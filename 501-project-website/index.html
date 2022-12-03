@@ -1,78 +1,179 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8">
-	<title>501 project</title>
-	<!-- point to css stylesheet -->
-	<link href="styles.css" rel="stylesheet" />
+	<title>501 project - Huiting Song</title>
+	
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	
+	<!-- Custom CSS -->
+	<link href="css/style.css" rel="stylesheet">
+	
+	<!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <script src="js/respond.min.js"></script>
+    <![endif]-->
 </head>
-<body><!-- HEADER BAR -->
-<div>
-<div style="background:#eeeeee;border:1px solid #cccccc;padding:5px 10px;">
-<ul><!-- link back to homepage -->
-	<li><a href="./index.html">About me</a></li>
-	<!-- tab without dropdown  -->
-	<!-- tab without dropdown  -->
-    <li><a href="https://github.com/anly501/anly-501-project-HuitingSong/pages/introduction.html">introduction</a></li>
-	<!-- tab without dropdown  -->
-	<li><a href="https://github.com/anly501/anly-501-project-HuitingSong">Code</a></li>
-	<!-- tab with dropdown -->
-	<li class="dropdown"><a href="https://github.com/anly501/anly-501-project-HuitingSong">Data</a></li>
-	<!-- tab with dropdown -->
-	<li class="dropdown"><a href="#">Data Gathering</a></li>
-	<li class="dropdown"><a href="#">Data Cleaning</a></li>
-	<li class="dropdown"><a href="#">Exploring Data</a></li>
-</ul>
-</div>
-</div>
+<body class="index-page">
+	<div class="wrap-body">
+		<!-- Intro -->
+		<div id="intro">
+			<span class="line-1">the</span>
+			<span class="line-2">Energy</span>
+			<span class="line-3">With Economic</span>
+			<span class="line-4"><a href="#">501 Project</a><a href="#">Huiting Song</a></span>
+		</div>
 
-<p></p>
+		<header id="page-header">
+			<!--Navigation-->
+			<nav id="menu" class="navbar">
+				<div class="container">
+					<div class="row">
+					<div class="navbar-header"><span id="heading" class="visible-xs">Categories</span>
+					  <button type="button" class="btn btn-navbar navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fa fa-bars"></i></button>
+					</div>
+					<div class="collapse navbar-collapse navbar-ex1-collapse">
+						<ul class="nav navbar-nav">
+							<li class="active"><a href="index.html">Home</a></li>
+							<li><a href="aboutme.html">About Me</a></li>
+							<li><a href="introducation.html">Intruduction</a></li>
+							<li><a href="code.html">Code</a></li>
+							<li><a href="Data.html">Data</a></li>
+							<li><a href="Datagathering.html">Data Gathering</a></li> 
+							<li><a href="Datacleaning.html">Data Cleaning</a></li>
+							<li><a href="Dataexploring.html">Data Exploring</a></li>
+							<li><a href="naivebayes.html">Naive Bayes</a></li>
+							<li><a href="Decisiontree.html">Decision Tree</a></li>
+							<li><a href="svm.html">SVM</a></li>
+							<li><a href="clustering.html">Clustering</a></li>
+							<li><a href="armnetworking.html">ARM and Networking</a></li>
+							<li><a href="Conclusion.html">Conclusion</a></li>
+						</ul>
+					</div>
+					</div>
+				</div>
+			</nav>
+		</header>
+		
+		<!-- /////////////////////////////////////////Content -->
+		<div id="page-content" class="container">
+			<div class="row">
+				<!-- ////////////Content Box 01 -->
+				<section class="box-content box-1 box-style-0">
+					<div class="flex-box no-gutter">
+						<div class="col-sm-5">
+							<div class="box-image">
+								<img src="images/1.jpg" alt="" />
+							</div>
+						</div>
+						<div class="col-sm-7">
+							<div class="box-text">
+								<div class="box-text-inner pd-large-lg pd-small-xs">
+									<div class="heading">
+										<h2>Huiting Song
+										</h2>
+									</div>
+									<p>Master Student in DSAN Program at Georgetown Univeristy</p>
+									<a class="btn btn-skin m-top30" href="aboutme.html">About Me</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				
+				<!-- ////////////Content Box 02 -->
+				<section class="box-content box-2 box-style-0">
+					<div class="flex-box no-gutter">
+						<div class="col-sm-5 f-right">
+							<div class="box-image">
+								<img src="images/2.jpg" alt="" />
+							</div>
+						</div>
+						<div class="col-sm-7">
+							<div class="box-text">
+								<div class="box-text-inner pd-large-lg pd-small-xs t-middle">
+									<div class="heading">
+										<h2>In This Website</h2>
+									</div>
+									<p>I will take you to nevigate the oil and gas energy consumption, and also the energy economic in United States of America, through implementing the machine learning algorithm and the statistical analysis.</p>
+									<a class="btn btn-skin m-top30" href="introducation.html">Project Introduction</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
 
-<table><!--TABLE ROW-1-->
-	<tbody>
-		<tr><!--ROW-1 COL-1-->
-			<td><img alt="" src="/501-project-website/IMG_4149.JPG" style="width: 369px; height: 550px;" /></td>
-			<!--ROW-1 COL-2-->
-			<td>&nbsp;
-			<h2 style="font-style:italic;"><span style="font-size:36px;"><strong>Huiting Song</strong></span></h2>
+				<footer id="page-footer" class="footer-contact">
+					<div class="wrap-footer container">
+						<div class="row">
+							<div class="flex-box no-gutter">
+								<div class="contact-info">
+										<ul class="list-unstyled">
+												<!-- Address -->
+											<li class="contact-group">
+												<span class="adr-heading">Address</span>
+												<span class="adr-info">Georgetown University, Washington D.C., US</span>
+											</li>
+										</ul>
+										<ul class="list-unstyled">
+											<!-- Email -->
+											<li class="contact-group">
+												<span class="adr-heading">Email</span>
+												<span class="adr-info">hs1119@georgetown.edu</span>
+											</li>
+										</ul>                  
+										<a href="#" class="show-map"><i class="fa fa-map-o"></i> Show on map</a>
+									</address>
+								</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			<div class="bottom-footer">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3">
+							<p>Web format Designed by <a href="https://www.html5xcss3.com">HTML5xCSS3</a></p>
+						</div>
+						<div class="col-md-6">
+							<ul class="list-inline social-link">
+								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+								<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+								<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+							</ul>
+						</div>
+						<div class="col-md-3">
+							<ul class="list-inline quicklinks">
+								<li><a href="#">Privacy Policy</a></li>
+								<li><a href="#">Terms of Use</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer><!-- Footer -->
 
-			<p></p>
-
-			<p><span style="color:#d35400;"><u><span style="font-size:20px;">Education</span></u></span></p>
-
-			<p>BS in Economic, University of Connecticut, 2018-2022</p>
-
-			<p>BA in Statistics, University of Connecticut, 2018-2022</p>
-
-			<p>MS in Data Science and analysis, Georgetown University, 2022-now</p>
-
-			<p><span style="color:#d35400;"><span style="font-size:20px;"><u>Contact</u></span></span></p>
-
-			<p>Linkedin:&nbsp;<a href="https://www.linkedin.com/in/huiting-song/">Huiting Song</a></p>
-
-			<p>Email: <a href="mailto:hs1119@georgetown.edu">hs1119@georgetown.edu</a></p>
-
-			<p></p>
-
-			<p></p>
-
-			<p></p>
-
-			<p></p>
-
-			<p></p>
-			</td>
-		</tr>
-		<!--ROW-2-->
-		<tr><!--ROW-2 COL-1-->
-			<td>
-			<h2 style="text-align:left; color:blue;"></h2>
-			</td>
-			<!--ROW-2 COL-2-->
-			<td>
-			<h2 style="text-align:left; color:blue;"></h2>
-			</td>
-		</tr>
-	</tbody>
-</table>
+	</div><!-- .wrap-body -->
+	
+	<!-- jQuery and Plugin-->
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/main.js"></script>
+	<!-- Bootstrap JS -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Logo -->
+	<script src="js/arctext.min.js"></script>
+	<script>
+		$(document).ready(function() {
+		  $(".line-2").arctext({radius: 400});
+		});
+	</script>
+	
 </body>
 </html>
