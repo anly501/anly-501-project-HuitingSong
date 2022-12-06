@@ -51,7 +51,7 @@ def search_twitter(query, max_results,tweet_fields, bearer_token = bearer_token)
 
 tweet_fields = "tweet.fields=text,author_id,created_at,lang"
 
-data = "/Users/apple/Desktop/anly-501-project-HuitingSong-1/codes/01-data-gathering/"
+data = "/Users/apple/Desktop/anly-501-project-HuitingSong-1/data/raw data/"
 search_tweets = ["energy","energy economy","consumption","data","USA"]
 for idx,val in enumerate(search_tweets):
     tweets_jsondump = []
@@ -93,7 +93,7 @@ twitterdf
 
 Save the data frame as csv file for futhur using
 ```{python}
-twitterdf.to_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/codes/01-data-gathering/twitterpython.csv")
+twitterdf.to_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/data/raw data/twitterpython.csv")
 ```
 
 ## Twitter API in R
@@ -133,5 +133,5 @@ Search1<-twitteR::searchTwitter(s_key,n=n_tweets, since="2022-05-01",lang="en")
 ```{r}
 TweetsDF<- twListToDF(Search1)
 TweetsDF
-write.csv(TweetsDF,"/Users/apple/Desktop/anly-501-project-HuitingSong-1/codes/01-data-gathering/twitterR.csv")
+write.csv(TweetsDF,"/Users/apple/Desktop/anly-501-project-HuitingSong-1/data/raw data/twitterR.csv")
 ```
