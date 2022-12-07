@@ -2850,18 +2850,18 @@ vertical-align: -.125em;
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>twitterdf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>              author_id  ... edit_history_tweet_ids
-0             914768132  ...  [1600361130920402945]
-1             216809278  ...  [1600361069611884544]
-2             424058395  ...  [1600361052965048321]
-3   1532375524240109568  ...  [1600360931460263939]
-4              28757610  ...  [1600360913433137152]
-..                  ...  ...                    ...
-95             41427918  ...  [1600354598119538691]
-96             25942990  ...  [1600354563613249536]
-97             51547047  ...  [1600354510710669312]
-98             18653094  ...  [1600354423829676040]
-99            213057317  ...  [1600354386596593664]
+<pre><code>              author_id lang  ...                   id                created_at
+0   1586733555153096705   en  ...  1600368651936243712  2022-12-07T05:56:34.000Z
+1            1241149884   en  ...  1600368539050704898  2022-12-07T05:56:07.000Z
+2   1381105861683146753   en  ...  1600368523762896896  2022-12-07T05:56:04.000Z
+3   1492780937708515334   en  ...  1600368376110424064  2022-12-07T05:55:28.000Z
+4             133658343   ja  ...  1600368296561324032  2022-12-07T05:55:09.000Z
+..                  ...  ...  ...                  ...                       ...
+95            618419310   en  ...  1600363593047760896  2022-12-07T05:36:28.000Z
+96            564897882   en  ...  1600363536009420800  2022-12-07T05:36:14.000Z
+97  1593487990562627591   en  ...  1600363495308025857  2022-12-07T05:36:05.000Z
+98   848347077897732097   en  ...  1600363436579299329  2022-12-07T05:35:51.000Z
+99   814629707551477760   en  ...  1600363415788208128  2022-12-07T05:35:46.000Z
 
 [600 rows x 6 columns]</code></pre>
 </div>
@@ -2935,36 +2935,36 @@ vertical-align: -.125em;
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(TweetsDF,<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                                                                                                                text
-1   RT @OfficialNCDMB: The Group Executive Director, Gas &amp;amp; Power, @nnpclimited, Mohammed Abdulkabir Ahmed has just delivered the 3rd Presentati…
-2       RT @FactSet: While cheap #naturalgas supply has historically driven gas-fired generation&#39;s capture of the market share at the expense of #c…
-3       @ChegutuD @Mavhure It’s not about water levels there are several alternative sources of energy that can power the g… https://t.co/GyutS32TLq
-4 RT @BrianGitt: Wind &amp;amp; solar power require power plants idle on standby in case the wind stops blowing or clouds roll in.\n\nPower plants burn…
-5       RT @khamenei_ir: “We can’t” was a negative, wrong catchphrase before the Revolution in #Iran. The #Revolution changed this mindset, which l…
-  favorited favoriteCount replyToSN             created truncated
-1     FALSE             0      &lt;NA&gt; 2022-12-07 05:27:03     FALSE
-2     FALSE             0      &lt;NA&gt; 2022-12-07 05:27:02     FALSE
-3     FALSE             0  ChegutuD 2022-12-07 05:26:24      TRUE
-4     FALSE             0      &lt;NA&gt; 2022-12-07 05:26:16     FALSE
-5     FALSE             0      &lt;NA&gt; 2022-12-07 05:26:02     FALSE
-           replyToSID                  id          replyToUID
-1                &lt;NA&gt; 1600361224817893379                &lt;NA&gt;
-2                &lt;NA&gt; 1600361219453779971                &lt;NA&gt;
-3 1600337440291840000 1600361059260301313 1340692774346231811
-4                &lt;NA&gt; 1600361027665027072                &lt;NA&gt;
-5                &lt;NA&gt; 1600360967979773953                &lt;NA&gt;
+<pre><code>                                                                                                                                               text
+1      Engie expects to move forward with three South African solar projects this week as the nation struggles to accelera… https://t.co/00TmAbbq8W
+2   RT @scienceisstrat1: Good news alert 👇\n\nSolar PV’s installed power capacity is poised to surpass natural gas by 2026 and coal by 2027, beco…
+3       @Andrei_Ilas @AngelicaOung Nuclear is dying, Solar and Wind have already won...   Why?  Economics, read and learn:… https://t.co/11cQRr5k0p
+4      Getting word from extended family this is turning into a crises. Gas super expensive. No way to cook cuz gas is off… https://t.co/srHKZLFzGq
+5 RT @tottaway22: $PBR - one of the best values out there ~20%+ div yield at $75 Brent\n\nPetrobras is the National Brazilian Integrated Oil &amp;amp;…
+  favorited favoriteCount   replyToSN             created truncated
+1     FALSE             0        &lt;NA&gt; 2022-12-07 05:57:25      TRUE
+2     FALSE             0        &lt;NA&gt; 2022-12-07 05:57:00     FALSE
+3     FALSE             0 Andrei_Ilas 2022-12-07 05:56:59      TRUE
+4     FALSE             0        &lt;NA&gt; 2022-12-07 05:56:47      TRUE
+5     FALSE             0        &lt;NA&gt; 2022-12-07 05:56:46     FALSE
+           replyToSID                  id replyToUID
+1                &lt;NA&gt; 1600368866227621888       &lt;NA&gt;
+2                &lt;NA&gt; 1600368761218813954       &lt;NA&gt;
+3 1600367871841796096 1600368757880532993  517650747
+4                &lt;NA&gt; 1600368706919755776       &lt;NA&gt;
+5                &lt;NA&gt; 1600368700397215744       &lt;NA&gt;
                                                                           statusSource
-1 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
-2              &lt;a href=&quot;https://mobile.twitter.com&quot; rel=&quot;nofollow&quot;&gt;Twitter Web App&lt;/a&gt;
-3   &lt;a href=&quot;http://twitter.com/download/iphone&quot; rel=&quot;nofollow&quot;&gt;Twitter for iPhone&lt;/a&gt;
+1                    &lt;a href=&quot;http://www.socialflow.com&quot; rel=&quot;nofollow&quot;&gt;SocialFlow&lt;/a&gt;
+2 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
+3              &lt;a href=&quot;https://mobile.twitter.com&quot; rel=&quot;nofollow&quot;&gt;Twitter Web App&lt;/a&gt;
 4   &lt;a href=&quot;http://twitter.com/download/iphone&quot; rel=&quot;nofollow&quot;&gt;Twitter for iPhone&lt;/a&gt;
-5 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
-       screenName retweetCount isRetweet retweeted longitude latitude
-1      anasmsani9            6      TRUE     FALSE        NA       NA
-2       VKisleika            3      TRUE     FALSE        NA       NA
-3 NyonyanaKaManzi            0     FALSE     FALSE        NA       NA
-4       dylanbusa           84      TRUE     FALSE        NA       NA
-5  mohammad137219          166      TRUE     FALSE        NA       NA</code></pre>
+5              &lt;a href=&quot;https://mobile.twitter.com&quot; rel=&quot;nofollow&quot;&gt;Twitter Web App&lt;/a&gt;
+     screenName retweetCount isRetweet retweeted longitude latitude
+1 BloombergAsia            0     FALSE     FALSE        NA       NA
+2  WillemienVan           38      TRUE     FALSE        NA       NA
+3    lleopard11            0     FALSE     FALSE        NA       NA
+4    azrael2600            0     FALSE     FALSE        NA       NA
+5       Btico19           27      TRUE     FALSE        NA       NA</code></pre>
 </div>
 </div>
 <ul>
@@ -2990,7 +2990,7 @@ vertical-align: -.125em;
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>comp_sector <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/modified data/consumptionbysector.csv&quot;</span>)</span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>comp_sector <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/consumptionbysector.csv&quot;</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(comp_sector)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -3020,7 +3020,7 @@ vertical-align: -.125em;
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>emission <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/modified data/energycoemission.csv&quot;</span>)</span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>emission <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/energycoemission.csv&quot;</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emission)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">

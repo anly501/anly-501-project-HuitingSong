@@ -209,7 +209,7 @@ This dataset is useful in understanding the tendency of energy consumption in ea
 
  - The uncleaned dataset
 ```{r}
-comp_sector <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/modified data/consumptionbysector.csv")
+comp_sector <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/consumptionbysector.csv")
 head(comp_sector)
 ```
 
@@ -219,7 +219,7 @@ Since our problem is also linked to environmental issues, I wanted to know the c
 
  - The uncleaned dataset
 ```{r}
-emission <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/modified data/energycoemission.csv")
+emission <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/energycoemission.csv")
 head(emission)
 ```
 
