@@ -2850,18 +2850,18 @@ vertical-align: -.125em;
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>twitterdf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>                     id lang  ...                created_at edit_history_tweet_ids
-0   1600350680358998016   en  ...  2022-12-07T04:45:09.000Z  [1600350680358998016]
-1   1600350651803791360   en  ...  2022-12-07T04:45:03.000Z  [1600350651803791360]
-2   1600350639489425408   en  ...  2022-12-07T04:45:00.000Z  [1600350639489425408]
-3   1600350625686224896   en  ...  2022-12-07T04:44:56.000Z  [1600350625686224896]
-4   1600350600956645377   en  ...  2022-12-07T04:44:51.000Z  [1600350600956645377]
-..                  ...  ...  ...                       ...                    ...
-95  1600344972061908992   en  ...  2022-12-07T04:22:28.000Z  [1600344972061908992]
-96  1600344916181540865   in  ...  2022-12-07T04:22:15.000Z  [1600344916181540865]
-97  1600344894023020545   en  ...  2022-12-07T04:22:10.000Z  [1600344894023020545]
-98  1600344874930212865   en  ...  2022-12-07T04:22:05.000Z  [1600344874930212865]
-99  1600344789983309824   en  ...  2022-12-07T04:21:45.000Z  [1600344789983309824]
+<pre><code>              author_id  ... edit_history_tweet_ids
+0             914768132  ...  [1600361130920402945]
+1             216809278  ...  [1600361069611884544]
+2             424058395  ...  [1600361052965048321]
+3   1532375524240109568  ...  [1600360931460263939]
+4              28757610  ...  [1600360913433137152]
+..                  ...  ...                    ...
+95             41427918  ...  [1600354598119538691]
+96             25942990  ...  [1600354563613249536]
+97             51547047  ...  [1600354510710669312]
+98             18653094  ...  [1600354423829676040]
+99            213057317  ...  [1600354386596593664]
 
 [600 rows x 6 columns]</code></pre>
 </div>
@@ -2935,36 +2935,36 @@ vertical-align: -.125em;
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(TweetsDF,<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                                                                                                          text
-1 RT @PeterDClack: The western world is dismantling the oil/coal/gas power that created modern society. It&#39;s energy suicide, that will take u…
-2 Can you help stop the California Public Utilities Commission&#39;s new NEM 3 proposal? It is a gift to the utilities an… https://t.co/9d6yUP5o5p
-3 Can you help stop the California Public Utilities Commission&#39;s new NEM 3 proposal? It is a gift to the utilities an… https://t.co/ppGggmONVL
-4  RT @lakshmishaks: Green hydrogen is entering hockey stick territory: the point where it sees a sudden and sharp turn upward. A boom in the…
-5 Marom Energy, a small company run by the Gandyr Foundation of #JudithRecanati, is going to build Israel’s first sol… https://t.co/BkGaeX4FmY
-  favorited favoriteCount replyToSN             created truncated replyToSID
-1     FALSE             0      &lt;NA&gt; 2022-12-07 04:45:13     FALSE       &lt;NA&gt;
-2     FALSE             0      &lt;NA&gt; 2022-12-07 04:45:12      TRUE       &lt;NA&gt;
-3     FALSE             0      &lt;NA&gt; 2022-12-07 04:45:12      TRUE       &lt;NA&gt;
-4     FALSE             0      &lt;NA&gt; 2022-12-07 04:45:05     FALSE       &lt;NA&gt;
-5     FALSE             0      &lt;NA&gt; 2022-12-07 04:45:00      TRUE       &lt;NA&gt;
-                   id replyToUID
-1 1600350696129560576       &lt;NA&gt;
-2 1600350691368779776       &lt;NA&gt;
-3 1600350691234562049       &lt;NA&gt;
-4 1600350660863488000       &lt;NA&gt;
-5 1600350639598424065       &lt;NA&gt;
+<pre><code>                                                                                                                                                text
+1   RT @OfficialNCDMB: The Group Executive Director, Gas &amp;amp; Power, @nnpclimited, Mohammed Abdulkabir Ahmed has just delivered the 3rd Presentati…
+2       RT @FactSet: While cheap #naturalgas supply has historically driven gas-fired generation&#39;s capture of the market share at the expense of #c…
+3       @ChegutuD @Mavhure It’s not about water levels there are several alternative sources of energy that can power the g… https://t.co/GyutS32TLq
+4 RT @BrianGitt: Wind &amp;amp; solar power require power plants idle on standby in case the wind stops blowing or clouds roll in.\n\nPower plants burn…
+5       RT @khamenei_ir: “We can’t” was a negative, wrong catchphrase before the Revolution in #Iran. The #Revolution changed this mindset, which l…
+  favorited favoriteCount replyToSN             created truncated
+1     FALSE             0      &lt;NA&gt; 2022-12-07 05:27:03     FALSE
+2     FALSE             0      &lt;NA&gt; 2022-12-07 05:27:02     FALSE
+3     FALSE             0  ChegutuD 2022-12-07 05:26:24      TRUE
+4     FALSE             0      &lt;NA&gt; 2022-12-07 05:26:16     FALSE
+5     FALSE             0      &lt;NA&gt; 2022-12-07 05:26:02     FALSE
+           replyToSID                  id          replyToUID
+1                &lt;NA&gt; 1600361224817893379                &lt;NA&gt;
+2                &lt;NA&gt; 1600361219453779971                &lt;NA&gt;
+3 1600337440291840000 1600361059260301313 1340692774346231811
+4                &lt;NA&gt; 1600361027665027072                &lt;NA&gt;
+5                &lt;NA&gt; 1600360967979773953                &lt;NA&gt;
                                                                           statusSource
-1              &lt;a href=&quot;https://mobile.twitter.com&quot; rel=&quot;nofollow&quot;&gt;Twitter Web App&lt;/a&gt;
-2                &lt;a href=&quot;https://www.hootsuite.com&quot; rel=&quot;nofollow&quot;&gt;Hootsuite Inc.&lt;/a&gt;
-3                &lt;a href=&quot;https://www.hootsuite.com&quot; rel=&quot;nofollow&quot;&gt;Hootsuite Inc.&lt;/a&gt;
-4 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
-5              &lt;a href=&quot;https://mobile.twitter.com&quot; rel=&quot;nofollow&quot;&gt;Twitter Web App&lt;/a&gt;
+1 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
+2              &lt;a href=&quot;https://mobile.twitter.com&quot; rel=&quot;nofollow&quot;&gt;Twitter Web App&lt;/a&gt;
+3   &lt;a href=&quot;http://twitter.com/download/iphone&quot; rel=&quot;nofollow&quot;&gt;Twitter for iPhone&lt;/a&gt;
+4   &lt;a href=&quot;http://twitter.com/download/iphone&quot; rel=&quot;nofollow&quot;&gt;Twitter for iPhone&lt;/a&gt;
+5 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
        screenName retweetCount isRetweet retweeted longitude latitude
-1 NeilJamesWeekes         5326      TRUE     FALSE        NA       NA
-2  RideDriveClean            0     FALSE     FALSE        NA       NA
-3    cooltheearth            0     FALSE     FALSE        NA       NA
-4     MaheshGurme            1      TRUE     FALSE        NA       NA
-5    TheMediaLine            0     FALSE     FALSE        NA       NA</code></pre>
+1      anasmsani9            6      TRUE     FALSE        NA       NA
+2       VKisleika            3      TRUE     FALSE        NA       NA
+3 NyonyanaKaManzi            0     FALSE     FALSE        NA       NA
+4       dylanbusa           84      TRUE     FALSE        NA       NA
+5  mohammad137219          166      TRUE     FALSE        NA       NA</code></pre>
 </div>
 </div>
 <ul>
@@ -2973,9 +2973,75 @@ vertical-align: -.125em;
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(TweetsDF,<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/codes/01-data-gathering/twitterR.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(TweetsDF,<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterR.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="downloaded-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="downloaded-dataset">Downloaded Dataset</h3>
+<section id="energy-consumption-by-sector-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="energy-consumption-by-sector-dataset">Energy Consumption by sector dataset</h4>
+<p>The sample source is from U.S. EIA. EIA conducts a comprehensive data collection program that covers the full spectrum of energy sources, end uses, and energy flows; generates short- and long-term domestic and international energy projections; and performs informative energy analyses. EIA disseminates its data products, analyses, reports, and services to customers and stakeholders primarily through its website and the customer contact center.</p>
+<p>For the direction I want to study, I need to collect monthly data samples of energy consumption of different groups. Americans use a lot of energy in homes, in businesses, and in industry, and to travel and transport goods.There are four end-use sectors that purchase or produce energy for their own consumption and not for resale: - The residential sector includes homes and apartments. - The commercial sector includes offices, malls, stores, schools, hospitals, hotels, warehouses, restaurants, and places of worship and public assembly. - The industrial sector includes facilities and equipment used for manufacturing, agriculture, mining, and construction. - The transportation sector includes vehicles that transport people or goods, such as cars, trucks, buses, motorcycles, trains, aircraft, boats, barges, and ships.</p>
+<p>This dataset is useful in understanding the tendency of energy consumption in each sector and in each energy types. After cleaning and tyding the dataset, I can use this predict the future tendency of consumption.</p>
+<ul>
+<li>The uncleaned dataset</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>comp_sector <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/modified data/consumptionbysector.csv&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(comp_sector)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      MSN YYYYMM    Value Column_Order
+1 TXRCBUS 194913 4460.588            1
+2 TXRCBUS 195013 4829.528            1
+3 TXRCBUS 195113 5104.680            1
+4 TXRCBUS 195213 5158.406            1
+5 TXRCBUS 195313 5052.749            1
+6 TXRCBUS 195413 5262.555            1
+                                        Description         Unit
+1 Primary Energy Consumed by the Residential Sector Trillion Btu
+2 Primary Energy Consumed by the Residential Sector Trillion Btu
+3 Primary Energy Consumed by the Residential Sector Trillion Btu
+4 Primary Energy Consumed by the Residential Sector Trillion Btu
+5 Primary Energy Consumed by the Residential Sector Trillion Btu
+6 Primary Energy Consumed by the Residential Sector Trillion Btu</code></pre>
+</div>
+</div>
+</section>
+<section id="energy-consumption-emission" class="level4">
+<h4 class="anchored" data-anchor-id="energy-consumption-emission">Energy Consumption Emission</h4>
+<p>Since our problem is also linked to environmental issues, I wanted to know the contribution of each energy type and each energy consuming sectors to emissions. Again, this dataset comes from EIA. I can analyze which sectors contribute significantly to environmental problems by comparing emissions from conventional energy sources, and also which sectors are making the transition to environmentally friendly energy sources by comparing emissions from new and conventional sources.</p>
+<ul>
+<li>The uncleaned dataset</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>emission <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/modified data/energycoemission.csv&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emission)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      MSN YYYYMM     Value Column_Order                      Description
+1 TETCBUS 194913 31.967775            1 Total Primary Energy Consumption
+2 TETCBUS 195013 34.598567            1 Total Primary Energy Consumption
+3 TETCBUS 195113 36.953661            1 Total Primary Energy Consumption
+4 TETCBUS 195213 36.726037            1 Total Primary Energy Consumption
+5 TETCBUS 195313 37.640598            1 Total Primary Energy Consumption
+6 TETCBUS 195413  36.61354            1 Total Primary Energy Consumption
+             Unit
+1 Quadrillion Btu
+2 Quadrillion Btu
+3 Quadrillion Btu
+4 Quadrillion Btu
+5 Quadrillion Btu
+6 Quadrillion Btu</code></pre>
+</div>
+</div>
+<p>reference link for downloaded dataset： https://www.eia.gov/totalenergy/data/monthly/</p>
+</section>
 </section>
 </section>
 

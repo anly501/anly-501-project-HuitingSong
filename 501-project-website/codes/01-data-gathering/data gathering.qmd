@@ -190,5 +190,37 @@ head(TweetsDF,5)
 
  - Step 4: Save the data frame as csv file for futhur using
 ```{r}
-write.csv(TweetsDF,"/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/codes/01-data-gathering/twitterR.csv")
+write.csv(TweetsDF,"/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterR.csv")
 ```
+
+### Downloaded Dataset
+
+#### Energy Consumption by sector dataset
+
+The sample source is from U.S. EIA. EIA conducts a comprehensive data collection program that covers the full spectrum of energy sources, end uses, and energy flows; generates short- and long-term domestic and international energy projections; and performs informative energy analyses. EIA disseminates its data products, analyses, reports, and services to customers and stakeholders primarily through its website and the customer contact center.
+
+For the direction I want to study, I need to collect monthly data samples of energy consumption of different groups. Americans use a lot of energy in homes, in businesses, and in industry, and to travel and transport goods.There are four end-use sectors that purchase or produce energy for their own consumption and not for resale: 
+ - The residential sector includes homes and apartments.
+ - The commercial sector includes offices, malls, stores, schools, hospitals, hotels, warehouses, restaurants, and places of worship and public assembly.
+ - The industrial sector includes facilities and equipment used for manufacturing, agriculture, mining, and construction.
+ - The transportation sector includes vehicles that transport people or goods, such as cars, trucks, buses, motorcycles, trains, aircraft, boats, barges, and ships.
+
+This dataset is useful in understanding the tendency of energy consumption in each sector and in each energy types. After cleaning and tyding the dataset, I can use this predict the future tendency of consumption.
+
+ - The uncleaned dataset
+```{r}
+comp_sector <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/modified data/consumptionbysector.csv")
+head(comp_sector)
+```
+
+#### Energy Consumption Emission 
+
+Since our problem is also linked to environmental issues, I wanted to know the contribution of each energy type and each energy consuming sectors to emissions. Again, this dataset comes from EIA. I can analyze which sectors contribute significantly to environmental problems by comparing emissions from conventional energy sources, and also which sectors are making the transition to environmentally friendly energy sources by comparing emissions from new and conventional sources.
+
+ - The uncleaned dataset
+```{r}
+emission <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/modified data/energycoemission.csv")
+head(emission)
+```
+
+reference link for downloaded dataset： https://www.eia.gov/totalenergy/data/monthly/ 
