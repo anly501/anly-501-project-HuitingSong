@@ -4,6 +4,7 @@ pdf-engine: lualatex
 format:
   html:
         code-fold: true
+        self-contained: true
 execute:
     warning: false
 ---
