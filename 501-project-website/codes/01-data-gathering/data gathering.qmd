@@ -19,15 +19,43 @@ Data gathering is the process of gathering and measuring information on targeted
  The U.S. Energy Information Administration (EIA) is a principal agency of the U.S. Federal Statistical System responsible for collecting, analyzing, and disseminating energy information to promote sound policymaking, efficient markets, and public understanding of energy and its interaction with the economy and the environment. EIA programs cover data on coal, petroleum, natural gas, electric, renewable and nuclear energy. EIA is part of the U.S. Department of Energy. 
  Reference link : https://www.eia.gov/
 
+### My Project Direction and 10 Questions
+
+ - Directions: 
+   1. Analyzing people's perceptions of energy consumption.
+   2. Predicting the consumption of different types of energy in the next decade.
+
+ - 10 Questions:
+   1. What does increased energy consumption mean for people?
+   2. Does clean energy matter for the environmental protection?
+   3. Who contributes the most to energy consumption, residence, industry, or commercial?
+   4. How do people think about global warming?
+   5. Which energy source will be consumed less in the next decade?
+   6. What will the overall energy consumption level look like in the next decade?
+   7. Will demand for traditional energy sources, such as oil, decline?
+   8. Will people choose new energy products? Such as electric cars?
+   9. Can new energy replace traditional energy?
+   10. Will new energy consumption continue to grow in the next decade?
+
 
 ### Data Type
  - Text Data <br>
 
-I used twitter API to scratch mutiple keywords:**"energy" "gas" "electricity" "price" "" "USA"** to gather comments from twiter about their opinion about the energy consumption and energy economy. I use these data to analyze the positive and negative opinion. I can detect the internet users' attitudes to energy influence on economy. I can also use this datasets to define the relationship between economy and data. The keywords may not clear enough for me to analysis but I will adjust it later for future research. I used for loop to search over 600 tweets in order to make comprehensive datasets. I will collect more in the future to scratch over 2000 tweets in order to make sure my results are accurate. I plan to detect the frequency of words to gain a plot. More than this, I plan to use Naive Bytes to give each tweet a positive or negative attitude.
+ Text data usually consists of documents which can represent words, sentences or even paragraphs of free flowing text.
 
- - Numerical Data
+ Since I want to study people's attitude towards energy consumption, I want to use the Twitter API to grab the text information. 
+ I will set "energy consumption" "global warming" "clean energy" "conventional energy" "environmental protection" as the keywords for the twitter api to get the text data. The data obtained will allow me to analyze people's attitudes towards energy consumption, how people perceive different energy sources, and also to analyze people's attitudes towards protecting the environment in terms of energy. I will also use this text data to analyze the relationship between the environment and energy in the minds of twitter users. I will also keep adjusting the text data later for future research. In data gathering section, I used for loop to search over 600 tweets in order to make comprehensive datasets. I will collect more in the future to scratch over 2000 tweets in order to make sure my results are accurate. I plan to detect the frequency of words to gain a plot. More than this, I plan to use Naive Bytes to give each tweet a positive or negative attitude.
+
+ - Downloaded Dataset
+ 
+ The data we can collect in our daily life is limited and cannot be guaranteed to be authentic, so we need to rely on the information provided by authorities or data miners to achieve our research needs. I will seek information from authorities, such as U.S. Energy Information Administration (EIA), to filter the datasets that are suitable for my project. According to my research direction and question, I need to collect energy consumption over a recent period of time, which can be collected by the energy consumption of different groups and the consumption of different energy types.
+
+## Data Collection Section
 
 ### Twitter API in Python
+
+I will set **"energy consumption" "global warming" "clean energy" "conventional energy" "environmental protection"** as the keywords for the twitter api to get the text data. The data obtained will allow me to analyze people's attitudes towards energy consumption, how people perceive different energy sources, and also to analyze people's attitudes towards protecting the environment in terms of energy. I can also use this text data to analyze the relationship between the environment and energy in the minds of twitter users. I will also keep adjusting the text data later for future research. In data gathering section, I used for loop to search over 600 tweets in order to make comprehensive datasets. I will collect more in the future to scratch over 2000 tweets in order to make sure my results are accurate. 
+
 - Step 1: The python package we will use in gathering data.
 ```{python}
 import json 
@@ -40,7 +68,7 @@ import pandas as pd
 - Step 2: Using the keys from Twitter and defined key words to scratch data into json file
 ```{python}
 # READ FILE
-f = open("/Users/apple/Desktop/anly-501-project-HuitingSong-1/codes/01-data-gathering/api-keys.json")
+f = open("/Users/apple/Desktop/anly-501-project-HuitingSong-1//501-project-website/codes/01-data-gathering/api-keys.json")
 input=json.load(f); 
 
 # LOAD KEYS INTO API
@@ -67,8 +95,8 @@ def search_twitter(query, max_results,tweet_fields, bearer_token = bearer_token)
 
 tweet_fields = "tweet.fields=text,author_id,created_at,lang"
 
-data = "/Users/apple/Desktop/anly-501-project-HuitingSong-1/data/raw data/"
-search_tweets = ["energy","energy economy","consumption","data","USA"]
+data = "/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/raw data/"
+search_tweets = ["energy consumption","clean energy","conventional energy","environmental protection","global warming"]
 for idx,val in enumerate(search_tweets):
     tweets_jsondump = []
     json_response1 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token)
@@ -109,6 +137,6 @@ twitterdf
 
 - Step 4: Save the data frame as csv file for futhur using
 ```{python}
-twitterdf.to_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/data/raw data/twitterpython.csv")
+twitterdf.to_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1//501-project-website/data/raw data/twitterpython.csv")
 ```
 
