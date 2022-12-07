@@ -2675,353 +2675,205 @@ vertical-align: -.125em;
 
 </header>
 
-<p>Data gathering is the process of gathering and measuring information on targeted variables in an established system, which then enables one to answer relevant questions and evaluate outcomes. In this section, I will introduction what kind of tools I used, what kind of data I want to get related to my project, and the meaning of the data. Also, the coding process and data result will be displayed.</p>
-<section id="tools-for-data-gathering" class="level3">
-<h3 class="anchored" data-anchor-id="tools-for-data-gathering">Tools for Data Gathering</h3>
-<ul>
-<li>Twitter API</li>
-</ul>
-<p>The Twitter API is a set of programmatic endpoints that can be used to understand or build the conversation on Twitter. This API allows you to find and retrieve, engage with, or create a variety of different resources including the following: Tweets, Direct Messages, Spaces, Lists, users, and more.</p>
-<ul>
-<li>Resource from U.S. Energy Information Administration <br></li>
-</ul>
-<p>The U.S. Energy Information Administration (EIA) is a principal agency of the U.S. Federal Statistical System responsible for collecting, analyzing, and disseminating energy information to promote sound policymaking, efficient markets, and public understanding of energy and its interaction with the economy and the environment. EIA programs cover data on coal, petroleum, natural gas, electric, renewable and nuclear energy. EIA is part of the U.S. Department of Energy. Reference link : https://www.eia.gov/</p>
-</section>
-<section id="my-project-direction-and-10-questions" class="level3">
-<h3 class="anchored" data-anchor-id="my-project-direction-and-10-questions">My Project Direction and 10 Questions</h3>
-<ul>
-<li>Directions:
-<ol type="1">
-<li>Analyzing people’s perceptions of energy consumption.</li>
-<li>Predicting the consumption of different types of energy in the next decade.</li>
-</ol></li>
-<li>10 Questions:
-<ol type="1">
-<li>What does increased energy consumption mean for people?</li>
-<li>Does clean energy matter for the environmental protection?</li>
-<li>Who contributes the most to energy consumption, residence, industry, or commercial?</li>
-<li>How do people think about global warming?</li>
-<li>Which energy source will be consumed less in the next decade?</li>
-<li>What will the overall energy consumption level look like in the next decade?</li>
-<li>Will demand for traditional energy sources, such as oil, decline?</li>
-<li>Will people choose new energy products? Such as electric cars?</li>
-<li>Can new energy replace traditional energy?</li>
-<li>Will new energy consumption continue to grow in the next decade?</li>
-</ol></li>
-</ul>
-</section>
-<section id="data-type" class="level3">
-<h3 class="anchored" data-anchor-id="data-type">Data Type</h3>
-<ul>
-<li>Text Data <br></li>
-</ul>
-<p>Text data usually consists of documents which can represent words, sentences or even paragraphs of free flowing text.</p>
-<p>Since I want to study people’s attitude towards energy consumption, I want to use the Twitter API to grab the text information. I will set “energy consumption” “global warming” “clean energy” “conventional energy” “environmental protection” as the keywords for the twitter api to get the text data. The data obtained will allow me to analyze people’s attitudes towards energy consumption, how people perceive different energy sources, and also to analyze people’s attitudes towards protecting the environment in terms of energy. I will also use this text data to analyze the relationship between the environment and energy in the minds of twitter users. I will also keep adjusting the text data later for future research. In data gathering section, I used for loop to search over 600 tweets in order to make comprehensive datasets. I will collect more in the future to scratch over 2000 tweets in order to make sure my results are accurate. I plan to detect the frequency of words to gain a plot. More than this, I plan to use Naive Bytes to give each tweet a positive or negative attitude.</p>
-<ul>
-<li>Downloaded Dataset</li>
-</ul>
-<p>The data we can collect in our daily life is limited and cannot be guaranteed to be authentic, so we need to rely on the information provided by authorities or data miners to achieve our research needs. I will seek information from authorities, such as U.S. Energy Information Administration (EIA), to filter the datasets that are suitable for my project. According to my research direction and question, I need to collect energy consumption over a recent period of time, which can be collected by the energy consumption of different groups and the consumption of different energy types.</p>
-</section>
-<section id="data-collection-section" class="level2">
-<h2 class="anchored" data-anchor-id="data-collection-section">Data Collection Section</h2>
-<section id="twitter-api-in-python" class="level3">
-<h3 class="anchored" data-anchor-id="twitter-api-in-python">Twitter API in Python</h3>
-<p>I will set <strong>“energy consumption” “global warming” “clean energy” “conventional energy” “environmental protection”</strong> as the keywords for the twitter api to get the text data. The data obtained will allow me to analyze people’s attitudes towards energy consumption, how people perceive different energy sources, and also to analyze people’s attitudes towards protecting the environment in terms of energy. I can also use this text data to analyze the relationship between the environment and energy in the minds of twitter users. I will also keep adjusting the text data later for future research. In data gathering section, I used for loop to search over 600 tweets in order to make comprehensive datasets. I will collect more in the future to scratch over 2000 tweets in order to make sure my results are accurate.</p>
-<ul>
-<li>Step 1: The python package we will use in gathering data.</li>
-</ul>
+<p><strong>Data cleaning</strong> is the process of fixing or removing incorrect, corrupted, incorrectly formatted, duplicate, or incomplete data within a dataset. When combining multiple data sources, there are many opportunities for data to be duplicated or mislabeled. If data is incorrect, outcomes and algorithms are unreliable, even though they may look correct. There is no one absolute way to prescribe the exact steps in the data cleaning process because the processes will vary from dataset to dataset. But it is crucial to establish a template for your data cleaning process so you know you are doing it the right way every time. In this section, I will clean my text data and modified data. The steps for cleaning these two kind of data is different, so I will specify the cleaning steps with presenting the code.</p>
+<section id="r-on-downloaded-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="r-on-downloaded-dataset">R on downloaded dataset</h2>
+<p>Load the possible packages</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tweepy</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pandas <span class="im">import</span> json_normalize </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<ul>
-<li>Step 2: Using the keys from Twitter and defined key words to scratch data into json file</li>
-</ul>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># READ FILE</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="bu">open</span>(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1//501-project-website/codes/01-data-gathering/api-keys.json&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">input</span><span class="op">=</span>json.load(f)<span class="op">;</span> </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD KEYS INTO API</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>consumer_key<span class="op">=</span><span class="bu">input</span>[<span class="st">&quot;consumer_key&quot;</span>]    </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>consumer_secret<span class="op">=</span><span class="bu">input</span>[<span class="st">&quot;consumer_secret&quot;</span>]    </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>access_token<span class="op">=</span><span class="bu">input</span>[<span class="st">&quot;access_token&quot;</span>]    </span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>access_token_secret<span class="op">=</span><span class="bu">input</span>[<span class="st">&quot;access_token_secret&quot;</span>]    </span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>bearer_token<span class="op">=</span><span class="bu">input</span>[<span class="st">&quot;bearer_token&quot;</span>]</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up Connection</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>auth <span class="op">=</span> tweepy.OAuthHandler(consumer_key, consumer_secret)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>auth.set_access_token(access_token, access_token_secret)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>api <span class="op">=</span> tweepy.API(auth)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the search_twitter function here.</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search_twitter(query, max_results,tweet_fields, bearer_token <span class="op">=</span> bearer_token):</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    headers <span class="op">=</span> {<span class="st">&quot;Authorization&quot;</span>: <span class="st">&quot;Bearer </span><span class="sc">{}</span><span class="st">&quot;</span>.<span class="bu">format</span>(bearer_token)}</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="st">&quot;https://api.twitter.com/2/tweets/search/recent?query=</span><span class="sc">{}</span><span class="st">&amp;max_results=</span><span class="sc">{}</span><span class="st">&amp;</span><span class="sc">{}</span><span class="st">&quot;</span>.<span class="bu">format</span>(query, max_results,tweet_fields)</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;--------------&quot;</span>,url,<span class="st">&quot;--------------&quot;</span>)</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.request(<span class="st">&quot;GET&quot;</span>, url, headers<span class="op">=</span>headers)</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> response.status_code <span class="op">!=</span> <span class="dv">200</span>:</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">Exception</span>(response.status_code, response.text)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> response.json()</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>tweet_fields <span class="op">=</span> <span class="st">&quot;tweet.fields=text,author_id,created_at,lang&quot;</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/raw data/&quot;</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>search_tweets <span class="op">=</span> [<span class="st">&quot;energy consumption&quot;</span>,<span class="st">&quot;clean energy&quot;</span>,<span class="st">&quot;conventional energy&quot;</span>,<span class="st">&quot;environmental protection&quot;</span>,<span class="st">&quot;global warming&quot;</span>]</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> idx,val <span class="kw">in</span> <span class="bu">enumerate</span>(search_tweets):</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    tweets_jsondump <span class="op">=</span> []</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    json_response1 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    json_response2 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    json_response3 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    json_response4 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    json_response5 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    json_response6 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> json_response1[<span class="st">&#39;data&#39;</span>]:</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>        tweets_jsondump.append(i)</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> json_response2[<span class="st">&#39;data&#39;</span>]:</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        tweets_jsondump.append(i)</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> json_response3[<span class="st">&#39;data&#39;</span>]:</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>        tweets_jsondump.append(i)</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> json_response4[<span class="st">&#39;data&#39;</span>]:</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>        tweets_jsondump.append(i)</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> json_response5[<span class="st">&#39;data&#39;</span>]:</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>        tweets_jsondump.append(i)</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> json_response6[<span class="st">&#39;data&#39;</span>]:</span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>        tweets_jsondump.append(i)</span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(data<span class="op">+</span><span class="bu">str</span>(val)<span class="op">+</span><span class="st">&#39;.json&#39;</span>,<span class="st">&#39;w&#39;</span>) <span class="im">as</span> json_file:</span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>        json.dump(tweets_jsondump,json_file)</span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>        json_file.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>-------------- https://api.twitter.com/2/tweets/search/recent?query=energy consumption&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=energy consumption&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=energy consumption&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=energy consumption&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=energy consumption&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=energy consumption&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=clean energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=clean energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=clean energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=clean energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=clean energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=clean energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=conventional energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=conventional energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=conventional energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=conventional energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=conventional energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=conventional energy&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=environmental protection&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=environmental protection&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=environmental protection&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=environmental protection&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=environmental protection&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=environmental protection&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=global warming&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=global warming&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=global warming&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=global warming&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=global warming&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------
--------------- https://api.twitter.com/2/tweets/search/recent?query=global warming&amp;max_results=100&amp;tweet.fields=text,author_id,created_at,lang --------------</code></pre>
-</div>
-</div>
-<ul>
-<li>Step 3: Normalize the json file and form a data frame</li>
-</ul>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>twitterdf1 <span class="op">=</span> json_normalize(json_response1,<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>twitterdf2 <span class="op">=</span> json_normalize(json_response2,<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>twitterdf3 <span class="op">=</span> json_normalize(json_response3,<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>twitterdf4 <span class="op">=</span> json_normalize(json_response4,<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>twitterdf5 <span class="op">=</span> json_normalize(json_response5,<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>twitterdf6 <span class="op">=</span> json_normalize(json_response6,<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>twitterdf <span class="op">=</span> [twitterdf1,twitterdf2,twitterdf3,twitterdf4,twitterdf5,twitterdf6]</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>twitterdf <span class="op">=</span> pd.concat(twitterdf)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>twitterdf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>              author_id  ... lang
-0   1549857918442524672  ...   en
-1   1075616751663104000  ...   en
-2   1515416161281785859  ...   en
-3             105241093  ...   en
-4              18852344  ...   en
-..                  ...  ...  ...
-95            152971284  ...   en
-96           3402582670  ...   en
-97  1181913812657565707  ...   en
-98   947078072595034112  ...   en
-99  1119378174540906497  ...   en
-
-[600 rows x 6 columns]</code></pre>
-</div>
-</div>
-<ul>
-<li>Step 4: Save the data frame as csv file for futhur using</li>
-</ul>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>twitterdf.to_csv(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1//501-project-website/data/raw data/twitterpython.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-</section>
-<section id="twitter-api-in-r" class="level3">
-<h3 class="anchored" data-anchor-id="twitter-api-in-r">Twitter API in R</h3>
-<p>For Twitter API in R, I used twitter to scratch keywords like <strong>“oil”,“gas”,“solar power”,“wind power”</strong> to scratch users’ attitudes about these four kinds of energy. I want to search different types of energy in order to analysis people attitude toward different enegy, and what they think about two different kind of energy (renewable energy and convential energy).</p>
-<ul>
-<li>Step 1: Load the R packages</li>
-</ul>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(selectr)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xml2)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rtweet) <span class="co"># for scraping tweets</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROAuth)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httpuv)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(twitteR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<ul>
-<li>Step 2: Using the keys from Twitter and defined key words to scratch data into json file</li>
-</ul>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>consumer_key <span class="ot">=</span> <span class="st">&quot;zV2ER7zM1HzFUshDEHpJ8UuVS&quot;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>consumer_secret <span class="ot">=</span> <span class="st">&quot;5uHStDPwbFxEfLZojqPP9eDcWWXgfNCwdVPe8VG0xFvPldjhHJ&quot;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>access_token <span class="ot">=</span> <span class="st">&quot;1558952162692108289-bQDaHCqBuJZnXXqeQWnz7Pk1bhdiWm&quot;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>access_token_secret <span class="ot">=</span> <span class="st">&quot;kSJLq0tng5MfaFHoxbc7GpQ6D4SaplXzthDrW2SzhTSpD&quot;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>bearer_token <span class="ot">=</span> <span class="st">&quot;AAAAAAAAAAAAAAAAAAAAAEGthAEAAAAArntLVGGx5Q8Irzy%2BRTc2HdgQ7Vw%3DOR64kNsk2o0eqNl9KKZQKs7i2yzUoHEObJHwsQWiwesFtlQKdp&quot;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>requestURL<span class="ot">=</span><span class="st">&#39;https://api.twitter.com/oauth/request_token&#39;</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>accessURL<span class="ot">=</span><span class="st">&#39;https://api.twitter.com/oauth/access_token&#39;</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>authURL<span class="ot">=</span><span class="st">&#39;https://api.twitter.com/oauth/authorize&#39;</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>s_key  <span class="ot">=</span> <span class="st">&#39;gas OR oil OR solar power OR wind power&#39;</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>n_tweets <span class="ot">=</span> <span class="dv">250</span> </span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>twitteR<span class="sc">:::</span><span class="fu">setup_twitter_oauth</span>(consumer_key, consumer_secret,access_token,access_token_secret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] &quot;Using direct authentication&quot;</code></pre>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Search1<span class="ot">&lt;-</span>twitteR<span class="sc">::</span><span class="fu">searchTwitter</span>(s_key,<span class="at">n=</span>n_tweets, <span class="at">since=</span><span class="st">&quot;2022-05-01&quot;</span>,<span class="at">lang=</span><span class="st">&quot;en&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<ul>
-<li>Step 3: Display the dataset</li>
-</ul>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>TweetsDF<span class="ot">&lt;-</span> <span class="fu">twListToDF</span>(Search1)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(TweetsDF,<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>                                                                                                                                                  text
-1         @Wera_Hobhouse Whilst it is madness to chop down mature trees, dry them, chip them then transport them thousands of… https://t.co/zpVlRF8atr
-2       RT @RailMinIndia: Progressing Towards Greener Railways!\n\nIndian Railways is working in mission mode towards minimising its carbon footprint…
-3         @dorfman_p @ABCaustralia SA is a lot of rooftops PV and wind power, with gas to back up and imports from Victoria w… https://t.co/qhivfMZwFZ
-4 RT @ProfKindeya: Joined an initiative assessing alternative, reliable, sustainable &amp;amp; affordable power supply (biomass,wind,hydro &amp;amp; solar) f…
-5        RT @Wera_Hobhouse: 🌳Burning trees in our power stations is a scandal. It is not a renewable form of energy producing more CO2 per unit than…
-  favorited favoriteCount     replyToSN             created truncated
-1     FALSE             0 Wera_Hobhouse 2022-12-07 10:26:12      TRUE
-2     FALSE             0          &lt;NA&gt; 2022-12-07 10:25:55     FALSE
-3     FALSE             0     dorfman_p 2022-12-07 10:25:21      TRUE
-4     FALSE             0          &lt;NA&gt; 2022-12-07 10:25:18     FALSE
-5     FALSE             0          &lt;NA&gt; 2022-12-07 10:25:10     FALSE
-           replyToSID                  id replyToUID
-1 1600087888674234370 1600436504664281094   19915728
-2                &lt;NA&gt; 1600436435559251968       &lt;NA&gt;
-3 1600430025630547968 1600436294143791104 2151390708
-4                &lt;NA&gt; 1600436280214450176       &lt;NA&gt;
-5                &lt;NA&gt; 1600436248362905600       &lt;NA&gt;
-                                                                          statusSource
-1              &lt;a href=&quot;https://mobile.twitter.com&quot; rel=&quot;nofollow&quot;&gt;Twitter Web App&lt;/a&gt;
-2 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
-3              &lt;a href=&quot;https://mobile.twitter.com&quot; rel=&quot;nofollow&quot;&gt;Twitter Web App&lt;/a&gt;
-4 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
-5 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
-    screenName retweetCount isRetweet retweeted longitude latitude
-1   manonriver            0     FALSE     FALSE        NA       NA
-2      RSS2810          178      TRUE     FALSE        NA       NA
-3   MalacoDeed            0     FALSE     FALSE        NA       NA
-4   NereMarkos           46      TRUE     FALSE        NA       NA
-5 MarijkePenny           65      TRUE     FALSE        NA       NA</code></pre>
-</div>
-</div>
-<ul>
-<li>Step 4: Save the data frame as csv file for futhur using</li>
-</ul>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(TweetsDF,<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterR.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-</section>
-<section id="downloaded-dataset" class="level3">
-<h3 class="anchored" data-anchor-id="downloaded-dataset">Downloaded Dataset</h3>
+<section id="dataset-1" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-1">Dataset 1</h3>
 <section id="energy-consumption-by-sector-dataset" class="level4">
 <h4 class="anchored" data-anchor-id="energy-consumption-by-sector-dataset">Energy Consumption by sector dataset</h4>
-<p>The sample source is from U.S. EIA. EIA conducts a comprehensive data collection program that covers the full spectrum of energy sources, end uses, and energy flows; generates short- and long-term domestic and international energy projections; and performs informative energy analyses. EIA disseminates its data products, analyses, reports, and services to customers and stakeholders primarily through its website and the customer contact center.</p>
-<p>For the direction I want to study, I need to collect monthly data samples of energy consumption of different groups. Americans use a lot of energy in homes, in businesses, and in industry, and to travel and transport goods.There are four end-use sectors that purchase or produce energy for their own consumption and not for resale: - The residential sector includes homes and apartments. - The commercial sector includes offices, malls, stores, schools, hospitals, hotels, warehouses, restaurants, and places of worship and public assembly. - The industrial sector includes facilities and equipment used for manufacturing, agriculture, mining, and construction. - The transportation sector includes vehicles that transport people or goods, such as cars, trucks, buses, motorcycles, trains, aircraft, boats, barges, and ships.</p>
-<p>This dataset is useful in understanding the tendency of energy consumption in each sector and in each energy types. After cleaning and tyding the dataset, I can use this predict the future tendency of consumption.</p>
+<p>This dataset contains the info of value of monthly energy consumption by different sectors. I will use this official data set from U.S. EIA to see how exact the monthly usage of different energy in different sectors. Since the dataset is too dirty and I cannot tell what kind of variables it has now, let’s do the cleaning and tidying step by step. Finally, I will introduce the variables I have in the dataset.</p>
 <ul>
-<li>The uncleaned dataset</li>
+<li>Step 1: load the dataset</li>
 </ul>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>comp_sector <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/consumptionbysector.csv&quot;</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(comp_sector)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sector <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/consumptionbysector.csv&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sector,<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      MSN YYYYMM    Value Column_Order
-1 TXRCBUS 197301 1339.270            1
-2 TXRCBUS 197302 1174.899            1
-3 TXRCBUS 197303  983.374            1
-4 TXRCBUS 197304  715.391            1
-5 TXRCBUS 197305  535.914            1
-6 TXRCBUS 197306  366.934            1
+1 TXRCBUS 194913 4460.588            1
+2 TXRCBUS 195013 4829.528            1
+3 TXRCBUS 195113 5104.680            1
+4 TXRCBUS 195213 5158.406            1
+5 TXRCBUS 195313 5052.749            1
                                         Description         Unit
 1 Primary Energy Consumed by the Residential Sector Trillion Btu
 2 Primary Energy Consumed by the Residential Sector Trillion Btu
 3 Primary Energy Consumed by the Residential Sector Trillion Btu
 4 Primary Energy Consumed by the Residential Sector Trillion Btu
-5 Primary Energy Consumed by the Residential Sector Trillion Btu
-6 Primary Energy Consumed by the Residential Sector Trillion Btu</code></pre>
+5 Primary Energy Consumed by the Residential Sector Trillion Btu</code></pre>
 </div>
 </div>
-</section>
-<section id="energy-consumption-emission" class="level4">
-<h4 class="anchored" data-anchor-id="energy-consumption-emission">Energy Consumption Emission</h4>
-<p>Since our problem is also linked to environmental issues, I wanted to know the contribution of each energy type and each energy consuming sectors to emissions. Again, this dataset comes from EIA. I can analyze which sectors contribute significantly to environmental problems by comparing emissions from conventional energy sources, and also which sectors are making the transition to environmentally friendly energy sources by comparing emissions from new and conventional sources.</p>
 <ul>
-<li>The uncleaned dataset</li>
+<li>Step 2: check the NA missing value. If have, remove it.</li>
+</ul>
+<p>Through checking, No NA missing value in the dataset</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(sector))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<ul>
+<li>Step 3: Remove the irrelevent columns</li>
 </ul>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>emission <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/energycoemission.csv&quot;</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emission)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sector.clean <span class="ot">&lt;-</span> sector[ , <span class="sc">!</span> <span class="fu">names</span>(sector) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;MSN&quot;</span>,<span class="st">&quot;Column_Order&quot;</span>,<span class="st">&quot;Unit&quot;</span>)]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sector.clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  YYYYMM    Value                                       Description
+1 194913 4460.588 Primary Energy Consumed by the Residential Sector
+2 195013 4829.528 Primary Energy Consumed by the Residential Sector
+3 195113 5104.680 Primary Energy Consumed by the Residential Sector
+4 195213 5158.406 Primary Energy Consumed by the Residential Sector
+5 195313 5052.749 Primary Energy Consumed by the Residential Sector
+6 195413 5262.555 Primary Energy Consumed by the Residential Sector</code></pre>
+</div>
+</div>
+<ul>
+<li>Step 4: drop the value in column</li>
+</ul>
+<p>Since the column “Description” in this dataset contain the info of energy type and sector type AND there are more than 10000 dataset, I want to remove the irrelevent row with some value in this column.</p>
+<p>I check the levels of the column and there are totally 15 levels. Among the levels, there are lots of contains that I do not need.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(sector<span class="sc">$</span>Description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] &quot;Primary Energy Consumed by the Residential Sector&quot;                
+ [2] &quot;Electricity Sales to Ultimate Customers by the Residential Sector&quot;
+ [3] &quot;End-Use Energy Consumed by the Residential Sector&quot;                
+ [4] &quot;Electrical System Energy Losses by Residential Sector &quot;           
+ [5] &quot;Total Energy Consumed by the Residential Sector&quot;                  
+ [6] &quot;Primary Energy Consumed by the Commercial Sector&quot;                 
+ [7] &quot;Electricity Sales to Ultimate Customers by the Commercial Sector&quot; 
+ [8] &quot;End-Use Energy Consumed by the Commercial Sector&quot;                 
+ [9] &quot;Electrical System Energy Losses by Commercial Sector &quot;            
+[10] &quot;Total Energy Consumed by the Commercial Sector&quot;                   
+[11] &quot;Primary Energy Consumed by the Industrial Sector&quot;                 
+[12] &quot;Electricity Sales to Ultimate Customers in the Industrial Sector&quot; 
+[13] &quot;End-Use Energy Consumed by the Industrial Sector&quot;                 
+[14] &quot;Electrical System Energy Losses by Industrial Sector &quot;            
+[15] &quot;Total Energy Consumed by the Industrial Sector&quot;                   </code></pre>
+</div>
+</div>
+<p>Remove the value i do not need in “Description”. and check the unique levels left</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sector.clean <span class="ot">&lt;-</span> sector.clean <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>( Description <span class="sc">!=</span> <span class="st">&quot;Electricity Sales to Ultimate Customers by the Residential Sector&quot;</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>( Description <span class="sc">!=</span> <span class="st">&quot;Electricity Sales to Ultimate Customers by the Commercial Sector&quot;</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>( Description <span class="sc">!=</span> <span class="st">&quot;Electricity Sales to Ultimate Customers in the Industrial Sector&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(sector.clean<span class="sc">$</span>Description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] &quot;Primary Energy Consumed by the Residential Sector&quot;     
+ [2] &quot;End-Use Energy Consumed by the Residential Sector&quot;     
+ [3] &quot;Electrical System Energy Losses by Residential Sector &quot;
+ [4] &quot;Total Energy Consumed by the Residential Sector&quot;       
+ [5] &quot;Primary Energy Consumed by the Commercial Sector&quot;      
+ [6] &quot;End-Use Energy Consumed by the Commercial Sector&quot;      
+ [7] &quot;Electrical System Energy Losses by Commercial Sector &quot; 
+ [8] &quot;Total Energy Consumed by the Commercial Sector&quot;        
+ [9] &quot;Primary Energy Consumed by the Industrial Sector&quot;      
+[10] &quot;End-Use Energy Consumed by the Industrial Sector&quot;      
+[11] &quot;Electrical System Energy Losses by Industrial Sector &quot; 
+[12] &quot;Total Energy Consumed by the Industrial Sector&quot;        </code></pre>
+</div>
+</div>
+<ul>
+<li>Step 5: split the column “Description” into two columns “sector” and “energy type”</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sector.clean[<span class="fu">c</span>(<span class="st">&#39;energy_type&#39;</span>, <span class="st">&#39;sector&#39;</span>)] <span class="ot">&lt;-</span> <span class="fu">str_split_fixed</span>(sector.clean<span class="sc">$</span>Description, <span class="st">&#39;by&#39;</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ul>
+<li>Step 6: change the variable levels name and drop the column “Description”</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sector.clean <span class="ot">&lt;-</span> sector.clean[ , <span class="sc">!</span> <span class="fu">names</span>(sector.clean) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Description&quot;</span>)]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(sector.clean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sector.clean<span class="sc">$</span>energy_type[sector.clean<span class="sc">$</span>energy_type<span class="sc">==</span><span class="st">&quot;Primary Energy Consumed &quot;</span>]<span class="ot">&lt;-</span><span class="st">&quot;Primary Energy&quot;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sector.clean<span class="sc">$</span>energy_type[sector.clean<span class="sc">$</span>energy_type<span class="sc">==</span><span class="st">&quot;End-Use Energy Consumed &quot;</span>]<span class="ot">&lt;-</span><span class="st">&quot;End-Use Energy&quot;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>sector.clean<span class="sc">$</span>energy_type[sector.clean<span class="sc">$</span>energy_type<span class="sc">==</span><span class="st">&quot;Electrical System Energy Losses &quot;</span>]<span class="ot">&lt;-</span><span class="st">&quot;Electrical Energy&quot;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>sector.clean<span class="sc">$</span>energy_type[sector.clean<span class="sc">$</span>energy_type<span class="sc">==</span><span class="st">&quot;Total Energy Consumed &quot;</span>]<span class="ot">&lt;-</span><span class="st">&quot;Total&quot;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>sector.clean<span class="sc">$</span>sector[sector.clean<span class="sc">$</span>sector<span class="sc">==</span><span class="st">&quot; the Residential Sector&quot;</span>]<span class="ot">&lt;-</span><span class="st">&quot;Residential&quot;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>sector.clean<span class="sc">$</span>sector[sector.clean<span class="sc">$</span>sector<span class="sc">==</span><span class="st">&quot; the Commercial Sector&quot;</span>]<span class="ot">&lt;-</span><span class="st">&quot;Commercial&quot;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>sector.clean<span class="sc">$</span>sector[sector.clean<span class="sc">$</span>sector<span class="sc">==</span><span class="st">&quot; the Industrial Sector&quot;</span>]<span class="ot">&lt;-</span><span class="st">&quot;Industrial&quot;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>sector.clean<span class="sc">$</span>sector[sector.clean<span class="sc">$</span>sector<span class="sc">==</span><span class="st">&quot; Residential Sector&quot;</span>]<span class="ot">&lt;-</span><span class="st">&quot;Residential&quot;</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>sector.clean<span class="sc">$</span>sector[sector.clean<span class="sc">$</span>sector<span class="sc">==</span><span class="st">&quot; Commercial Sector&quot;</span>]<span class="ot">&lt;-</span><span class="st">&quot;Commercial&quot;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>sector.clean<span class="sc">$</span>sector[sector.clean<span class="sc">$</span>sector<span class="sc">==</span><span class="st">&quot; Industrial Sector&quot;</span>]<span class="ot">&lt;-</span><span class="st">&quot;Industrial&quot;</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sector.clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  YYYYMM    Value    energy_type      sector
+1 194913 4460.588 Primary Energy Residential
+2 195013 4829.528 Primary Energy Residential
+3 195113 5104.680 Primary Energy Residential
+4 195213 5158.406 Primary Energy Residential
+5 195313 5052.749 Primary Energy Residential
+6 195413 5262.555 Primary Energy Residential</code></pre>
+</div>
+</div>
+<ul>
+<li>Step 7: save to csv file</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(sector.clean,<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/cleaned data/clean_sector.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="downloaded-dataset-2" class="level3">
+<h3 class="anchored" data-anchor-id="downloaded-dataset-2">Downloaded Dataset 2</h3>
+<section id="energy-co2-emission-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="energy-co2-emission-dataset">Energy CO^2 Emission dataset</h4>
+<p>This dataset contains the info of value of annually total energy consumption and Total Energy CO2 Emissions. I will use this official data set from U.S. EIA to see how exact the annually usage of energy and the CO2 emission anually. ALso, i can analyze the relationship between energy consumption and energy CO2 emossion. Since the dataset is too dirty and I cannot tell what kind of variables it has now, let’s do the cleaning and tidying step by step. Finally, I will introduce the variables I have in the dataset.</p>
+<ul>
+<li>Step 1: load the dataset</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>emission <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/energycoemission.csv&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emission,<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      MSN YYYYMM     Value Column_Order                      Description
@@ -3030,17 +2882,200 @@ vertical-align: -.125em;
 3 TETCBUS 195113 36.953661            1 Total Primary Energy Consumption
 4 TETCBUS 195213 36.726037            1 Total Primary Energy Consumption
 5 TETCBUS 195313 37.640598            1 Total Primary Energy Consumption
-6 TETCBUS 195413  36.61354            1 Total Primary Energy Consumption
              Unit
 1 Quadrillion Btu
 2 Quadrillion Btu
 3 Quadrillion Btu
 4 Quadrillion Btu
-5 Quadrillion Btu
-6 Quadrillion Btu</code></pre>
+5 Quadrillion Btu</code></pre>
 </div>
 </div>
-<p>reference link for downloaded dataset： https://www.eia.gov/totalenergy/data/monthly/</p>
+<ul>
+<li>Step 2: check the NA missing value. If have, remove it.</li>
+</ul>
+<p>Through checking, No NA missing value in the dataset</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(emission))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<ul>
+<li>Step 3: Remove the irrelevent columns</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>emission.clean <span class="ot">&lt;-</span> emission[ , <span class="sc">!</span> <span class="fu">names</span>(emission) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;MSN&quot;</span>,<span class="st">&quot;Column_Order&quot;</span>,<span class="st">&quot;Unit&quot;</span>)]</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emission.clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  YYYYMM     Value                      Description
+1 194913 31.967775 Total Primary Energy Consumption
+2 195013 34.598567 Total Primary Energy Consumption
+3 195113 36.953661 Total Primary Energy Consumption
+4 195213 36.726037 Total Primary Energy Consumption
+5 195313 37.640598 Total Primary Energy Consumption
+6 195413  36.61354 Total Primary Energy Consumption</code></pre>
+</div>
+</div>
+<ul>
+<li>Step 4: drop the value in column</li>
+</ul>
+<p>Since the column “Description” in this dataset contain the info of total energy consumption, energy expenditures and total energy CO2 emission in different calculation mathod AND there are more than 10000 dataset, I want to remove the irrelevent row with some value in this column.</p>
+<p>I check the levels of the column and there are totally 10 levels. Among the levels, there are lots of contains that I do not need. such as “Total Primary Energy Consumption per Real Dollar of GDP”,“Energy Expenditures as Share of GDP”,“Energy Expenditures as Share of Gross Output”,“Total Energy CO2 Emissions per Real Dollar of GDP”. These are the value that i will not consider in my project, so i will remove them.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(emission<span class="sc">$</span>Description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] &quot;Total Primary Energy Consumption&quot;                       
+ [2] &quot;Total Primary Energy Consumption per Capita&quot;            
+ [3] &quot;Total Primary Energy Consumption per Real Dollar of GDP&quot;
+ [4] &quot;Energy Expenditures&quot;                                    
+ [5] &quot;Energy Expenditures per Capita&quot;                         
+ [6] &quot;Energy Expenditures as Share of GDP&quot;                    
+ [7] &quot;Energy Expenditures as Share of Gross Output&quot;           
+ [8] &quot;Total Energy CO2 Emissions&quot;                             
+ [9] &quot;Total Energy CO2 Emissions per Capita&quot;                  
+[10] &quot;Total Energy CO2 Emissions per Real Dollar of GDP&quot;      </code></pre>
+</div>
+</div>
+<p>Remove the value i do not need in “Description”</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>emission.clean <span class="ot">&lt;-</span> emission.clean <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>( Description <span class="sc">!=</span> <span class="st">&quot;Total Primary Energy Consumption per Real Dollar of GDP&quot;</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>( Description <span class="sc">!=</span> <span class="st">&quot;Energy Expenditures as Share of GDP&quot;</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>( Description <span class="sc">!=</span> <span class="st">&quot;Energy Expenditures as Share of Gross Output&quot;</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>( Description <span class="sc">!=</span> <span class="st">&quot;Total Energy CO2 Emissions per Real Dollar of GDP&quot;</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emission.clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  YYYYMM     Value                      Description
+1 194913 31.967775 Total Primary Energy Consumption
+2 195013 34.598567 Total Primary Energy Consumption
+3 195113 36.953661 Total Primary Energy Consumption
+4 195213 36.726037 Total Primary Energy Consumption
+5 195313 37.640598 Total Primary Energy Consumption
+6 195413  36.61354 Total Primary Energy Consumption</code></pre>
+</div>
+</div>
+<ul>
+<li>Step 5: check and change the varible data type</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(emission.clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>&#39;data.frame&#39;:   438 obs. of  3 variables:
+ $ YYYYMM     : int  194913 195013 195113 195213 195313 195413 195513 195613 195713 195813 ...
+ $ Value      : chr  &quot;31.967775&quot; &quot;34.598567&quot; &quot;36.953661&quot; &quot;36.726037&quot; ...
+ $ Description: chr  &quot;Total Primary Energy Consumption&quot; &quot;Total Primary Energy Consumption&quot; &quot;Total Primary Energy Consumption&quot; &quot;Total Primary Energy Consumption&quot; ...</code></pre>
+</div>
+</div>
+<p>Change the <code>value</code> to integer</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>emission.clean<span class="sc">$</span>Value <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(emission.clean<span class="sc">$</span>Value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Change the int <code>YYYYMM</code> as chr</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>emission.clean<span class="sc">$</span>YYYYMM <span class="ot">&lt;-</span> <span class="fu">as.character</span>(emission.clean<span class="sc">$</span>YYYYMM)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>emission.clean<span class="sc">$</span>Description <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(emission.clean<span class="sc">$</span>Description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ul>
+<li>Step 6: Tidying the data</li>
+</ul>
+<p>pivot wider the <code>Description</code> and change the column name for better extract</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>emission.clean <span class="ot">&lt;-</span> emission.clean <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> Description, <span class="at">values_from =</span> Value)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(emission.clean) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;Date&#39;</span>,<span class="st">&#39;v1&#39;</span>,<span class="st">&#39;v2&#39;</span>,<span class="st">&#39;v3&#39;</span>,<span class="st">&#39;v4&#39;</span>,<span class="st">&#39;v5&#39;</span>,<span class="st">&#39;v6&#39;</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emission.clean,<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+  Date      v1    v2    v3    v4    v5    v6
+  &lt;chr&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+1 194913    31   214    NA    NA  2206    14
+2 195013    34   227    NA    NA  2382    15
+3 195113    36   239    NA    NA  2526    16
+4 195213    36   233    NA    NA  2473    15
+5 195313    37   235    NA    NA  2536    15</code></pre>
+</div>
+</div>
+<ul>
+<li>Step 7: Check NA and change the NA</li>
+</ul>
+<p>After pivoting, we found 44 NA value in the dataset. We will not remove the NA value, since the data is colloected by Date. If I remove the entire row of containning NA value, The Date will not be continious. Thus, I choose to fill the NA value by the mean of columns. After filling the value, there is no missing value in the dataset.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(emission.clean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 44</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># change the NA by mean of the column</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>emission.clean<span class="sc">$</span>v1[<span class="fu">is.na</span>(emission.clean<span class="sc">$</span>v1)]<span class="ot">&lt;-</span><span class="fu">mean</span>(emission.clean<span class="sc">$</span>v1,<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>emission.clean<span class="sc">$</span>v2[<span class="fu">is.na</span>(emission.clean<span class="sc">$</span>v2)]<span class="ot">&lt;-</span><span class="fu">mean</span>(emission.clean<span class="sc">$</span>v2,<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>emission.clean<span class="sc">$</span>v3[<span class="fu">is.na</span>(emission.clean<span class="sc">$</span>v3)]<span class="ot">&lt;-</span><span class="fu">mean</span>(emission.clean<span class="sc">$</span>v3,<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>emission.clean<span class="sc">$</span>v4[<span class="fu">is.na</span>(emission.clean<span class="sc">$</span>v4)]<span class="ot">&lt;-</span><span class="fu">mean</span>(emission.clean<span class="sc">$</span>v4,<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>emission.clean<span class="sc">$</span>v5[<span class="fu">is.na</span>(emission.clean<span class="sc">$</span>v5)]<span class="ot">&lt;-</span><span class="fu">mean</span>(emission.clean<span class="sc">$</span>v5,<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>emission.clean<span class="sc">$</span>v6[<span class="fu">is.na</span>(emission.clean<span class="sc">$</span>v6)]<span class="ot">&lt;-</span><span class="fu">mean</span>(emission.clean<span class="sc">$</span>v6,<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># check NA again</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(emission.clean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emission.clean,<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 7
+   Date      v1    v2      v3    v4    v5    v6
+   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 194913    31   214 668411. 2340.  2206    14
+ 2 195013    34   227 668411. 2340.  2382    15
+ 3 195113    36   239 668411. 2340.  2526    16
+ 4 195213    36   233 668411. 2340.  2473    15
+ 5 195313    37   235 668411. 2340.  2536    15
+ 6 195413    36   225 668411. 2340.  2422    14
+ 7 195513    40   242 668411. 2340.  2684    16
+ 8 195613    41   247 668411. 2340.  2777    16
+ 9 195713    41   243 668411. 2340.  2756    16
+10 195813    41   238 668411. 2340.  2703    15</code></pre>
+</div>
+</div>
+<ul>
+<li>Step 7: save to csv file</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">write.csv</span>(emission.clean,<span class="st">&quot;/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/cleaned data/clean_emission.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The Variable Description for cleaned Energy CO2 Emission Dataset <code>clean_emission.csv</code> <br> - Date: The year time from 1949 to 2021 <br> - v1: Total Primary Energy Consumption in Quadrillion Btu <br> - v2: Total Primary Energy Consumption per Capita in Million Btu <br> - v3: Energy Expenditures in Million Nominal Dollars <br> - v4: Energy Expenditures per Capita in Nominal Dollars <br> - v5: Total Energy CO2 Emissions in Million Metric Tons Carbon Dioxide <br> - v6: Total Energy CO2 Emissions per Capita in Metric Tons Carbon Dioxide <br></p>
 </section>
 </section>
 </section>
