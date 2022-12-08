@@ -1,0 +1,13 @@
+---
+title: "Exploring Data"
+pdf-engine: lualatex
+format:
+  html:
+        code-fold: true
+        self-contained: true
+execute:
+    warning: false
+---
+
+Exploratory Data Analysis (EDA) refers to the critical process of performing initial investigations on data so as to discover patterns,to spot anomalies,to test hypothesis and to check assumptions with the help of summary statistics and graphical representations. In my project, I plan to use the data I cleaned previously to do EDA in order to gather some summaries of datasets. 
+

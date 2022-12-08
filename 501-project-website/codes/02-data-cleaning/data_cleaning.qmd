@@ -3,93 +3,15 @@ title: "Data Gathering"
 pdf-engine: lualatex
 format:
   html:
-        code-fold: true
+        code-fold: False
         self-contained: true
 execute:
     warning: false
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-reticulate::use_python("/usr/local/bin/python3")
-```
-
 **Data cleaning** is the process of fixing or removing incorrect, corrupted, incorrectly formatted, duplicate, or incomplete data within a dataset. When combining multiple data sources, there are many opportunities for data to be duplicated or mislabeled. If data is incorrect, outcomes and algorithms are unreliable, even though they may look correct. There is no one absolute way to prescribe the exact steps in the data cleaning process because the processes will vary from dataset to dataset. But it is crucial to establish a template for your data cleaning process so you know you are doing it the right way every time. In this section, I will clean my text data and modified data. The steps for cleaning these two kind of data is different, so I will specify the cleaning steps with presenting the code. 
 
-## Part 1 - R on downloaded dataset
-
-Load the possible packages
-```{r}
-library(tidyverse)
-library(dplyr)
-library(reshape2)
-library(tidyr)
-library(stringr)
-```
-
-#### Energy Consumption by sector dataset
-
-This dataset contains the info of value of monthly energy consumption by different sectors. I will use this official data set from U.S. EIA to see how exact the monthly usage of different energy in different sectors. Since the dataset is too dirty and I cannot tell what kind of variables it has now, let's do the cleaning and tidying step by step. Finally, I will introduce the variables I have in the dataset.
-
- - Step 1: load the dataset
-```{r}
-sector <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/consumptionbysector.csv")
-head(sector,5)
-```
-
- - Step 2: check the NA missing value. If have, remove it. 
-
- Through checking, No NA missing value in the dataset
-```{r}
-sum(is.na(sector))
-```
-
- - Step 3: Remove the irrelevent columns
- ```{r}
-sector.clean <- sector[ , ! names(sector) %in% c("MSN","Column_Order")]
-head(sector.clean)
- ```
- 
- - Step 4: drop the value in column
-
- Since the column "Description" in this dataset contain the info of energy type and sector type AND there are more than 10000 dataset, I want to remove the irrelevent row with some value in this column.
-
- I check the levels of the column and there are totally 15 levels. Among the levels, there are lots of contains that I do not need. 
- ```{r}
- unique(sector$Description)
- ```
-
- Remove the value i do not need in "Description"
- ```{r}
-sector.clean <- sector.clean %>%
-         filter( Description != "Electricity Sales to Ultimate Customers in the Residential Sector")%>%
-         filter( Description != "Electricity Sales to Ultimate Customers in the Commercial Sector")%>%
-         filter( Description != "Electricity Sales to Ultimate Customers in the Industrial Sector")
- ```
-
- - Step 5: split the column "Description" into two columns "sector" and "energy type"
- ```{r}
- sector.clean[c('energy_type', 'sector')] <- str_split_fixed(sector.clean$Description, 'by', 2)
- ```
-
- - Step 6: change the variable levels name and drop the column "Description"
- ```{r}
- sector.clean$energy_type[sector.clean$energy_type=="Primary Energy Consumed"]<-"Primary Energy"
- sector.clean$energy_type[sector.clean$energy_type=="End-Use Energy Consumed"]<-"End-Use Energy"
- sector.clean$energy_type[sector.clean$energy_type=="Electrical System Energy Losses"]<-"Electrical Energy"
- sector.clean$sector[sector.clean$sector=="the Residential Sector"]<-"Residential"
- sector.clean$sector[sector.clean$sector=="the Commercial Sector"]<-"Commercial"
- sector.clean$sector[sector.clean$sector=="the Industrial Sector"]<-"Industrial"
-
- sector.clean <- sector.clean[ , ! names(sector.clean) %in% c("Description")]
- head(sector.clean)
- ```
- - Step 7: save to csv file
- ```{r}
- write.csv(sector.clean,"/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/cleaned data/cleansector.csv")
- ```
-
-## Part 2 - Python on Text Data 
+## Python on Text Data 
 
 #### Dataset "twitterpython.csv" which is grabbed through python
 

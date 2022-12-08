@@ -1,9 +1,9 @@
 ---
-title: "Data Gathering"
+title: "Data Cleaning"
 pdf-engine: lualatex
 format:
   html:
-        code-fold: true
+        code-fold: False
         self-contained: true
 execute:
     warning: false
@@ -11,6 +11,7 @@ execute:
 
 **Data cleaning** is the process of fixing or removing incorrect, corrupted, incorrectly formatted, duplicate, or incomplete data within a dataset. When combining multiple data sources, there are many opportunities for data to be duplicated or mislabeled. If data is incorrect, outcomes and algorithms are unreliable, even though they may look correct. There is no one absolute way to prescribe the exact steps in the data cleaning process because the processes will vary from dataset to dataset. But it is crucial to establish a template for your data cleaning process so you know you are doing it the right way every time. In this section, I will clean my text data and modified data. The steps for cleaning these two kind of data is different, so I will specify the cleaning steps with presenting the code. 
 
+## Part 1
 ## R on downloaded dataset
 
 Load the possible packages
@@ -196,3 +197,70 @@ head(emission.clean,10)
  - v5: Total Energy CO2 Emissions in Million Metric Tons Carbon Dioxide <br>
  - v6: Total Energy CO2 Emissions per Capita in Metric Tons Carbon Dioxide <br>
 
+
+## Part 2
+#### Dataset "twitterR.csv" which is grabbed by R
+
+For Twitter API in R, I used twitter to scratch keywords like **"oil","gas","solar power","wind power"** to scratch users’ attitudes about these four kinds of energy. I want to search different types of energy in order to analysis people attitude toward different enegy, and what they think about two different kind of energy (renewable energy and convential energy).
+
+ - Step 1: import the packages we may use during data processing
+```{r}
+library(selectr)
+library(rvest)
+library(xml2)
+library(wordcloud2) # for generating really cool looking wordclouds
+library(tm) # for text minning
+library(dplyr) 
+library(ROAuth)
+library(jsonlite)
+library(httpuv)
+suppressWarnings(expr)
+```
+
+ - Step 2: Load the Dataset we grab by using R
+```{r}
+twtr <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterR.csv")
+head(twtr,5)
+```
+
+ - Step 3: Find the dataset with NA missing value
+ 
+ Since R collects lots of basic infor of users and tweet situation, we just need to check whether there are missing value in text variable. Through checking, there is no missing value in the text.
+```{r}
+sum(is.na(twtr$text))
+```
+ 
+ - Step 4: Pre-processing the text info in the dataset
+```{r}
+twittertext = Corpus(VectorSource(twtr$text))
+toSpace = content_transformer(
+              function (x, pattern)
+              gsub(pattern, " ", x))
+twittertext1 = tm_map(twittertext, toSpace, "/")
+twittertext1 = tm_map(twittertext, toSpace, "@")
+twittertext1 = tm_map(twittertext, toSpace, "#")
+twittertext1 = tm_map(twittertext1, content_transformer(tolower))
+twittertext1 = tm_map(twittertext1, removeNumbers)
+twittertext1 = tm_map(twittertext1, stripWhitespace)
+removeURL <- function(x) gsub("http[[:alnum:]]*", "", x)
+text = tm_map(twittertext, removeURL)
+head(text)
+```
+
+ - Step 5: count the words freqency
+```{r}
+term = TermDocumentMatrix(text)
+m = as.matrix(term)
+v = sort(rowSums(m), 
+         decreasing = TRUE)
+d = data.frame(word = names(v),
+               freq = v)
+head(d, 10)
+```
+
+ - Step 6: saved as csv for python sentiment analysis. 
+```{r}
+write.csv(d,"/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/cleaned data/countwordR.csv")
+```
+
+ - Step 7: for the sentiment analysis, I will use python to do it, so please go to the text data in python to see the sentiment analysis.
