@@ -1,29 +1,25 @@
 ---
-title: "Data Gathering"
-pdf-engine: lualatex
+title: "Data Gathering through Python"
 format:
   html:
-        code-fold: true
+        code-fold: false
         self-contained: true
 execute:
     warning: false
 ---
+
 Data gathering is the process of gathering and measuring information on targeted variables in an established system, which then enables one to answer relevant questions and evaluate outcomes. In this section, I will introduction what kind of tools I used, what kind of data I want to get related to my project, and the meaning of the data. Also, the coding process and data result will be displayed. 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-reticulate::use_python("/usr/local/bin/python3")
-```
 
 ### Tools for Data Gathering
  - Twitter API 
 
  The Twitter API is a set of programmatic endpoints that can be used to understand or build the conversation on Twitter. This API allows you to find and retrieve, engage with, or create a variety of different resources including the following: Tweets, Direct Messages, Spaces, Lists, users, and more. 
 
- - Resource from U.S. Energy Information Administration <br>
+ - Resource from U.S. Energy Information Administration 
 
  The U.S. Energy Information Administration (EIA) is a principal agency of the U.S. Federal Statistical System responsible for collecting, analyzing, and disseminating energy information to promote sound policymaking, efficient markets, and public understanding of energy and its interaction with the economy and the environment. EIA programs cover data on coal, petroleum, natural gas, electric, renewable and nuclear energy. EIA is part of the U.S. Department of Energy. 
- Reference link : https://www.eia.gov/
+ Reference link : https://www.eia.gov/b
 
 ### My Project Direction and 10 Questions
 
@@ -45,7 +41,7 @@ reticulate::use_python("/usr/local/bin/python3")
 
 
 ### Data Type
- - Text Data <br>
+ - Text Data 
 
  Text data usually consists of documents which can represent words, sentences or even paragraphs of free flowing text.
 
@@ -74,7 +70,7 @@ import pandas as pd
 - Step 2: Using the keys from Twitter and defined key words to scratch data into json file
 ```{python}
 # READ FILE
-f = open("/Users/apple/Desktop/anly-501-project-HuitingSong-1//501-project-website/codes/01-data-gathering/api-keys.json")
+f = open("/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/codes/01-data-gathering/api-keys.json")
 input=json.load(f); 
 
 # LOAD KEYS INTO API
@@ -101,7 +97,7 @@ def search_twitter(query, max_results,tweet_fields, bearer_token = bearer_token)
 
 tweet_fields = "tweet.fields=text,author_id,created_at,lang"
 
-data = "/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/raw data/"
+data = "/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/data/raw data/"
 search_tweets = ["energy consumption","clean energy","conventional energy","environmental protection","global warming"]
 for idx,val in enumerate(search_tweets):
     tweets_jsondump = []
@@ -143,84 +139,5 @@ twitterdf
 
 - Step 4: Save the data frame as csv file for futhur using
 ```{python}
-twitterdf.to_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1//501-project-website/data/raw data/twitterpython.csv")
+twitterdf.to_csv("/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterpython.csv")
 ```
-
-### Twitter API in R
-
-For Twitter API in R, I used twitter to scratch keywords like **"oil","gas","solar power","wind power"** to scratch users’ attitudes about these four kinds of energy. I want to search different types of energy in order to analysis people attitude toward different enegy, and what they think about two different kind of energy (renewable energy and convential energy).
-
- - Step 1: Load the R packages 
-```{r}
-library(reticulate)
-library(selectr)
-library(rvest)
-library(xml2)
-library(rtweet) # for scraping tweets
-library(ROAuth)
-library(jsonlite)
-library(httpuv)
-library(twitteR)
-```
-
- - Step 2: Using the keys from Twitter and defined key words to scratch data into json file
-```{r}
-consumer_key = "zV2ER7zM1HzFUshDEHpJ8UuVS"
-consumer_secret = "5uHStDPwbFxEfLZojqPP9eDcWWXgfNCwdVPe8VG0xFvPldjhHJ"
-access_token = "1558952162692108289-bQDaHCqBuJZnXXqeQWnz7Pk1bhdiWm"
-access_token_secret = "kSJLq0tng5MfaFHoxbc7GpQ6D4SaplXzthDrW2SzhTSpD"
-bearer_token = "AAAAAAAAAAAAAAAAAAAAAEGthAEAAAAArntLVGGx5Q8Irzy%2BRTc2HdgQ7Vw%3DOR64kNsk2o0eqNl9KKZQKs7i2yzUoHEObJHwsQWiwesFtlQKdp"
-
-requestURL='https://api.twitter.com/oauth/request_token'
-accessURL='https://api.twitter.com/oauth/access_token'
-authURL='https://api.twitter.com/oauth/authorize'
-
-s_key  = 'gas OR oil OR solar power OR wind power'
-n_tweets = 250 
-
-twitteR:::setup_twitter_oauth(consumer_key, consumer_secret,access_token,access_token_secret)
-Search1<-twitteR::searchTwitter(s_key,n=n_tweets, since="2022-05-01",lang="en")
-```
-
- - Step 3: Display the dataset
-```{r}
-TweetsDF<- twListToDF(Search1)
-head(TweetsDF,5)
-```
-
- - Step 4: Save the data frame as csv file for futhur using
-```{r}
-write.csv(TweetsDF,"/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterR.csv")
-```
-
-### Downloaded Dataset
-
-#### Energy Consumption by sector dataset
-
-The sample source is from U.S. EIA. EIA conducts a comprehensive data collection program that covers the full spectrum of energy sources, end uses, and energy flows; generates short- and long-term domestic and international energy projections; and performs informative energy analyses. EIA disseminates its data products, analyses, reports, and services to customers and stakeholders primarily through its website and the customer contact center.
-
-For the direction I want to study, I need to collect monthly data samples of energy consumption of different groups. Americans use a lot of energy in homes, in businesses, and in industry, and to travel and transport goods.There are four end-use sectors that purchase or produce energy for their own consumption and not for resale: 
- - The residential sector includes homes and apartments.
- - The commercial sector includes offices, malls, stores, schools, hospitals, hotels, warehouses, restaurants, and places of worship and public assembly.
- - The industrial sector includes facilities and equipment used for manufacturing, agriculture, mining, and construction.
- - The transportation sector includes vehicles that transport people or goods, such as cars, trucks, buses, motorcycles, trains, aircraft, boats, barges, and ships.
-
-This dataset is useful in understanding the tendency of energy consumption in each sector and in each energy types. After cleaning and tyding the dataset, I can use this predict the future tendency of consumption.
-
- - The uncleaned dataset
-```{r}
-comp_sector <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/consumptionbysector.csv")
-head(comp_sector)
-```
-
-#### Energy Consumption Emission 
-
-Since our problem is also linked to environmental issues, I wanted to know the contribution of each energy type and each energy consuming sectors to emissions. Again, this dataset comes from EIA. I can analyze which sectors contribute significantly to environmental problems by comparing emissions from conventional energy sources, and also which sectors are making the transition to environmentally friendly energy sources by comparing emissions from new and conventional sources.
-
- - The uncleaned dataset
-```{r}
-emission <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/energycoemission.csv")
-head(emission)
-```
-
-reference link for downloaded dataset： https://www.eia.gov/totalenergy/data/monthly/ 
