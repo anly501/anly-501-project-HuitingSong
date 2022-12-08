@@ -2,7 +2,7 @@
 title: "Data Gathering through Python"
 format:
   html:
-        code-fold: false
+        code-fold: true
         self-contained: true
 execute:
     warning: false
@@ -56,7 +56,7 @@ Data gathering is the process of gathering and measuring information on targeted
 
 ### Twitter API in Python
 
-I will set **"energy consumption" "global warming" "clean energy" "conventional energy" "environmental protection"** as the keywords for the twitter api to get the text data. The data obtained will allow me to analyze people's attitudes towards energy consumption, how people perceive different energy sources, and also to analyze people's attitudes towards protecting the environment in terms of energy. I can also use this text data to analyze the relationship between the environment and energy in the minds of twitter users. I will also keep adjusting the text data later for future research. In data gathering section, I used for loop to search over 600 tweets in order to make comprehensive datasets. I will collect more in the future to scratch over 2000 tweets in order to make sure my results are accurate. 
+I will set **"enviornment" "clean energy" "conventional energy" "energy consumption"** as the keywords for the twitter api to get the text data. The data obtained will allow me to analyze people's attitudes towards energy consumption, how people perceive different energy sources, and also to analyze people's attitudes towards protecting the environment in terms of energy. I can also use this text data to analyze the relationship between the environment and energy in the minds of twitter users. I will also keep adjusting the text data later for future research. In data gathering section, I used for loop to search over 1000 tweets in order to make comprehensive datasets. I will collect more in the future to scratch over 2000 tweets in order to make sure my results are accurate. 
 
 - Step 1: The python package we will use in gathering data.
 ```{python}
@@ -65,6 +65,9 @@ import tweepy
 import requests
 from pandas import json_normalize 
 import pandas as pd
+from datetime import datetime
+import time
+import os
 ```
 
 - Step 2: Using the keys from Twitter and defined key words to scratch data into json file
@@ -98,7 +101,7 @@ def search_twitter(query, max_results,tweet_fields, bearer_token = bearer_token,
 tweet_fields = "tweet.fields=text,author_id,created_at,lang"
 
 data = "/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/"
-search_tweets = ["energy consumption","clean energy","conventional energy","environmental protection","global warming"]
+search_tweets = ["clean energy","conventional energy","environment","energy consumption"]
 for idx,val in enumerate(search_tweets):
     tweets_jsondump = []
     json_response1 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
@@ -107,6 +110,10 @@ for idx,val in enumerate(search_tweets):
     json_response4 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
     json_response5 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
     json_response6 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    json_response7 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    json_response8 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    json_response9 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    json_response10 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
     for i in json_response1['data']:
         tweets_jsondump.append(i)
     for i in json_response2['data']:
@@ -118,6 +125,14 @@ for idx,val in enumerate(search_tweets):
     for i in json_response5['data']:
         tweets_jsondump.append(i)
     for i in json_response6['data']:
+        tweets_jsondump.append(i)
+    for i in json_response7['data']:
+        tweets_jsondump.append(i)
+    for i in json_response8['data']:
+        tweets_jsondump.append(i)
+    for i in json_response9['data']:
+        tweets_jsondump.append(i)
+    for i in json_response10['data']:
         tweets_jsondump.append(i)
     with open(data+str(val)+'.json','w') as json_file:
         json.dump(tweets_jsondump,json_file)
@@ -132,7 +147,11 @@ twitterdf3 = json_normalize(json_response3,"data")
 twitterdf4 = json_normalize(json_response4,"data")
 twitterdf5 = json_normalize(json_response5,"data")
 twitterdf6 = json_normalize(json_response6,"data")
-twitterdf = [twitterdf1,twitterdf2,twitterdf3,twitterdf4,twitterdf5,twitterdf6]
+twitterdf7 = json_normalize(json_response6,"data")
+twitterdf8 = json_normalize(json_response6,"data")
+twitterdf9 = json_normalize(json_response6,"data")
+twitterdf10 = json_normalize(json_response6,"data")
+twitterdf = [twitterdf1,twitterdf2,twitterdf3,twitterdf4,twitterdf5,twitterdf6,twitterdf7,twitterdf8,twitterdf9,twitterdf10]
 twitterdf = pd.concat(twitterdf)
 twitterdf
 ```

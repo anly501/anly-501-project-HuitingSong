@@ -1,0 +1,239 @@
+---
+title: "Naive Bayes"
+pdf-engine: lualatex
+format:
+  html:
+        code-fold: true
+        self-contained: true
+execute:
+    warning: false
+---
+
+Naive Bayes methods are a set of supervised learning algorithms based on applying Bayes’ theorem with the “naive” assumption of conditional independence between every pair of features given the value of the class variable. In spite of their apparently over-simplified assumptions, naive Bayes classifiers have worked quite well in many real-world situations, famously document classification and spam filtering. They require a small amount of training data to estimate the necessary parameters. Naive Bayes learners and classifiers can be extremely fast compared to more sophisticated methods. The decoupling of the class conditional feature distributions means that each distribution can be independently estimated as a one dimensional distribution. This in turn helps to alleviate problems stemming from the curse of dimensionality.
+
+In this section, I will use the TI-IDF transformer to process my cleaned text data. And then using two different Naive Bayes classifiers for my dataset. Finally, I will conpare model performance through accuracy and confusion matrix to determine which model is better for my data. More of the explaination of my tool using will be introduced in the section they are used. 
+
+## Part 1 - Naive Bayes in labeled text data
+
+#### On cleaned datset about twitter users' sentiment of energy and environment.
+
+- Loading the required packages
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib as mlp
+import re
+from bs4 import BeautifulSoup
+import nltk
+from nltk.corpus import stopwords
+import sklearn
+from sklearn.naive_bayes import GaussianNB,MultinomialNB,BernoulliNB
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+import matplotlib.pyplot as plt
+```
+
+- Loading the dataset
+```{python}
+score_py = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/pystmscore.csv")
+score_py.head()
+```
+
+- Categorize the sentiment score
+
+Since in the data cleaning process. we use sentiment analysis to get the opinion score respect to 'negative','positive','neutral'. Now, here we must make a label for the score for future prediction. The label will be created based on 'compound' variable.
+
+The compound score is the sum of positive, negative & neutral scores which is then normalized between -1(most extreme negative) and +1 (most extreme positive). The more Compound score closer to +1, the higher the positivity of the text.
+
+then, save the labeled sentiment data into cleaned data folder for future reference.
+
+```{python}
+conditions = [
+    (score_py['compound'] >= 0.33),
+    (score_py['compound'] <= -0.33),
+    (score_py['compound'] > -0.33) & (score_py['compound'] < 0.33),
+]
+
+values = ['positive', 'negative', 'neutral']
+
+score_py["sentiment"] = np.select(conditions, values)
+
+score_py.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/stm_py_label.csv")
+
+score_py.head()
+```
+
+
+ - split the dataset into traning set (80%) and test set (20%)。 
+```{python}
+x_train,x_test,y_train,y_test=train_test_split(score_py['text'],score_py['sentiment'],test_size=0.2)
+```
+
+ - process the text
+```{python}
+REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
+BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
+STOPWORDS = set(stopwords.words('english'))
+
+def cleanText(text):
+    text = BeautifulSoup(text, "lxml").text
+    text = text.lower()
+    text = REPLACE_BY_SPACE_RE.sub(' ', text) # replace REPLACE_BY_SPACE_RE symbols by space in text
+    text = BAD_SYMBOLS_RE.sub('', text) # delete symbols which are in BAD_SYMBOLS_RE from text
+    text = ' '.join(word for word in text.split() if word not in STOPWORDS) 
+    return text
+
+score_py['text'] = score_py['text'].apply(cleanText)
+score_py.head()
+```
+
+ - Performs the TF-IDF transformation from a provided matrix of counts.
+
+In the data cleaning section, I use bag of word method to model converts text into fixed-length vectors by counting how many times each word appears. Here, i will use TF-IDF which is Term Frequency Inverse Document Frequency. TFIDF works by proportionally increasing the number of times a word appears in the document but is counterbalanced by the number of documents in which it is present. Hence, words like ‘this’, ’are’ etc., that are commonly present in all the documents are not given a very high rank. 
+
+First, the "TfidfVectorizer" function converts a collection of raw documents into a matrix of TF-IDF features. The stop_words_ attribute can get large and increase the model size when pickling.
+```{python}
+tfidf = TfidfVectorizer(stop_words= 'english', sublinear_tf= True)
+tfidf
+```
+
+Second, I fit the x_train data into the TF-IDF and transform them to get the tf-idf scores of a set of sentences. 
+
+I print the result of TF-IDF score matching with tokens, so you can what exactly TF-IDF do here and what it does.
+
+```{python}
+tfidf_fitted = tfidf.fit(x_train)
+tfidf_scores = tfidf_fitted.transform(x_train)
+
+# to see how the tfidf score the tokens
+# get the first vector out for x_train
+first_vec=tfidf_scores[0] 
+# place tf-idf values in a pandas data frame 
+df = pd.DataFrame(first_vec.T.todense(), index=tfidf.get_feature_names(), columns=["tfidf"]) 
+df.sort_values(by=["tfidf"],ascending=False)
+```
+
+
+ - Different Naive Bayes model
+
+**1. Bernoulli NB**
+
+Naive Bayes classifier for multivariate Bernoulli models.
+
+ implements the naive Bayes training and classification algorithms for data that is distributed according to multivariate Bernoulli distributions; i.e., there may be multiple features but each one is assumed to be a binary-valued (Bernoulli, boolean) variable. Therefore, this class requires samples to be represented as binary-valued feature vectors; if handed any other kind of data, a BernoulliNB instance may binarize its input (depending on the binarize parameter).
+
+I use the function from package scikit-learn.
+```{python}
+bayes = BernoulliNB()
+bayes.fit(tfidf_scores, y_train)
+```
+
+Train the model to get the accuracy
+```{python}
+tfidf_scores_test = tfidf_fitted.transform(x_test)
+accuracy = bayes.score(tfidf_scores_test,y_test)
+print("The accuracy for BernoulliNB is: ",accuracy)
+```
+
+In the last step, i get the trained TI-IDF score , so now i can use it to do the prediction. Then, print out the classification report which contain accuracy, f1-score, AUC ROC score.
+```{python}
+pred = bayes.predict(tfidf_scores_test)
+print(classification_report(y_test,pred))
+```
+
+**2. Multinomial NB**
+
+Naive Bayes classifier for multinomial models.
+ 
+ The multinomial Naive Bayes classifier is suitable for classification with discrete features (e.g., word counts for text classification). The multinomial distribution normally requires integer feature counts. However, in practice, fractional counts such as tf-idf may also work.
+
+Using the model function
+```{python}
+nb_clf = MultinomialNB()
+nb_clf.fit(tfidf_scores, y_train)
+```
+
+Train the model to get the accuracy
+```{python}
+tfidf_scores_test = tfidf_fitted.transform(x_test)
+accuracy = nb_clf.score(tfidf_scores_test,y_test)
+accuracy
+```
+
+In the last step, i get the trained TI-IDF score , so now i can use it to do the prediction. Then, print out the classification report which contain accuracy, f1-score, AUC ROC score.
+```{python}
+predictions = nb_clf.predict(tfidf_scores_test)
+print(classification_report(y_test,predictions))
+```
+
+
+ - Model Comparison
+
+The confusion matrix for Bernoulli NB
+```{python}
+#The confusion matrix
+pred = bayes.predict(tfidf_scores_test)
+cm = confusion_matrix(y_test,pred)
+print(cm)
+
+def plot_confusion_matrix(cm, classes,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
+    """
+    Plot a confusion matrix of predicted and true results
+    """
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=0)
+    plt.yticks(tick_marks, classes)
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, cm[i, j],
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+```
+
+The Confussion matrix for Multinormial NB
+```{python}
+#The confusion matrix
+predictions = nb_clf.predict(tfidf_scores_test)
+cm = confusion_matrix(y_test,predictions)
+print(cm)
+
+def plot_confusion_matrix(cm, classes,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
+    """
+    Plot a confusion matrix of predicted and true results
+    """
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=0)
+    plt.yticks(tick_marks, classes)
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, cm[i, j],
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+```
+
+
+## Part 2 - Naive Bayes on labeled record dataset
+
+## Conclusion

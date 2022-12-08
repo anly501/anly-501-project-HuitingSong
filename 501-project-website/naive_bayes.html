@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data Cleaning</title>
+<title>Naive Bayes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2612,7 +2612,7 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data Cleaning</h1>
+<h1 class="title">Naive Bayes</h1>
 </div>
 
 
@@ -2627,32 +2627,41 @@ vertical-align: -.125em;
 
 </header>
 
-<p><strong>Data cleaning</strong> is the process of fixing or removing incorrect, corrupted, incorrectly formatted, duplicate, or incomplete data within a dataset. When combining multiple data sources, there are many opportunities for data to be duplicated or mislabeled. If data is incorrect, outcomes and algorithms are unreliable, even though they may look correct. There is no one absolute way to prescribe the exact steps in the data cleaning process because the processes will vary from dataset to dataset. But it is crucial to establish a template for your data cleaning process so you know you are doing it the right way every time. In this section, I will clean my text data and modified data. The steps for cleaning these two kind of data is different, so I will specify the cleaning steps with presenting the code.</p>
-<section id="python-on-text-data" class="level2">
-<h2 class="anchored" data-anchor-id="python-on-text-data">Python on Text Data</h2>
-<section id="dataset-twitterpython.csv-which-is-grabbed-through-python" class="level4">
-<h4 class="anchored" data-anchor-id="dataset-twitterpython.csv-which-is-grabbed-through-python">Dataset “twitterpython.csv” which is grabbed through python</h4>
-<p>People’s perception of energy consumption is very important. It not only reflects the public’s perception, but also indirectly reflects people’s concern for environmental issues and their willingness to change the status quo. In the data gathering section, I have gather the text data by setting “energy consumption” “global warming” “clean energy” “conventional energy” “environmental protection” as the keywords for the twitter api to get the text data. Now I will do the data processing for the text dataset through python.</p>
+<p>Naive Bayes methods are a set of supervised learning algorithms based on applying Bayes’ theorem with the “naive” assumption of conditional independence between every pair of features given the value of the class variable. In spite of their apparently over-simplified assumptions, naive Bayes classifiers have worked quite well in many real-world situations, famously document classification and spam filtering. They require a small amount of training data to estimate the necessary parameters. Naive Bayes learners and classifiers can be extremely fast compared to more sophisticated methods. The decoupling of the class conditional feature distributions means that each distribution can be independently estimated as a one dimensional distribution. This in turn helps to alleviate problems stemming from the curse of dimensionality.</p>
+<p>In this section, I will use the TI-IDF transformer to process my cleaned text data. And then using two different Naive Bayes classifiers for my dataset. Finally, I will conpare model performance through accuracy and confusion matrix to determine which model is better for my data. More of the explaination of my tool using will be introduced in the section they are used.</p>
+<section id="on-cleaned-datset-about-twitter-users-sentiment-of-energy-and-environment." class="level2">
+<h2 class="anchored" data-anchor-id="on-cleaned-datset-about-twitter-users-sentiment-of-energy-and-environment.">On cleaned datset about twitter users’ sentiment of energy and environment.</h2>
 <ul>
-<li>Step 1: import the packages we may use during data processing</li>
+<li>Loading the required packages</li>
 </ul>
 <div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> svm</span>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mlp</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">&#39;ignore&#39;</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.sentiment <span class="im">import</span> SentimentIntensityAnalyzer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.naive_bayes <span class="im">import</span> GaussianNB,MultinomialNB,BernoulliNB</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report, confusion_matrix, accuracy_score</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> TfidfVectorizer</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <ul>
-<li>Step 2: Load the Dataset we grab by using python</li>
+<li>Loading the dataset</li>
 </ul>
 <div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>twitter <span class="op">=</span> pd.read_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/twitterpython.csv&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>twitter.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>score_py <span class="op">=</span> pd.read_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/pystmscore.csv&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>score_py.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="2">
 
 <div>
@@ -2663,11 +2672,10 @@ vertical-align: -.125em;
       <th></th>
       <th>Unnamed: 0</th>
       <th>text</th>
-      <th>lang</th>
-      <th>author_id</th>
-      <th>created_at</th>
-      <th>edit_history_tweet_ids</th>
-      <th>id</th>
+      <th>neg</th>
+      <th>neu</th>
+      <th>pos</th>
+      <th>compound</th>
     </tr>
   </thead>
   <tbody>
@@ -2675,51 +2683,46 @@ vertical-align: -.125em;
       <th>0</th>
       <td>0</td>
       <td>RT @BTC_Archive: JUST IN:  🇷🇺  #Bitcoin mining...</td>
-      <td>en</td>
-      <td>1087706984667852800</td>
-      <td>2022-12-08T19:38:48.000Z</td>
-      <td>[&#39;1600937959611543553&#39;]</td>
-      <td>1600937959611543553</td>
+      <td>0.000</td>
+      <td>0.890</td>
+      <td>0.110</td>
+      <td>0.2732</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
       <td>RT @JMGlachant: Voluntarily reducing energy co...</td>
-      <td>en</td>
-      <td>62578686</td>
-      <td>2022-12-08T19:37:46.000Z</td>
-      <td>[&#39;1600937701892452352&#39;]</td>
-      <td>1600937701892452352</td>
+      <td>0.000</td>
+      <td>0.865</td>
+      <td>0.135</td>
+      <td>0.4939</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
       <td>RT @toyota_europe: Aiming to make our European...</td>
-      <td>en</td>
-      <td>1424955126528233537</td>
-      <td>2022-12-08T19:37:33.000Z</td>
-      <td>[&#39;1600937647513272320&#39;]</td>
-      <td>1600937647513272320</td>
+      <td>0.000</td>
+      <td>0.913</td>
+      <td>0.087</td>
+      <td>0.4939</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
       <td>RT @BTCTN: #Russian Ministry of Energy expects...</td>
-      <td>en</td>
-      <td>1207446343238791168</td>
-      <td>2022-12-08T19:37:29.000Z</td>
-      <td>[&#39;1600937628647710725&#39;]</td>
-      <td>1600937628647710725</td>
+      <td>0.000</td>
+      <td>0.904</td>
+      <td>0.096</td>
+      <td>0.6486</td>
     </tr>
     <tr>
       <th>4</th>
       <td>4</td>
       <td>Itron $ITRI said Thursday that it will connect...</td>
-      <td>en</td>
-      <td>1595144930279702529</td>
-      <td>2022-12-08T19:37:23.000Z</td>
-      <td>[&#39;1600937606144880641&#39;]</td>
-      <td>1600937606144880641</td>
+      <td>0.021</td>
+      <td>0.795</td>
+      <td>0.184</td>
+      <td>0.9360</td>
     </tr>
   </tbody>
 </table>
@@ -2727,76 +2730,131 @@ vertical-align: -.125em;
 </div>
 </div>
 <ul>
-<li>Step 3: Find the dataset with NA missing value</li>
+<li>Categorize the sentiment score</li>
 </ul>
-<p>Through checking, there is no missing value in the text dataset.</p>
+<p>Since in the data cleaning process. we use sentiment analysis to get the opinion score respect to ‘negative’,‘positive’,‘neutral’. Now, here we must make a label for the score for future prediction. The label will be created based on ‘compound’ variable.</p>
+<p>The compound score is the sum of positive, negative &amp; neutral scores which is then normalized between -1(most extreme negative) and +1 (most extreme positive). The more Compound score closer to +1, the higher the positivity of the text.</p>
+<p>then, save the labeled sentiment data into cleaned data folder for future reference.</p>
 <div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>twitter.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>conditions <span class="op">=</span> [</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    (score_py[<span class="st">&#39;compound&#39;</span>] <span class="op">&gt;=</span> <span class="fl">0.33</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    (score_py[<span class="st">&#39;compound&#39;</span>] <span class="op">&lt;=</span> <span class="op">-</span><span class="fl">0.33</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    (score_py[<span class="st">&#39;compound&#39;</span>] <span class="op">&gt;</span> <span class="op">-</span><span class="fl">0.33</span>) <span class="op">&amp;</span> (score_py[<span class="st">&#39;compound&#39;</span>] <span class="op">&lt;</span> <span class="fl">0.33</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> [<span class="st">&#39;positive&#39;</span>, <span class="st">&#39;negative&#39;</span>, <span class="st">&#39;neutral&#39;</span>]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>score_py[<span class="st">&quot;sentiment&quot;</span>] <span class="op">=</span> np.select(conditions, values)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>score_py.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/stm_py_label.csv&quot;</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>score_py.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="3">
-<pre><code>Unnamed: 0                0
-text                      0
-lang                      0
-author_id                 0
-created_at                0
-edit_history_tweet_ids    0
-id                        0
-dtype: int64</code></pre>
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>text</th>
+      <th>neg</th>
+      <th>neu</th>
+      <th>pos</th>
+      <th>compound</th>
+      <th>sentiment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>RT @BTC_Archive: JUST IN:  🇷🇺  #Bitcoin mining...</td>
+      <td>0.000</td>
+      <td>0.890</td>
+      <td>0.110</td>
+      <td>0.2732</td>
+      <td>neutral</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>RT @JMGlachant: Voluntarily reducing energy co...</td>
+      <td>0.000</td>
+      <td>0.865</td>
+      <td>0.135</td>
+      <td>0.4939</td>
+      <td>positive</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>RT @toyota_europe: Aiming to make our European...</td>
+      <td>0.000</td>
+      <td>0.913</td>
+      <td>0.087</td>
+      <td>0.4939</td>
+      <td>positive</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>RT @BTCTN: #Russian Ministry of Energy expects...</td>
+      <td>0.000</td>
+      <td>0.904</td>
+      <td>0.096</td>
+      <td>0.6486</td>
+      <td>positive</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>Itron $ITRI said Thursday that it will connect...</td>
+      <td>0.021</td>
+      <td>0.795</td>
+      <td>0.184</td>
+      <td>0.9360</td>
+      <td>positive</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 </div>
 </div>
 <ul>
-<li>Step 4: Pre-processing the text info in the dataset</li>
+<li>split the dataset into traning set (80%) and test set (20%)。</li>
 </ul>
-<p>Since the raw data contains lots of puntuations, urls, commas, numbers, highercase, and some other things which will influence our analysis and tokenization. Therefore, we need to remove the unnecessary things. Since this semester, I take Natural Language Processing course, and learn how to use <strong>pipline</strong> to process the text information. So, in this part, I will the method I learn from NLP.</p>
-<p>Through pipline, the things which will influence our analysis will be cleaned and replaced. And then, we will need to transform the sentence from text data to tokens which is a list of words through tokenizer.</p>
 <div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> spacy</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> spacy.language <span class="im">import</span> Language</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> spacy.load(<span class="st">&#39;en_core_web_sm&#39;</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># http://emailregex.com/</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>email_re <span class="op">=</span> <span class="vs">r&quot;&quot;&quot;(?:[a-z0-9!#$%&amp;&#39;*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;&#39;*+/=?^_`{|}~-]+)*|&quot;(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*&quot;)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.)</span><span class="sc">{3}</span><span class="vs">(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])&quot;&quot;&quot;</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># replace = [ (pattern-to-replace, replacement),  ...]</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>replace <span class="op">=</span> [</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;&lt;a[^&gt;]*&gt;(.*?)&lt;/a&gt;&quot;</span>, <span class="vs">r&quot;\1&quot;</span>),  <span class="co"># Matches most URLs</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    (email_re, <span class="st">&quot;email&quot;</span>),            <span class="co"># Matches emails</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;(?&lt;=\d),(?=\d)&quot;</span>, <span class="st">&quot;&quot;</span>),        <span class="co"># Remove commas in numbers</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;\d+&quot;</span>, <span class="st">&quot;number&quot;</span>),              <span class="co"># Map digits to special token &lt;numbr&gt;</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;[\t\n\r\*\.\@\,\-\/]&quot;</span>, <span class="st">&quot; &quot;</span>), <span class="co"># Punctuation and other junk</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;\s+&quot;</span>, <span class="st">&quot; &quot;</span>)                   <span class="co"># Stips extra whitespace</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>twitter_sentences <span class="op">=</span> []</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, d <span class="kw">in</span> <span class="bu">enumerate</span>(twitter[<span class="st">&#39;text&#39;</span>]):</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> repl <span class="kw">in</span> replace:</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> re.sub(repl[<span class="dv">0</span>], repl[<span class="dv">1</span>], d)</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    twitter_sentences.append(d)</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="at">@Language.component</span>(<span class="st">&quot;lab04Preprocessor&quot;</span>)</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ng20_preprocess(doc):</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token <span class="cf">for</span> token <span class="kw">in</span> doc </span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>              <span class="cf">if</span> <span class="kw">not</span> <span class="bu">any</span>((token.is_stop, token.is_punct))]</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token.lemma_.lower().strip() <span class="cf">for</span> token <span class="kw">in</span> tokens]</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token <span class="cf">for</span> token <span class="kw">in</span> tokens <span class="cf">if</span> token]</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&quot; &quot;</span>.join(tokens)</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>pipeline.add_pipe(<span class="st">&quot;lab04Preprocessor&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;function __main__.ng20_preprocess(doc)&gt;</code></pre>
-</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x_train,x_test,y_train,y_test<span class="op">=</span>train_test_split(score_py[<span class="st">&#39;text&#39;</span>],score_py[<span class="st">&#39;sentiment&#39;</span>],test_size<span class="op">=</span><span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <ul>
-<li>Step 5: Pass data through spacy pipeline</li>
+<li>process the text</li>
 </ul>
 <div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>docs <span class="op">=</span> []</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sent <span class="kw">in</span> twitter_sentences:</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    docs.append(pipeline(sent))</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> pd.DataFrame(docs)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>result.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>REPLACE_BY_SPACE_RE <span class="op">=</span> re.<span class="bu">compile</span>(<span class="st">&#39;[/()</span><span class="sc">{}</span><span class="st">\[\]\|@,;]&#39;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>BAD_SYMBOLS_RE <span class="op">=</span> re.<span class="bu">compile</span>(<span class="st">&#39;[^0-9a-z #+_]&#39;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>STOPWORDS <span class="op">=</span> <span class="bu">set</span>(stopwords.words(<span class="st">&#39;english&#39;</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cleanText(text):</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> BeautifulSoup(text, <span class="st">&quot;lxml&quot;</span>).text</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> text.lower()</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> REPLACE_BY_SPACE_RE.sub(<span class="st">&#39; &#39;</span>, text) <span class="co"># replace REPLACE_BY_SPACE_RE symbols by space in text</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> BAD_SYMBOLS_RE.sub(<span class="st">&#39;&#39;</span>, text) <span class="co"># delete symbols which are in BAD_SYMBOLS_RE from text</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> <span class="st">&#39; &#39;</span>.join(word <span class="cf">for</span> word <span class="kw">in</span> text.split() <span class="cf">if</span> word <span class="kw">not</span> <span class="kw">in</span> STOPWORDS) </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> text</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>score_py[<span class="st">&#39;text&#39;</span>] <span class="op">=</span> score_py[<span class="st">&#39;text&#39;</span>].<span class="bu">apply</span>(cleanText)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>score_py.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="5">
 
 <div>
@@ -2805,29 +2863,65 @@ dtype: int64</code></pre>
   <thead>
     <tr>
       <th></th>
-      <th>0</th>
+      <th>Unnamed: 0</th>
+      <th>text</th>
+      <th>neg</th>
+      <th>neu</th>
+      <th>pos</th>
+      <th>compound</th>
+      <th>sentiment</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>rt btc_archive 🇷 🇺 bitcoin mining industry pow...</td>
+      <td>0</td>
+      <td>rt btc_archive #bitcoin mining industrys power...</td>
+      <td>0.000</td>
+      <td>0.890</td>
+      <td>0.110</td>
+      <td>0.2732</td>
+      <td>neutral</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>rt jmglachant voluntarily reduce energy consum...</td>
+      <td>1</td>
+      <td>rt jmglachant voluntarily reducing energy cons...</td>
+      <td>0.000</td>
+      <td>0.865</td>
+      <td>0.135</td>
+      <td>0.4939</td>
+      <td>positive</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>rt toyota_europe aim european manufacturing fa...</td>
+      <td>2</td>
+      <td>rt toyota_europe aiming make european manufact...</td>
+      <td>0.000</td>
+      <td>0.913</td>
+      <td>0.087</td>
+      <td>0.4939</td>
+      <td>positive</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>rt btctn russian ministry energy expect crypto...</td>
+      <td>3</td>
+      <td>rt btctn #russian ministry energy expects #cry...</td>
+      <td>0.000</td>
+      <td>0.904</td>
+      <td>0.096</td>
+      <td>0.6486</td>
+      <td>positive</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>itron $ itri say thursday connect manage numbe...</td>
+      <td>4</td>
+      <td>itron itri said thursday connect manage 260 00...</td>
+      <td>0.021</td>
+      <td>0.795</td>
+      <td>0.184</td>
+      <td>0.9360</td>
+      <td>positive</td>
     </tr>
   </tbody>
 </table>
@@ -2835,23 +2929,35 @@ dtype: int64</code></pre>
 </div>
 </div>
 <ul>
-<li>Step 6: Backup the processed data</li>
+<li>Performs the TF-IDF transformation from a provided matrix of counts.</li>
 </ul>
+<p>In the data cleaning section, I use bag of word method to model converts text into fixed-length vectors by counting how many times each word appears. Here, i will use TF-IDF which is Term Frequency Inverse Document Frequency. TFIDF works by proportionally increasing the number of times a word appears in the document but is counterbalanced by the number of documents in which it is present. Hence, words like ‘this’, ’are’ etc., that are commonly present in all the documents are not given a very high rank.</p>
+<p>First, the “TfidfVectorizer” function converts a collection of raw documents into a matrix of TF-IDF features. The stop_words_ attribute can get large and increase the model size when pickling.</p>
 <div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>result.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/piplineresult.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tfidf <span class="op">=</span> TfidfVectorizer(stop_words<span class="op">=</span> <span class="st">&#39;english&#39;</span>, sublinear_tf<span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tfidf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>TfidfVectorizer(stop_words=&#39;english&#39;, sublinear_tf=True)</code></pre>
 </div>
-<ul>
-<li>Step 7: Using the CountVectorizer and count the words freqency</li>
-</ul>
-<p>Countvectorizer can convert a collection of text documents to a matrix of token counts.</p>
+</div>
+<p>Second, I fit the x_train data into the TF-IDF and transform them to get the tf-idf scores of a set of sentences.</p>
+<p>I print the result of TF-IDF score matching with tokens, so you can what exactly TF-IDF do here and what it does.</p>
 <div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>vectorizer <span class="op">=</span> CountVectorizer()</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>bow <span class="op">=</span> vectorizer.fit(docs)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> bow.vocabulary_.keys()</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> bow.vocabulary_.values()</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>bow<span class="op">=</span>pd.DataFrame({<span class="st">&#39;words&#39;</span>:features,<span class="st">&#39;counts&#39;</span>:counts})</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>bow <span class="op">=</span> bow.sort_values(by<span class="op">=</span>[<span class="st">&#39;counts&#39;</span>],ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>bow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tfidf_fitted <span class="op">=</span> tfidf.fit(x_train)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>tfidf_scores <span class="op">=</span> tfidf_fitted.transform(x_train)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># to see how the tfidf score the tokens</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># get the first vector out for x_train</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>first_vec<span class="op">=</span>tfidf_scores[<span class="dv">0</span>] </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># place tf-idf values in a pandas data frame </span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(first_vec.T.todense(), index<span class="op">=</span>tfidf.get_feature_names(), columns<span class="op">=</span>[<span class="st">&quot;tfidf&quot;</span>]) </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>df.sort_values(by<span class="op">=</span>[<span class="st">&quot;tfidf&quot;</span>],ascending<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="7">
 
 <div>
@@ -2860,156 +2966,233 @@ dtype: int64</code></pre>
   <thead>
     <tr>
       <th></th>
-      <th>words</th>
-      <th>counts</th>
+      <th>tfidf</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>448</th>
-      <td>zxxvrrdmrs</td>
-      <td>497</td>
+      <th>relying</th>
+      <td>0.288498</td>
     </tr>
     <tr>
-      <th>251</th>
-      <td>zero</td>
-      <td>496</td>
+      <th>exhibition</th>
+      <td>0.288498</td>
     </tr>
     <tr>
-      <th>124</th>
-      <td>young</td>
-      <td>495</td>
+      <th>sino</th>
+      <td>0.288498</td>
     </tr>
     <tr>
-      <th>8</th>
-      <td>year</td>
-      <td>494</td>
+      <th>crccnews</th>
+      <td>0.288498</td>
     </tr>
     <tr>
-      <th>61</th>
-      <td>xpcoqqqauk</td>
-      <td>493</td>
+      <th>hall</th>
+      <td>0.288498</td>
     </tr>
     <tr>
       <th>...</th>
       <td>...</td>
-      <td>...</td>
     </tr>
     <tr>
-      <th>231</th>
-      <td>adoption</td>
-      <td>4</td>
+      <th>expanding</th>
+      <td>0.000000</td>
     </tr>
     <tr>
-      <th>64</th>
-      <td>actually</td>
-      <td>3</td>
+      <th>excessive</th>
+      <td>0.000000</td>
     </tr>
     <tr>
-      <th>393</th>
-      <td>account</td>
-      <td>2</td>
+      <th>excess</th>
+      <td>0.000000</td>
     </tr>
     <tr>
-      <th>464</th>
-      <td>accessory</td>
-      <td>1</td>
+      <th>exactly</th>
+      <td>0.000000</td>
     </tr>
     <tr>
-      <th>73</th>
-      <td>absorb</td>
-      <td>0</td>
+      <th>zxxvrrdmrs</th>
+      <td>0.000000</td>
     </tr>
   </tbody>
 </table>
-<p>498 rows × 2 columns</p>
+<p>535 rows × 1 columns</p>
 </div>
 </div>
 </div>
 <ul>
-<li>Step 8: Backup the processed data</li>
+<li>Different Naive Bayes model</li>
 </ul>
+<p><strong>1. Bernoulli NB</strong></p>
+<p>Naive Bayes classifier for multivariate Bernoulli models.</p>
+<p>implements the naive Bayes training and classification algorithms for data that is distributed according to multivariate Bernoulli distributions; i.e., there may be multiple features but each one is assumed to be a binary-valued (Bernoulli, boolean) variable. Therefore, this class requires samples to be represented as binary-valued feature vectors; if handed any other kind of data, a BernoulliNB instance may binarize its input (depending on the binarize parameter).</p>
+<p>I use the function from package scikit-learn.</p>
 <div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>bow.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/countword.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>bayes <span class="op">=</span> BernoulliNB()</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>bayes.fit(tfidf_scores, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>BernoulliNB()</code></pre>
+</div>
+</div>
+<p>Train the model to get the accuracy</p>
+<div class="cell" data-execution_count="9">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tfidf_scores_test <span class="op">=</span> tfidf_fitted.transform(x_test)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>accuracy <span class="op">=</span> bayes.score(tfidf_scores_test,y_test)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;The accuracy for BernoulliNB is: &quot;</span>,accuracy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>The accuracy for BernoulliNB is:  0.995</code></pre>
+</div>
+</div>
+<p>In the last step, i get the trained TI-IDF score , so now i can use it to do the prediction. Then, print out the classification report which contain accuracy, f1-score, AUC ROC score.</p>
+<div class="cell" data-execution_count="10">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> bayes.predict(tfidf_scores_test)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test,pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              precision    recall  f1-score   support
+
+     neutral       0.00      0.00      0.00         1
+    positive       0.99      1.00      1.00       199
+
+    accuracy                           0.99       200
+   macro avg       0.50      0.50      0.50       200
+weighted avg       0.99      0.99      0.99       200
+</code></pre>
+</div>
+</div>
+<p><strong>2. Multinomial NB</strong></p>
+<p>Naive Bayes classifier for multinomial models.</p>
+<p>The multinomial Naive Bayes classifier is suitable for classification with discrete features (e.g., word counts for text classification). The multinomial distribution normally requires integer feature counts. However, in practice, fractional counts such as tf-idf may also work.</p>
+<p>Using the model function</p>
+<div class="cell" data-execution_count="11">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>nb_clf <span class="op">=</span> MultinomialNB()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>nb_clf.fit(tfidf_scores, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>MultinomialNB()</code></pre>
+</div>
+</div>
+<p>Train the model to get the accuracy</p>
+<div class="cell" data-execution_count="12">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>tfidf_scores_test <span class="op">=</span> tfidf_fitted.transform(x_test)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>accuracy <span class="op">=</span> nb_clf.score(tfidf_scores_test,y_test)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>accuracy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>0.995</code></pre>
+</div>
+</div>
+<p>In the last step, i get the trained TI-IDF score , so now i can use it to do the prediction. Then, print out the classification report which contain accuracy, f1-score, AUC ROC score.</p>
+<div class="cell" data-execution_count="13">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> nb_clf.predict(tfidf_scores_test)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test,predictions))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              precision    recall  f1-score   support
+
+     neutral       0.00      0.00      0.00         1
+    positive       0.99      1.00      1.00       199
+
+    accuracy                           0.99       200
+   macro avg       0.50      0.50      0.50       200
+weighted avg       0.99      0.99      0.99       200
+</code></pre>
+</div>
 </div>
 <ul>
-<li>Step 9: Opinion Mining</li>
+<li>Model Comparison</li>
 </ul>
-<p>Opinion mining is an approach to natural language processing (NLP) that identifies the emotional tone behind a body of text. This is a popular way for organizations to determine and categorize opinions about a product, service, or idea. In addition to identifying sentiment, opinion mining can extract the polarity (or the amount of positivity and negativity), subject and opinion holder within the text. Furthermore, sentiment analysis can be applied to varying scopes such as document, paragraph, sentence and sub-sentence levels.</p>
-<p>Since I would like to analysis the attitude people toward the energy consumption, opinion mining is an useful methods to conduct the result.</p>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># define the function</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> getSentiments(df):</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    sid <span class="op">=</span> SentimentIntensityAnalyzer()</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    tweet_str <span class="op">=</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    tweetscore <span class="op">=</span> []</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tweet <span class="kw">in</span> df[<span class="st">&#39;text&#39;</span>]:</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        tweet_str <span class="op">=</span> tweet_str <span class="op">+</span> <span class="st">&quot; &quot;</span> <span class="op">+</span> tweet</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        score <span class="op">=</span> sid.polarity_scores(tweet_str)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        tweetscore.append(score)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tweetscore</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># call the function above to see the result score and form a data frame to record</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>sentiment <span class="op">=</span> getSentiments(twitter)</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>texts <span class="op">=</span> pd.DataFrame(twitter.text)</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>stmscore <span class="op">=</span> pd.DataFrame.from_dict(sentiment)</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>stmscore.head()</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co"># relate the text and score for better view</span></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>txtscore <span class="op">=</span> pd.concat([texts,stmscore],axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>txtscore.head()</span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="co"># export the csv for future analysis</span></span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>txtscore.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/pystmscore.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="dataset-twitterr.csv-which-is-grabbed-through-python" class="level4">
-<h4 class="anchored" data-anchor-id="dataset-twitterr.csv-which-is-grabbed-through-python">Dataset “twitterR.csv” which is grabbed through python</h4>
-<p>For Twitter API in R, I used twitter to scratch keywords like <strong>“oil”,“gas”,“solar power”,“wind power”</strong> to scratch users’ attitudes about these four kinds of energy. I want to search different types of energy in order to analysis people attitude toward different enegy, and what they think about two different kind of energy (renewable energy and convential energy).</p>
-<p>Since the dataset has gone through word counts in <code>record data in R</code> link, The purpose for the dataset here is to do the sentiment analysis, which is opinion mining. An important analysis for my project in understanding twitter users’ idea about different type of energy.</p>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>twtr <span class="op">=</span> pd.read_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/twitterR.csv&quot;</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define the function</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> getSentiments(df):</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    sid <span class="op">=</span> SentimentIntensityAnalyzer()</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    tweet_str <span class="op">=</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    tweetscore <span class="op">=</span> []</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tweet <span class="kw">in</span> df[<span class="st">&#39;text&#39;</span>]:</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        tweet_str <span class="op">=</span> tweet_str <span class="op">+</span> <span class="st">&quot; &quot;</span> <span class="op">+</span> tweet</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        score <span class="op">=</span> sid.polarity_scores(tweet_str)</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        tweetscore.append(score)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tweetscore</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co"># call the function above to see the result score and form a data frame to record</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>sentiment <span class="op">=</span> getSentiments(twtr)</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>texts <span class="op">=</span> pd.DataFrame(twtr.text)</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>stmscore <span class="op">=</span> pd.DataFrame.from_dict(sentiment)</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>stmscore.head()</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co"># relate the text and score for better view</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>txtscore <span class="op">=</span> pd.concat([texts,stmscore],axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(txtscore.head())</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="co"># export the csv for future analysis</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>txtscore.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/rstmscore.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The confusion matrix for Bernoulli NB</p>
+<div class="cell" data-execution_count="14">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The confusion matrix</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> bayes.predict(tfidf_scores_test)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>cm <span class="op">=</span> confusion_matrix(y_test,pred)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cm)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_confusion_matrix(cm, classes,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                          title<span class="op">=</span><span class="st">&#39;Confusion matrix&#39;</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                          cmap<span class="op">=</span>plt.cm.Blues):</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Plot a confusion matrix of predicted and true results</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    plt.imshow(cm, interpolation<span class="op">=</span><span class="st">&#39;nearest&#39;</span>, cmap<span class="op">=</span>cmap)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    plt.title(title)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    plt.colorbar()</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    tick_marks <span class="op">=</span> np.arange(<span class="bu">len</span>(classes))</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    plt.xticks(tick_marks, classes, rotation<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    plt.yticks(tick_marks, classes)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    thresh <span class="op">=</span> cm.<span class="bu">max</span>() <span class="op">/</span> <span class="fl">2.</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, j <span class="kw">in</span> itertools.product(<span class="bu">range</span>(cm.shape[<span class="dv">0</span>]), <span class="bu">range</span>(cm.shape[<span class="dv">1</span>])):</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>        plt.text(j, i, cm[i, j],</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>                 horizontalalignment<span class="op">=</span><span class="st">&quot;center&quot;</span>,</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>                 color<span class="op">=</span><span class="st">&quot;white&quot;</span> <span class="cf">if</span> cm[i, j] <span class="op">&gt;</span> thresh <span class="cf">else</span> <span class="st">&quot;black&quot;</span>)</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">&#39;True label&#39;</span>)</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">&#39;Predicted label&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                text  neg    neu    pos  \
-0  RT @RailMinIndia: Progressing Towards Greener ...  0.0  1.000  0.000   
-1  RT @NickDeIuliis: New England bans #natgas pip...  0.0  1.000  0.000   
-2  RT @MikeHudema: This electric car was built in...  0.0  0.943  0.057   
-3  RT @elonmusk: Solar + Powerwall battery ensure...  0.0  0.928  0.072   
-4  Let us know which car gets fuel first in the c...  0.0  0.941  0.059   
-
-   compound  
-0    0.0000  
-1    0.0000  
-2    0.4504  
-3    0.6015  
-4    0.6015  </code></pre>
+<pre><code>[[  0   1]
+ [  0 199]]</code></pre>
+</div>
+</div>
+<p>The Confussion matrix for Multinormial NB</p>
+<div class="cell" data-execution_count="15">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The confusion matrix</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> nb_clf.predict(tfidf_scores_test)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>cm <span class="op">=</span> confusion_matrix(y_test,predictions)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cm)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_confusion_matrix(cm, classes,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                          title<span class="op">=</span><span class="st">&#39;Confusion matrix&#39;</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>                          cmap<span class="op">=</span>plt.cm.Blues):</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Plot a confusion matrix of predicted and true results</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    plt.imshow(cm, interpolation<span class="op">=</span><span class="st">&#39;nearest&#39;</span>, cmap<span class="op">=</span>cmap)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    plt.title(title)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    plt.colorbar()</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    tick_marks <span class="op">=</span> np.arange(<span class="bu">len</span>(classes))</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    plt.xticks(tick_marks, classes, rotation<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>    plt.yticks(tick_marks, classes)</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    thresh <span class="op">=</span> cm.<span class="bu">max</span>() <span class="op">/</span> <span class="fl">2.</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, j <span class="kw">in</span> itertools.product(<span class="bu">range</span>(cm.shape[<span class="dv">0</span>]), <span class="bu">range</span>(cm.shape[<span class="dv">1</span>])):</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>        plt.text(j, i, cm[i, j],</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>                 horizontalalignment<span class="op">=</span><span class="st">&quot;center&quot;</span>,</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>                 color<span class="op">=</span><span class="st">&quot;white&quot;</span> <span class="cf">if</span> cm[i, j] <span class="op">&gt;</span> thresh <span class="cf">else</span> <span class="st">&quot;black&quot;</span>)</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">&#39;True label&#39;</span>)</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">&#39;Predicted label&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[  0   1]
+ [  0 199]]</code></pre>
 </div>
 </div>
 </section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
 </section>
 
 </main>
