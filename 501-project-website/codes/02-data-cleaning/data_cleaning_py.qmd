@@ -44,15 +44,7 @@ twitter.head()
 twitter.isnull().sum()
 ```
 
- - Step 4: Remove data with language other than English
-
- Since my Twitter API collect the text with different languages, I need to drop the text information that cannot be understand by me and you. I only keep the text with English.
-```{python}
-twitter = twitter[twitter.lang == "en"]
-twitter
-```
- 
- - Step 5: Pre-processing the text info in the dataset
+ - Step 4: Pre-processing the text info in the dataset
  
  Since the raw data contains lots of puntuations, urls, commas, numbers, highercase, and some other things which will influence our analysis and tokenization. Therefore, we need to remove the unnecessary things. Since this semester, I take Natural Language Processing course, and learn how to use **pipline** to process the text information. So, in this part, I will the method I learn from NLP. 
  
@@ -95,7 +87,7 @@ def ng20_preprocess(doc):
 pipeline.add_pipe("lab04Preprocessor")
 ```
 
- - Step 6: Pass data through spacy pipeline
+ - Step 5: Pass data through spacy pipeline
 ```{python}
 docs = []
 for sent in twitter_sentences:
@@ -105,12 +97,12 @@ result = pd.DataFrame(docs)
 result.head()
 ```
 
- - Step 7: Backup the processed data
+ - Step 6: Backup the processed data
 ```{python}
 result.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/piplineresult.csv")
 ```
 
- - Step 8: Using the CountVectorizer and count the words freqency
+ - Step 7: Using the CountVectorizer and count the words freqency
 
  Countvectorizer can convert a collection of text documents to a matrix of token counts.
 ```{python}
@@ -123,12 +115,12 @@ bow = bow.sort_values(by=['counts'],ascending=False)
 bow
 ```
 
- - Step 9: Backup the processed data 
+ - Step 8: Backup the processed data 
 ```{python}
 bow.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/countword.csv")
 ```
 
- - Step 10: Opinion Mining
+ - Step 9: Opinion Mining
  
  Opinion mining is an approach to natural language processing (NLP) that identifies the emotional tone behind a body of text. This is a popular way for organizations to determine and categorize opinions about a product, service, or idea. In addition to identifying sentiment, opinion mining can extract the polarity (or the amount of positivity and negativity), subject and opinion holder within the text. Furthermore, sentiment analysis can be applied to varying scopes such as document, paragraph, sentence and sub-sentence levels.
 

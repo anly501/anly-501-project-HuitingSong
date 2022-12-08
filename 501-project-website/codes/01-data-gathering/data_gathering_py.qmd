@@ -70,7 +70,7 @@ import pandas as pd
 - Step 2: Using the keys from Twitter and defined key words to scratch data into json file
 ```{python}
 # READ FILE
-f = open("/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/codes/01-data-gathering/api-keys.json")
+f = open("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/codes/01-data-gathering/api-keys.json")
 input=json.load(f); 
 
 # LOAD KEYS INTO API
@@ -86,7 +86,7 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 # Add the search_twitter function here.
-def search_twitter(query, max_results,tweet_fields, bearer_token = bearer_token):
+def search_twitter(query, max_results,tweet_fields, bearer_token = bearer_token,lang="en"):
     headers = {"Authorization": "Bearer {}".format(bearer_token)}
     url = "https://api.twitter.com/2/tweets/search/recent?query={}&max_results={}&{}".format(query, max_results,tweet_fields)
     print("--------------",url,"--------------")
@@ -97,16 +97,16 @@ def search_twitter(query, max_results,tweet_fields, bearer_token = bearer_token)
 
 tweet_fields = "tweet.fields=text,author_id,created_at,lang"
 
-data = "/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/data/raw data/"
+data = "/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/"
 search_tweets = ["energy consumption","clean energy","conventional energy","environmental protection","global warming"]
 for idx,val in enumerate(search_tweets):
     tweets_jsondump = []
-    json_response1 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token)
-    json_response2 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token)
-    json_response3 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token)
-    json_response4 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token)
-    json_response5 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token)
-    json_response6 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token)
+    json_response1 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    json_response2 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    json_response3 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    json_response4 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    json_response5 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    json_response6 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
     for i in json_response1['data']:
         tweets_jsondump.append(i)
     for i in json_response2['data']:
@@ -139,5 +139,5 @@ twitterdf
 
 - Step 4: Save the data frame as csv file for futhur using
 ```{python}
-twitterdf.to_csv("/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterpython.csv")
+twitterdf.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/twitterpython.csv")
 ```

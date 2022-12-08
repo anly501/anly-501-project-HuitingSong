@@ -2694,7 +2694,7 @@ vertical-align: -.125em;
 </ul>
 <div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># READ FILE</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="bu">open</span>(<span class="st">&quot;/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/codes/01-data-gathering/api-keys.json&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="bu">open</span>(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/codes/01-data-gathering/api-keys.json&quot;</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">input</span><span class="op">=</span>json.load(f)<span class="op">;</span> </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD KEYS INTO API</span></span>
@@ -2710,7 +2710,7 @@ vertical-align: -.125em;
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>api <span class="op">=</span> tweepy.API(auth)</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the search_twitter function here.</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search_twitter(query, max_results,tweet_fields, bearer_token <span class="op">=</span> bearer_token):</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search_twitter(query, max_results,tweet_fields, bearer_token <span class="op">=</span> bearer_token,lang<span class="op">=</span><span class="st">&quot;en&quot;</span>):</span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    headers <span class="op">=</span> {<span class="st">&quot;Authorization&quot;</span>: <span class="st">&quot;Bearer </span><span class="sc">{}</span><span class="st">&quot;</span>.<span class="bu">format</span>(bearer_token)}</span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="st">&quot;https://api.twitter.com/2/tweets/search/recent?query=</span><span class="sc">{}</span><span class="st">&amp;max_results=</span><span class="sc">{}</span><span class="st">&amp;</span><span class="sc">{}</span><span class="st">&quot;</span>.<span class="bu">format</span>(query, max_results,tweet_fields)</span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;--------------&quot;</span>,url,<span class="st">&quot;--------------&quot;</span>)</span>
@@ -2721,16 +2721,16 @@ vertical-align: -.125em;
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>tweet_fields <span class="op">=</span> <span class="st">&quot;tweet.fields=text,author_id,created_at,lang&quot;</span></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="st">&quot;/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/data/raw data/&quot;</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/&quot;</span></span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>search_tweets <span class="op">=</span> [<span class="st">&quot;energy consumption&quot;</span>,<span class="st">&quot;clean energy&quot;</span>,<span class="st">&quot;conventional energy&quot;</span>,<span class="st">&quot;environmental protection&quot;</span>,<span class="st">&quot;global warming&quot;</span>]</span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> idx,val <span class="kw">in</span> <span class="bu">enumerate</span>(search_tweets):</span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    tweets_jsondump <span class="op">=</span> []</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    json_response1 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    json_response2 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    json_response3 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    json_response4 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    json_response5 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    json_response6 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    json_response1 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token,lang<span class="op">=</span><span class="st">&quot;en&quot;</span>)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    json_response2 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token,lang<span class="op">=</span><span class="st">&quot;en&quot;</span>)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    json_response3 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token,lang<span class="op">=</span><span class="st">&quot;en&quot;</span>)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    json_response4 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token,lang<span class="op">=</span><span class="st">&quot;en&quot;</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    json_response5 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token,lang<span class="op">=</span><span class="st">&quot;en&quot;</span>)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    json_response6 <span class="op">=</span> search_twitter(query <span class="op">=</span> <span class="bu">str</span>(val), max_results <span class="op">=</span> <span class="dv">100</span>, tweet_fields <span class="op">=</span> tweet_fields, bearer_token<span class="op">=</span>bearer_token,lang<span class="op">=</span><span class="st">&quot;en&quot;</span>)</span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> json_response1[<span class="st">&#39;data&#39;</span>]:</span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>        tweets_jsondump.append(i)</span>
 <span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> json_response2[<span class="st">&#39;data&#39;</span>]:</span>
@@ -2850,7 +2850,7 @@ vertical-align: -.125em;
 <span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>twitterdf <span class="op">=</span> [twitterdf1,twitterdf2,twitterdf3,twitterdf4,twitterdf5,twitterdf6]</span>
 <span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>twitterdf <span class="op">=</span> pd.concat(twitterdf)</span>
 <span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>twitterdf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="3">
 
 <div>
 
@@ -2858,59 +2858,59 @@ vertical-align: -.125em;
   <thead>
     <tr>
       <th></th>
-      <th>lang</th>
-      <th>created_at</th>
+      <th>edit_history_tweet_ids</th>
       <th>id</th>
       <th>author_id</th>
       <th>text</th>
-      <th>edit_history_tweet_ids</th>
+      <th>lang</th>
+      <th>created_at</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
+      <td>[1600922056651964417]</td>
+      <td>1600922056651964417</td>
+      <td>1514862908609789954</td>
+      <td>RT @ComradeFat: And speaking of Amsterdam, the...</td>
       <td>en</td>
-      <td>2022-12-08T12:51:56.000Z</td>
-      <td>1600835570271686657</td>
-      <td>1441294614250471433</td>
-      <td>Early December. Woke up to find that global wa...</td>
-      <td>[1600835570271686657]</td>
+      <td>2022-12-08T18:35:36.000Z</td>
     </tr>
     <tr>
       <th>1</th>
+      <td>[1600921918537928707]</td>
+      <td>1600921918537928707</td>
+      <td>1254870686272806912</td>
+      <td>Drew Carey - Global Warming in Ohio</td>
       <td>en</td>
-      <td>2022-12-08T12:51:53.000Z</td>
-      <td>1600835555096657920</td>
-      <td>472923501</td>
-      <td>Where is global warming when you need it?</td>
-      <td>[1600835555096657920]</td>
+      <td>2022-12-08T18:35:03.000Z</td>
     </tr>
     <tr>
       <th>2</th>
+      <td>[1600921898358972416]</td>
+      <td>1600921898358972416</td>
+      <td>738240705974272001</td>
+      <td>haha wow global warming sure can&#39;t explain tha...</td>
       <td>en</td>
-      <td>2022-12-08T12:51:42.000Z</td>
-      <td>1600835509835554816</td>
-      <td>1467186267708403721</td>
-      <td>RT @Tony40335450: @zarahsultana Global Warming...</td>
-      <td>[1600835509835554816]</td>
+      <td>2022-12-08T18:34:58.000Z</td>
     </tr>
     <tr>
       <th>3</th>
+      <td>[1600921875445846016]</td>
+      <td>1600921875445846016</td>
+      <td>1592283498588561414</td>
+      <td>RT @ramzpaul: Global warming is real. Look how...</td>
       <td>en</td>
-      <td>2022-12-08T12:51:36.000Z</td>
-      <td>1600835483470209024</td>
-      <td>1586377646320930816</td>
-      <td>@sillyrob7200 @atomic_viking @PeterSweden7 So ...</td>
-      <td>[1600835483470209024]</td>
+      <td>2022-12-08T18:34:53.000Z</td>
     </tr>
     <tr>
       <th>4</th>
+      <td>[1600921852003889152]</td>
+      <td>1600921852003889152</td>
+      <td>797813417801379840</td>
+      <td>@gbnews global warming didn&#39;t come true so it ...</td>
       <td>en</td>
-      <td>2022-12-08T12:51:25.000Z</td>
-      <td>1600835438566330369</td>
-      <td>704650064376033280</td>
-      <td>RT @latimeralder: The frost has barely lifted ...</td>
-      <td>[1600835438566330369]</td>
+      <td>2022-12-08T18:34:47.000Z</td>
     </tr>
     <tr>
       <th>...</th>
@@ -2923,48 +2923,48 @@ vertical-align: -.125em;
     </tr>
     <tr>
       <th>95</th>
+      <td>[1600918194109448192]</td>
+      <td>1600918194109448192</td>
+      <td>1232250758</td>
+      <td>@JacquelineLWay @ECOWARRIORSS So where’s the d...</td>
       <td>en</td>
-      <td>2022-12-08T12:36:07.000Z</td>
-      <td>1600831590606983168</td>
-      <td>547200182</td>
-      <td>Cant have global warming with a bitch this cold</td>
-      <td>[1600831590606983168]</td>
+      <td>2022-12-08T18:20:15.000Z</td>
     </tr>
     <tr>
       <th>96</th>
+      <td>[1600918126996164633]</td>
+      <td>1600918126996164633</td>
+      <td>1483801692441391106</td>
+      <td>Global lies promoted By Biden’s Climate Czar J...</td>
       <td>en</td>
-      <td>2022-12-08T12:36:07.000Z</td>
-      <td>1600831588723576832</td>
-      <td>346650872</td>
-      <td>RT @Tony40335450: Global Warming? Northern Hem...</td>
-      <td>[1600831588723576832]</td>
+      <td>2022-12-08T18:19:59.000Z</td>
     </tr>
     <tr>
       <th>97</th>
+      <td>[1600918125104443392]</td>
+      <td>1600918125104443392</td>
+      <td>258926856</td>
+      <td>RT @hausfath: Global surface temperatures fluc...</td>
       <td>en</td>
-      <td>2022-12-08T12:35:15.000Z</td>
-      <td>1600831372536340483</td>
-      <td>808941258127372288</td>
-      <td>@VargasMilan1 yes it clicks through. I underst...</td>
-      <td>[1600831372536340483]</td>
+      <td>2022-12-08T18:19:59.000Z</td>
     </tr>
     <tr>
       <th>98</th>
+      <td>[1600918103164325889]</td>
+      <td>1600918103164325889</td>
+      <td>207467032</td>
+      <td>RT @JunkScience: Average global temperature 20...</td>
       <td>en</td>
-      <td>2022-12-08T12:34:27.000Z</td>
-      <td>1600831170404491270</td>
-      <td>1025809362386862082</td>
-      <td>Meropis Vu -- Icebound planet -- Tribal life f...</td>
-      <td>[1600831170404491270]</td>
+      <td>2022-12-08T18:19:54.000Z</td>
     </tr>
     <tr>
       <th>99</th>
+      <td>[1600918035094986752]</td>
+      <td>1600918035094986752</td>
+      <td>1514417391438118915</td>
+      <td>RT @ramzpaul: Global warming is real. Look how...</td>
       <td>en</td>
-      <td>2022-12-08T12:34:13.000Z</td>
-      <td>1600831111218614272</td>
-      <td>183720066</td>
-      <td>@ChidiNwobodo1 @YarKafanchan And not just any ...</td>
-      <td>[1600831111218614272]</td>
+      <td>2022-12-08T18:19:37.000Z</td>
     </tr>
   </tbody>
 </table>
@@ -2976,7 +2976,7 @@ vertical-align: -.125em;
 <li>Step 4: Save the data frame as csv file for futhur using</li>
 </ul>
 <div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>twitterdf.to_csv(<span class="st">&quot;/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterpython.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>twitterdf.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/twitterpython.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
