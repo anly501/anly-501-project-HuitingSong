@@ -32,7 +32,7 @@ from nltk.sentiment import SentimentIntensityAnalyzer
 
  - Step 2: Load the Dataset we grab by using python
 ```{python}
-twitter = pd.read_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterpython.csv")
+twitter = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/twitterpython.csv")
 twitter.head()
 ```
 
@@ -92,8 +92,11 @@ def ng20_preprocess(doc):
     tokens = [token for token in tokens if token]
     return " ".join(tokens)
 
+pipeline.add_pipe("lab04Preprocessor")
 ```
-```{r}
+
+ - Step 6: Pass data through spacy pipeline
+```{python}
 docs = []
 for sent in twitter_sentences:
     docs.append(pipeline(sent))
@@ -101,21 +104,14 @@ for sent in twitter_sentences:
 result = pd.DataFrame(docs)
 result.head()
 ```
- - Step 6: Pass data through spacy pipeline
-```{python}
-
-for sent in twitter_sentences:
-    pipeline(sent)
-
-```
 
  - Step 7: Backup the processed data
 ```{python}
-result.to_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/cleaned data/piplineresult.csv")
+result.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/piplineresult.csv")
 ```
 
  - Step 8: Using the CountVectorizer and count the words freqency
- 
+
  Countvectorizer can convert a collection of text documents to a matrix of token counts.
 ```{python}
 vectorizer = CountVectorizer()
@@ -129,7 +125,7 @@ bow
 
  - Step 9: Backup the processed data 
 ```{python}
-bow.to_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/cleaned data/countword.csv")
+bow.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/countword.csv")
 ```
 
  - Step 10: Opinion Mining
@@ -138,7 +134,7 @@ bow.to_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-webs
 
  Since I would like to analysis the attitude people toward the energy consumption, opinion mining is an useful methods to conduct the result. 
 
- ```{python}
+```{python}
  # define the function
 def getSentiments(df):
     sid = SentimentIntensityAnalyzer()
@@ -161,8 +157,8 @@ txtscore = pd.concat([texts,stmscore],axis=1)
 txtscore.head()
 
 # export the csv for future analysis
-txtscore.to_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/cleaned data/pystmscore.csv")
- ```
+txtscore.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/pystmscore.csv")
+```
 
 
 #### Dataset "twitterR.csv" which is grabbed through python
@@ -172,7 +168,7 @@ For Twitter API in R, I used twitter to scratch keywords like **"oil","gas","sol
 Since the dataset has gone through word counts in `record data in R` link, The purpose for the dataset here is to do the sentiment analysis, which is opinion mining. An important analysis for my project in understanding twitter users' idea about different type of energy.
 
 ```{python}
-twtr = pd.read_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterR.csv")
+twtr = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/twitterR.csv")
 
 # define the function
 def getSentiments(df):
@@ -196,5 +192,5 @@ txtscore = pd.concat([texts,stmscore],axis=1)
 print(txtscore.head())
 
 # export the csv for future analysis
-txtscore.to_csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/cleaned data/rstmscore.csv")
+txtscore.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/rstmscore.csv")
 ```
