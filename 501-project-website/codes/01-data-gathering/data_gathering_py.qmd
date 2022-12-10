@@ -45,8 +45,7 @@ Data gathering is the process of gathering and measuring information on targeted
 
  Text data usually consists of documents which can represent words, sentences or even paragraphs of free flowing text.
 
- Since I want to study people's attitude towards energy consumption, I want to use the Twitter API to grab the text information. 
- I will set "energy consumption" "global warming" "clean energy" "conventional energy" "environmental protection" as the keywords for the twitter api to get the text data. The data obtained will allow me to analyze people's attitudes towards energy consumption, how people perceive different energy sources, and also to analyze people's attitudes towards protecting the environment in terms of energy. I will also use this text data to analyze the relationship between the environment and energy in the minds of twitter users. I will also keep adjusting the text data later for future research. In data gathering section, I used for loop to search over 600 tweets in order to make comprehensive datasets. I will collect more in the future to scratch over 2000 tweets in order to make sure my results are accurate. I plan to detect the frequency of words to gain a plot. More than this, I plan to use Naive Bytes to give each tweet a positive or negative attitude.
+ Since I want to study people's attitude towards energy consumption, I want to use the Twitter API to grab the text information. I will set "enviornment" "clean energy" "conventional energy" "energy consumption" as the keywords for the twitter api to get the text data. The data obtained will allow me to analyze people's attitudes towards energy consumption, how people perceive different energy sources, and also to analyze people's attitudes towards protecting the environment in terms of energy. I will also use this text data to analyze the relationship between the environment and energy in the minds of twitter users. I will also keep adjusting the text data later for future research. In data gathering section, I used for loop to search over 600 tweets in order to make comprehensive datasets. I will collect more in the future to scratch over 2000 tweets in order to make sure my results are accurate. I plan to detect the frequency of words to gain a plot. More than this, I plan to use Naive Bytes to give each tweet a positive or negative attitude.
 
  - Downloaded Dataset
  
@@ -56,7 +55,7 @@ Data gathering is the process of gathering and measuring information on targeted
 
 ### Twitter API in Python
 
-I will set **"enviornment" "clean energy" "conventional energy" "energy consumption"** as the keywords for the twitter api to get the text data. The data obtained will allow me to analyze people's attitudes towards energy consumption, how people perceive different energy sources, and also to analyze people's attitudes towards protecting the environment in terms of energy. I can also use this text data to analyze the relationship between the environment and energy in the minds of twitter users. I will also keep adjusting the text data later for future research. In data gathering section, I used for loop to search over 1000 tweets in order to make comprehensive datasets. I will collect more in the future to scratch over 2000 tweets in order to make sure my results are accurate. 
+I will set **"enviornment" "clean energy" "conventional energy" "energy consumption"** as the keywords for the twitter api to get the text data. The data obtained will allow me to analyze people's attitudes towards energy consumption, how people perceive different energy sources, and also to analyze people's attitudes towards protecting the environment in terms of energy. I can also use this text data to analyze the relationship between the environment and energy in the minds of twitter users. I will also keep adjusting the text data later for future research. In data gathering section, I used for loop to search over 800 tweets in order to make comprehensive datasets. I will collect more in the future to scratch over 2000 tweets in order to make sure my results are accurate. 
 
 - Step 1: The python package we will use in gathering data.
 ```{python}
@@ -105,15 +104,21 @@ search_tweets = ["clean energy","conventional energy","environment","energy cons
 for idx,val in enumerate(search_tweets):
     tweets_jsondump = []
     json_response1 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    time.sleep(60)
     json_response2 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    time.sleep(60)
     json_response3 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    time.sleep(60)
     json_response4 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    time.sleep(60)
     json_response5 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    time.sleep(60)
     json_response6 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    time.sleep(60)
     json_response7 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    time.sleep(60)
     json_response8 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
-    json_response9 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
-    json_response10 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token,lang="en")
+    time.sleep(60)
     for i in json_response1['data']:
         tweets_jsondump.append(i)
     for i in json_response2['data']:
@@ -130,10 +135,6 @@ for idx,val in enumerate(search_tweets):
         tweets_jsondump.append(i)
     for i in json_response8['data']:
         tweets_jsondump.append(i)
-    for i in json_response9['data']:
-        tweets_jsondump.append(i)
-    for i in json_response10['data']:
-        tweets_jsondump.append(i)
     with open(data+str(val)+'.json','w') as json_file:
         json.dump(tweets_jsondump,json_file)
         json_file.close()
@@ -149,9 +150,7 @@ twitterdf5 = json_normalize(json_response5,"data")
 twitterdf6 = json_normalize(json_response6,"data")
 twitterdf7 = json_normalize(json_response6,"data")
 twitterdf8 = json_normalize(json_response6,"data")
-twitterdf9 = json_normalize(json_response6,"data")
-twitterdf10 = json_normalize(json_response6,"data")
-twitterdf = [twitterdf1,twitterdf2,twitterdf3,twitterdf4,twitterdf5,twitterdf6,twitterdf7,twitterdf8,twitterdf9,twitterdf10]
+twitterdf = [twitterdf1,twitterdf2,twitterdf3,twitterdf4,twitterdf5,twitterdf6,twitterdf7,twitterdf8]
 twitterdf = pd.concat(twitterdf)
 twitterdf
 ```

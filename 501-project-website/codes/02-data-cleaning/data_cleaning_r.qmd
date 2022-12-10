@@ -30,7 +30,7 @@ This dataset contains the info of value of monthly energy consumption by differe
 
  - Step 1: load the dataset
 ```{r}
-sector <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/consumptionbysector.csv")
+sector <- read.csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/downloaded data/consumptionbysector.csv")
 head(sector,5)
 ```
 
@@ -92,7 +92,7 @@ head(sector.clean)
 
  - Step 7: save to csv file
 ```{r}
-write.csv(sector.clean,"/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/cleaned data/clean_sector.csv")
+write.csv(sector.clean,"/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/clean_sector.csv")
 ```
 
 ### Downloaded Dataset 2
@@ -102,7 +102,7 @@ This dataset contains the info of value of annually total energy consumption and
 
  - Step 1: load the dataset
 ```{r}
-emission <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/energycoemission.csv")
+emission <- read.csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/downloaded data/energycoemission.csv")
 head(emission,5)
 ```
 
@@ -185,7 +185,7 @@ head(emission.clean,10)
 
  - Step 7: save to csv file
 ```{r}
- write.csv(emission.clean,"/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/cleaned data/clean_emission.csv")
+ write.csv(emission.clean,"/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/clean_emission.csv")
 ```
 
  The Variable Description for cleaned Energy CO2 Emission Dataset `clean_emission.csv` <br>
@@ -208,8 +208,7 @@ For Twitter API in R, I used twitter to scratch keywords like **"oil","gas","sol
 library(selectr)
 library(rvest)
 library(xml2)
-library(wordcloud2) # for generating really cool looking wordclouds
-library(tm) # for text minning
+library(tm) 
 library(dplyr) 
 library(ROAuth)
 library(jsonlite)
@@ -219,7 +218,7 @@ suppressWarnings(expr)
 
  - Step 2: Load the Dataset we grab by using R
 ```{r}
-twtr <- read.csv("/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterR.csv")
+twtr <- read.csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/twitterR.csv")
 head(twtr,5)
 ```
 
@@ -260,7 +259,7 @@ head(d, 10)
 
  - Step 6: saved as csv for python sentiment analysis. 
 ```{r}
-write.csv(d,"/Users/apple/Desktop/anly-501-project-HuitingSong-1/501-project-website/data/cleaned data/countwordR.csv")
+write.csv(d,"/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/countwordR.csv")
 ```
 
  - Step 7: for the sentiment analysis, I will use python to do it, so please go to the text data in python to see the sentiment analysis.

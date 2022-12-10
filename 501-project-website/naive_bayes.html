@@ -2629,8 +2629,10 @@ vertical-align: -.125em;
 
 <p>Naive Bayes methods are a set of supervised learning algorithms based on applying Bayes’ theorem with the “naive” assumption of conditional independence between every pair of features given the value of the class variable. In spite of their apparently over-simplified assumptions, naive Bayes classifiers have worked quite well in many real-world situations, famously document classification and spam filtering. They require a small amount of training data to estimate the necessary parameters. Naive Bayes learners and classifiers can be extremely fast compared to more sophisticated methods. The decoupling of the class conditional feature distributions means that each distribution can be independently estimated as a one dimensional distribution. This in turn helps to alleviate problems stemming from the curse of dimensionality.</p>
 <p>In this section, I will use the TI-IDF transformer to process my cleaned text data. And then using two different Naive Bayes classifiers for my dataset. Finally, I will conpare model performance through accuracy and confusion matrix to determine which model is better for my data. More of the explaination of my tool using will be introduced in the section they are used.</p>
-<section id="on-cleaned-datset-about-twitter-users-sentiment-of-energy-and-environment." class="level2">
-<h2 class="anchored" data-anchor-id="on-cleaned-datset-about-twitter-users-sentiment-of-energy-and-environment.">On cleaned datset about twitter users’ sentiment of energy and environment.</h2>
+<section id="part-1---naive-bayes-in-labeled-text-data" class="level2">
+<h2 class="anchored" data-anchor-id="part-1---naive-bayes-in-labeled-text-data">Part 1 - Naive Bayes in labeled text data</h2>
+<section id="on-cleaned-datset-about-twitter-users-sentiment-of-energy-and-environment." class="level4">
+<h4 class="anchored" data-anchor-id="on-cleaned-datset-about-twitter-users-sentiment-of-energy-and-environment.">On cleaned datset about twitter users’ sentiment of energy and environment.</h4>
 <ul>
 <li>Loading the required packages</li>
 </ul>
@@ -2971,31 +2973,31 @@ vertical-align: -.125em;
   </thead>
   <tbody>
     <tr>
-      <th>relying</th>
-      <td>0.288498</td>
+      <th>double</th>
+      <td>0.314626</td>
     </tr>
     <tr>
-      <th>exhibition</th>
-      <td>0.288498</td>
+      <th>just</th>
+      <td>0.309917</td>
     </tr>
     <tr>
-      <th>sino</th>
-      <td>0.288498</td>
+      <th>btc_archive</th>
+      <td>0.309339</td>
     </tr>
     <tr>
-      <th>crccnews</th>
-      <td>0.288498</td>
+      <th>industry</th>
+      <td>0.305920</td>
     </tr>
     <tr>
-      <th>hall</th>
-      <td>0.288498</td>
+      <th>year</th>
+      <td>0.305358</td>
     </tr>
     <tr>
       <th>...</th>
       <td>...</td>
     </tr>
     <tr>
-      <th>expanding</th>
+      <th>exhibition</th>
       <td>0.000000</td>
     </tr>
     <tr>
@@ -3046,7 +3048,7 @@ vertical-align: -.125em;
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;The accuracy for BernoulliNB is: &quot;</span>,accuracy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>The accuracy for BernoulliNB is:  0.995</code></pre>
+<pre><code>The accuracy for BernoulliNB is:  1.0</code></pre>
 </div>
 </div>
 <p>In the last step, i get the trained TI-IDF score , so now i can use it to do the prediction. Then, print out the classification report which contain accuracy, f1-score, AUC ROC score.</p>
@@ -3059,12 +3061,11 @@ vertical-align: -.125em;
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
 
-     neutral       0.00      0.00      0.00         1
-    positive       0.99      1.00      1.00       199
+    positive       1.00      1.00      1.00       200
 
-    accuracy                           0.99       200
-   macro avg       0.50      0.50      0.50       200
-weighted avg       0.99      0.99      0.99       200
+    accuracy                           1.00       200
+   macro avg       1.00      1.00      1.00       200
+weighted avg       1.00      1.00      1.00       200
 </code></pre>
 </div>
 </div>
@@ -3091,7 +3092,7 @@ weighted avg       0.99      0.99      0.99       200
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>accuracy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="12">
-<pre><code>0.995</code></pre>
+<pre><code>1.0</code></pre>
 </div>
 </div>
 <p>In the last step, i get the trained TI-IDF score , so now i can use it to do the prediction. Then, print out the classification report which contain accuracy, f1-score, AUC ROC score.</p>
@@ -3104,12 +3105,11 @@ weighted avg       0.99      0.99      0.99       200
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
 
-     neutral       0.00      0.00      0.00         1
-    positive       0.99      1.00      1.00       199
+    positive       1.00      1.00      1.00       200
 
-    accuracy                           0.99       200
-   macro avg       0.50      0.50      0.50       200
-weighted avg       0.99      0.99      0.99       200
+    accuracy                           1.00       200
+   macro avg       1.00      1.00      1.00       200
+weighted avg       1.00      1.00      1.00       200
 </code></pre>
 </div>
 </div>
@@ -3149,8 +3149,7 @@ weighted avg       0.99      0.99      0.99       200
 <span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">&#39;Predicted label&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[  0   1]
- [  0 199]]</code></pre>
+<pre><code>[[200]]</code></pre>
 </div>
 </div>
 <p>The Confussion matrix for Multinormial NB</p>
@@ -3186,10 +3185,13 @@ weighted avg       0.99      0.99      0.99       200
 <span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">&#39;Predicted label&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[  0   1]
- [  0 199]]</code></pre>
+<pre><code>[[200]]</code></pre>
 </div>
 </div>
+</section>
+</section>
+<section id="part-2---naive-bayes-on-labeled-record-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="part-2---naive-bayes-on-labeled-record-dataset">Part 2 - Naive Bayes on labeled record dataset</h2>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>

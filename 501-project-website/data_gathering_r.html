@@ -2638,7 +2638,7 @@ vertical-align: -.125em;
 <h2 class="anchored" data-anchor-id="part-1---text-data">Part 1 - Text Data</h2>
 <section id="twitter-api-in-r" class="level3">
 <h3 class="anchored" data-anchor-id="twitter-api-in-r">Twitter API in R</h3>
-<p>For Twitter API in R, I used twitter to scratch keywords like <strong>“oil”,“gas”,“solar power”,“wind power”</strong> to scratch users’ attitudes about these four kinds of energy. I want to search different types of energy in order to analysis people attitude toward different enegy, and what they think about two different kind of energy (renewable energy and convential energy).</p>
+<p>For Twitter API in R, I used twitter to scratch keywords like <strong>“oil”,“gas”,“solar power”,“wind power”,“enviornment”</strong> to scratch users’ attitudes about these four kinds of energy. I want to search different types of energy in order to analysis people attitude toward different enegy, and what they think about two different kind of energy (renewable energy and convential energy).</p>
 <ul>
 <li>Step 1: Load the R packages</li>
 </ul>
@@ -2672,8 +2672,8 @@ vertical-align: -.125em;
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>accessURL<span class="ot">=</span><span class="st">&#39;https://api.twitter.com/oauth/access_token&#39;</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>authURL<span class="ot">=</span><span class="st">&#39;https://api.twitter.com/oauth/authorize&#39;</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>s_key  <span class="ot">=</span> <span class="st">&#39;gas OR oil OR solar power OR wind power&#39;</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>n_tweets <span class="ot">=</span> <span class="dv">250</span> </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>s_key  <span class="ot">=</span> <span class="st">&#39;gas OR oil OR solar power OR wind power OR enviornment&#39;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>n_tweets <span class="ot">=</span> <span class="dv">800</span> </span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>twitteR<span class="sc">:::</span><span class="fu">setup_twitter_oauth</span>(consumer_key, consumer_secret,access_token,access_token_secret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -2696,35 +2696,35 @@ vertical-align: -.125em;
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                                                                                                                            text
-1 RT @RailMinIndia: Progressing Towards Greener Railways!\n\nIndian Railways is working in mission mode towards minimising its carbon footprint…
-2   RT @NickDeIuliis: New England bans #natgas pipes, bets on wind/solar. Now EIA says winter natgas bills up 25%, power up 11%, heating oil up…
-3    RT @MikeHudema: This electric car was built in 1912 and got a #solar power upgrade in 1960. It isn&#39;t for lack of solutions that we haven&#39;t…
-4                                                               RT @elonmusk: Solar + Powerwall battery ensures that your home never loses power
-5    Let us know which car gets fuel first in the comments section below.\n\n#Adrol #Glide #AdrolLubricants #Lubricants… https://t.co/NKU6irWKDn
+1   RT @Mustafa_Alali2: Turkey has been focusing it&#39;s attacks on vitat projects in NE Syria, from first days, it destroyed oil refinaries, powe…
+2 RT @MikeHudema: Providing enough electricity to power 10 thousand homes. Cochin International airport runs on 100% #solarpower.\n\nWe have th…
+3   RT @Shehusky: You are not angry that you are poor, you are not angry that gas is expensive, you are not angry that milk is expensive, you a…
+4  RT @TansuYegen: China&#39;s first 100MW solar power plant uses 12,000 mirrors. It&#39;s capable of producing energy day and night👏 https://t.co/aAf…
+5   RT @jules1430358743: @simonahac Our solar panels and battery work wonderfully at night and during power outages. They also save use from th…
   favorited favoriteCount replyToSN             created truncated replyToSID
-1     FALSE             0      &lt;NA&gt; 2022-12-08 06:07:44     FALSE       &lt;NA&gt;
-2     FALSE             0      &lt;NA&gt; 2022-12-08 06:07:40     FALSE       &lt;NA&gt;
-3     FALSE             0      &lt;NA&gt; 2022-12-08 06:07:40     FALSE       &lt;NA&gt;
-4     FALSE             0      &lt;NA&gt; 2022-12-08 06:07:29     FALSE       &lt;NA&gt;
-5     FALSE             0      &lt;NA&gt; 2022-12-08 06:07:25      TRUE       &lt;NA&gt;
+1     FALSE             0      &lt;NA&gt; 2022-12-10 09:47:10     FALSE       &lt;NA&gt;
+2     FALSE             0      &lt;NA&gt; 2022-12-10 09:46:57     FALSE       &lt;NA&gt;
+3     FALSE             0      &lt;NA&gt; 2022-12-10 09:46:55     FALSE       &lt;NA&gt;
+4     FALSE             0      &lt;NA&gt; 2022-12-10 09:46:14     FALSE       &lt;NA&gt;
+5     FALSE             0      &lt;NA&gt; 2022-12-10 09:46:12     FALSE       &lt;NA&gt;
                    id replyToUID
-1 1600733847183687680       &lt;NA&gt;
-2 1600733833782910976       &lt;NA&gt;
-3 1600733831686131717       &lt;NA&gt;
-4 1600733784852553730       &lt;NA&gt;
-5 1600733768419250177       &lt;NA&gt;
+1 1601513846979842048       &lt;NA&gt;
+2 1601513792655228928       &lt;NA&gt;
+3 1601513782349418496       &lt;NA&gt;
+4 1601513611603501056       &lt;NA&gt;
+5 1601513605060448257       &lt;NA&gt;
                                                                           statusSource
 1 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
 2   &lt;a href=&quot;http://twitter.com/download/iphone&quot; rel=&quot;nofollow&quot;&gt;Twitter for iPhone&lt;/a&gt;
-3    &lt;a href=&quot;http://twitter.com/#!/download/ipad&quot; rel=&quot;nofollow&quot;&gt;Twitter for iPad&lt;/a&gt;
-4   &lt;a href=&quot;http://twitter.com/download/iphone&quot; rel=&quot;nofollow&quot;&gt;Twitter for iPhone&lt;/a&gt;
-5              &lt;a href=&quot;https://mobile.twitter.com&quot; rel=&quot;nofollow&quot;&gt;Twitter Web App&lt;/a&gt;
-       screenName retweetCount isRetweet retweeted longitude latitude
-1       rpficsonr          400      TRUE     FALSE        NA       NA
-2      KCA_builds           19      TRUE     FALSE        NA       NA
-3   bobbiemcgarey           51      TRUE     FALSE        NA       NA
-4 purevdo27046751         8625      TRUE     FALSE        NA       NA
-5 AdrolLubricants            0     FALSE     FALSE        NA       NA</code></pre>
+3 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
+4 &lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;
+5   &lt;a href=&quot;http://twitter.com/download/iphone&quot; rel=&quot;nofollow&quot;&gt;Twitter for iPhone&lt;/a&gt;
+     screenName retweetCount isRetweet retweeted longitude latitude
+1  Norvecli2121          125      TRUE     FALSE        NA       NA
+2   MonicaTedde           79      TRUE     FALSE        NA       NA
+3   the_pronoia         2039      TRUE     FALSE        NA       NA
+4 humberto_hass          170      TRUE     FALSE        NA       NA
+5  connor_daren            1      TRUE     FALSE        NA       NA</code></pre>
 </div>
 </div>
 <ul>
@@ -2733,7 +2733,7 @@ vertical-align: -.125em;
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(TweetsDF,<span class="st">&quot;/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/data/raw data/twitterR.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(TweetsDF,<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/twitterR.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -2751,7 +2751,7 @@ vertical-align: -.125em;
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>comp_sector <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/consumptionbysector.csv&quot;</span>)</span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>comp_sector <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/downloaded data/consumptionbysector.csv&quot;</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(comp_sector)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -2781,7 +2781,7 @@ vertical-align: -.125em;
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>emission <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/huiting/Desktop/ANLY-501/anly-501-project-HuitingSong-1/501-project-website/data/downloaded data/energycoemission.csv&quot;</span>)</span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>emission <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/downloaded data/energycoemission.csv&quot;</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emission)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">

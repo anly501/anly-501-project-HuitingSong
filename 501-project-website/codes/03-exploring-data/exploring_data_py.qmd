@@ -1,0 +1,220 @@
+---
+title: "Exploring Data in Python"
+pdf-engine: lualatex
+format:
+  html:
+        code-fold: true
+        self-contained: true
+execute:
+    warning: false
+---
+
+Exploratory Data Analysis (EDA) refers to the critical process of performing initial investigations on data so as to discover patterns,to spot anomalies,to test hypothesis and to check assumptions with the help of summary statistics and graphical representations. In my project, I plan to use the data I cleaned previously to do EDA.
+
+## Dataset Introducation and Plan
+
+**Twitter users' dataset grathered from R**
+
+- The dataset i want to use is the sentiment analysis dataset and the word counts dataset which are all cleaned . This dataset contains the infomation of Twitter users' opinions about different type of energy and environment. I used twitter to scratch keywords like **"oil","gas","solar power","wind power","enviornment"** to scratch users’ attitudes about these four kinds of energy and environment. I want to search different types of energy in order to analysis people attitude toward different enegy, and what they think about two different kind of energy (renewable energy and convential energy).
+
+- I plan to make histogram to see people attitude, and wordcloud to see what people is thinking about the key words i have set up. 
+
+**Twitter users' dataset grathered from Python**
+
+- This dataset i want to use is the bag-of-word dataset which is saved while doing data cleaning. The raw dataset is twitter text about "enviornment" "clean energy" "conventional energy" "energy consumption". In cleaning process, I use countvectorizer to get the word counts. This dataset contains the freqency of each word or tokens.
+
+- I plan to make a wordcloud to see the key word people usually talk about based on the dataset.This will give me a clear view about people attitude and help me to make assumption.
+
+## EDA
+
+### Twitter users' dataset grathered from R
+
+**Load packages and dataset**
+```{python}
+from matplotlib import pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+import warnings
+warnings.filterwarnings('ignore')
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
+import pandas as pd
+
+freq_r = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/countwordR.csv").drop("Unnamed: 0",axis=1)
+
+stmr = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/rstmscore.csv",index_col=[0])
+```
+
+**Dataset preview**
+```{python}
+print("The word frequency dataset:",freq_r.head())
+print("The sentiment score dataset:",stmr.head())
+```
+
+**barplot of the word frequency**
+- top 10 counts of words
+```{python}
+sns.barplot(x=freq_r["word"][:10].sort_index(ascending=True),y=freq_r['freq'])
+```
+
+The barplot shows the top 10 word counts. `Power` is the highest common word appears on the dataset. However, you can see there are lots of meaningless words, like `you`,`and`,`the`,`are`,`that`,`not`. Those word are showned out because the countvectorizer only count the freqency of each words and it does not consider the type of words. 
+
+**Wordcloud**
+```{python}
+comment_words = ''
+w = WordCloud()
+stop_words = list(w.stopwords)
+custom_stop_words = ['https', 'rt','website']
+stopwords = set(stop_words + custom_stop_words)
+ 
+# iterate through the csv file
+for val in stmr.clean_text:
+     
+    # typecaste each val to string
+    val = str(val)
+ 
+    # split the value
+    tokens = val.split()
+     
+    # Converts each token into lowercase
+    for i in range(len(tokens)):
+        tokens[i] = tokens[i].lower()
+     
+    comment_words += " ".join(tokens)+" "
+ 
+wordcloud = WordCloud(width = 800, height = 800,
+                background_color ='white',
+                stopwords = stopwords,
+                min_font_size = 10).generate(comment_words)
+ 
+# plot the WordCloud image                      
+plt.figure(figsize = (8, 8), facecolor = None)
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.tight_layout(pad = 0)
+ 
+plt.show()
+```
+
+From the wordcloud, we can see that the most common word is `solar` and `power`. people seems like highly interested in this two word-related things. Also, there appear `angry` and `expensive` those kind of emotion or altittude words.  
+
+**Pie chart about the sentiment counts**
+```{python}
+conditions = [
+    (stmr['compound'] >= 0.33),
+    (stmr['compound'] <= -0.33),
+    (stmr['compound'] > -0.33) & (stmr['compound'] < 0.33),
+]
+
+values = ['positive', 'negative', 'neutral']
+
+stmr["sentiment"] = np.select(conditions, values)
+
+pie = stmr.sentiment.value_counts().plot(kind = "pie",autopct='%1.0f%%') 
+pie.set_title("Twitter Userss' Attitudes",fontdict= { 'fontsize': 20,'fontweight':'bold'}) 
+```
+
+From the pie chart, you can clearly notice that there are 64% users' with negative sentiment, and only 31% people positive sentiment. 
+
+**Conclusion:**
+From the EDA, we know that `Power` and `Solar` are two highest meaningful word appears on the dataset. Based on the pie chart, we know that negative sentiment counts the most of the dataset. Related with the negative words in wordcloud, like `angry` and `expensive` and `happy`, we can know that people are angry about somethings and somethings must be expensive. These frequent words in wordcloud can justify that most people has negative sentiments. Therefore, I can assume that toward the different energy and enviornment, people feels negative. Specifically, people is caring about the solar power and nowadays the expensive energy payment makes people feel negative. 
+
+Nowadays, the inflation after Covid-19 era makes every expensive than the past, the high payment of utilities of house or eergy consumption can make people streeful. Will this increasing payment make people use less energy? This still need to be justified. However, people is considering more about solar power which is a type of clean energy whic we direcly get from sunlight. This power is environmentally friendly and also sustainable. Government should promote these kind of clean energy in helping society to reduce the CO2 emission and save unrenewable energy. 
+
+
+### Twitter users' dataset grathered from Python
+
+**Load packages and dataset**
+```{python}
+from matplotlib import pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+import warnings
+warnings.filterwarnings('ignore')
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
+import pandas as pd
+
+freq_py = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/countword.csv").drop("Unnamed: 0",axis=1)
+
+stmpy = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/pystmscore.csv",index_col=[0])
+```
+
+**Dataset preview**
+```{python}
+print("The word frequency dataset:",freq_py.head())
+print("The sentiment score dataset:",stmpy.head())
+```
+
+**barplot of the word frequency**
+- top 10 counts of words
+```{python}
+sns.barplot(x=freq_py["words"][:10].sort_index(ascending=True),y=freq_py['counts'])
+plt.xticks(rotation=50)
+```
+
+As we can see in ths barplot, the word with highest counts are still mostly meaningless in understanding. 
+
+**Wordcloud**
+```{python}
+comment_words = ''
+w = WordCloud()
+stop_words = list(w.stopwords)
+custom_stop_words = ['https', 'rt','website']
+stopwords = set(stop_words + custom_stop_words)
+ 
+# iterate through the csv file
+for val in stmpy.clean_text:
+     
+    # typecaste each val to string
+    val = str(val)
+ 
+    # split the value
+    tokens = val.split()
+     
+    # Converts each token into lowercase
+    for i in range(len(tokens)):
+        tokens[i] = tokens[i].lower()
+     
+    comment_words += " ".join(tokens)+" "
+ 
+wordcloud = WordCloud(width = 800, height = 800,
+                background_color ='white',
+                stopwords = stopwords,
+                min_font_size = 10).generate(comment_words)
+ 
+# plot the WordCloud image                      
+plt.figure(figsize = (8, 8), facecolor = None)
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.tight_layout(pad = 0)
+ 
+plt.show()
+```
+
+From the wordcloud, we can see people is more interested about energy consumption. I also see `change energy` and `saving environment`. Even though those words are small on the graph, but it shows people alttitude toward the energy and environment.
+
+**Pie chart about the sentiment counts**
+```{python}
+conditions = [
+    (stmpy['compound'] >= 0.33),
+    (stmpy['compound'] <= -0.33),
+    (stmpy['compound'] > -0.33) & (stmpy['compound'] < 0.33),
+]
+
+values = ['positive', 'negative', 'neutral']
+
+stmpy["sentiment"] = np.select(conditions, values)
+
+pie = stmpy.sentiment.value_counts().plot(kind = "pie",autopct='%1.0f%%') 
+pie.set_title("Twitter Userss' Attitudes",fontdict= { 'fontsize': 20,'fontweight':'bold'}) 
+```
+
+From the pie chart, the sentiment for twitter users' are 100% positive. I think may somethinsg wrong with the sentiment analysis. However, I do do not see the negative words in the wordcloud. 
+
+**Conclusion:**
+From the EDA, we know that `energy consumption` is the word with high discussion appears on the twitter. Based on the pie chart, we know that positive sentiment counts the most of the dataset. Related with the  wordcloud, we can know that people are seems like feel fair about energy and environment sorround them. Therefore, I can assume that toward the energy consumption and enviornment, people feels all right. Specifically, people is caring about the how much energy is consumed and there is a small corner in the wordcloud have a word called `saving enviornment`. This indicates that users' do think about the situation of energy consumption and do think about save our Earth. These are a positive alttitude. 
+
+Nowadays, the envirnment is under huge challenge due to human actions, and also the energy we usually use is facing the problem of unrenewable. Saving the energy and environment is good for everyone of us. People now is thinking about the actions and ideas to reach the blueprint of better home, so we all need to have positive sentiment in make our Earth better. 

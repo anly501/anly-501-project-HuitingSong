@@ -2632,7 +2632,7 @@ vertical-align: -.125em;
 <h2 class="anchored" data-anchor-id="python-on-text-data">Python on Text Data</h2>
 <section id="dataset-twitterpython.csv-which-is-grabbed-through-python" class="level4">
 <h4 class="anchored" data-anchor-id="dataset-twitterpython.csv-which-is-grabbed-through-python">Dataset “twitterpython.csv” which is grabbed through python</h4>
-<p>People’s perception of energy consumption is very important. It not only reflects the public’s perception, but also indirectly reflects people’s concern for environmental issues and their willingness to change the status quo. In the data gathering section, I have gather the text data by setting “energy consumption” “global warming” “clean energy” “conventional energy” “environmental protection” as the keywords for the twitter api to get the text data. Now I will do the data processing for the text dataset through python.</p>
+<p>People’s perception of energy consumption is very important. It not only reflects the public’s perception, but also indirectly reflects people’s concern for environmental issues and their willingness to change the status quo. In the data gathering section, I have gather the text data by setting “enviornment” “clean energy” “conventional energy” “energy consumption” as the keywords for the twitter api to get the text data. Now I will do the data processing for the text dataset through python.</p>
 <ul>
 <li>Step 1: import the packages we may use during data processing</li>
 </ul>
@@ -2645,7 +2645,8 @@ vertical-align: -.125em;
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">&#39;ignore&#39;</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.sentiment <span class="im">import</span> SentimentIntensityAnalyzer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.sentiment <span class="im">import</span> SentimentIntensityAnalyzer</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cleantext <span class="im">import</span> clean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>Step 2: Load the Dataset we grab by using python</li>
@@ -2662,64 +2663,64 @@ vertical-align: -.125em;
     <tr>
       <th></th>
       <th>Unnamed: 0</th>
-      <th>text</th>
-      <th>lang</th>
       <th>author_id</th>
       <th>created_at</th>
-      <th>edit_history_tweet_ids</th>
       <th>id</th>
+      <th>text</th>
+      <th>lang</th>
+      <th>edit_history_tweet_ids</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>RT @BTC_Archive: JUST IN:  🇷🇺  #Bitcoin mining...</td>
+      <td>1601215082104586240</td>
+      <td>2022-12-10T06:02:37.000Z</td>
+      <td>1601457338409525248</td>
+      <td>The Croatian team had an unfair advantage due ...</td>
       <td>en</td>
-      <td>1087706984667852800</td>
-      <td>2022-12-08T19:38:48.000Z</td>
-      <td>[&#39;1600937959611543553&#39;]</td>
-      <td>1600937959611543553</td>
+      <td>[&#39;1601457338409525248&#39;]</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>RT @JMGlachant: Voluntarily reducing energy co...</td>
+      <td>1441037765697810434</td>
+      <td>2022-12-10T06:01:11.000Z</td>
+      <td>1601456976248344578</td>
+      <td>@crypto_pylon 📣🥳We are proud to announce a new...</td>
       <td>en</td>
-      <td>62578686</td>
-      <td>2022-12-08T19:37:46.000Z</td>
-      <td>[&#39;1600937701892452352&#39;]</td>
-      <td>1600937701892452352</td>
+      <td>[&#39;1601456976248344578&#39;]</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>RT @toyota_europe: Aiming to make our European...</td>
+      <td>1441037765697810434</td>
+      <td>2022-12-10T06:01:07.000Z</td>
+      <td>1601456960116645888</td>
+      <td>@BTCPriceUp 📣🥳We are proud to announce a new t...</td>
       <td>en</td>
-      <td>1424955126528233537</td>
-      <td>2022-12-08T19:37:33.000Z</td>
-      <td>[&#39;1600937647513272320&#39;]</td>
-      <td>1600937647513272320</td>
+      <td>[&#39;1601456960116645888&#39;]</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
-      <td>RT @BTCTN: #Russian Ministry of Energy expects...</td>
+      <td>1325537114533089281</td>
+      <td>2022-12-10T06:01:07.000Z</td>
+      <td>1601456958929661954</td>
+      <td>@JustCanadian7 @RobCairns10 @LouisGeorgeVonB @...</td>
       <td>en</td>
-      <td>1207446343238791168</td>
-      <td>2022-12-08T19:37:29.000Z</td>
-      <td>[&#39;1600937628647710725&#39;]</td>
-      <td>1600937628647710725</td>
+      <td>[&#39;1601456958929661954&#39;]</td>
     </tr>
     <tr>
       <th>4</th>
       <td>4</td>
-      <td>Itron $ITRI said Thursday that it will connect...</td>
+      <td>1441037765697810434</td>
+      <td>2022-12-10T06:01:04.000Z</td>
+      <td>1601456947496374272</td>
+      <td>@BNB_Tracker 📣🥳We are proud to announce a new ...</td>
       <td>en</td>
-      <td>1595144930279702529</td>
-      <td>2022-12-08T19:37:23.000Z</td>
-      <td>[&#39;1600937606144880641&#39;]</td>
-      <td>1600937606144880641</td>
+      <td>[&#39;1601456947496374272&#39;]</td>
     </tr>
   </tbody>
 </table>
@@ -2734,12 +2735,12 @@ vertical-align: -.125em;
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>twitter.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>Unnamed: 0                0
-text                      0
-lang                      0
 author_id                 0
 created_at                0
-edit_history_tweet_ids    0
 id                        0
+text                      0
+lang                      0
+edit_history_tweet_ids    0
 dtype: int64</code></pre>
 </div>
 </div>
@@ -2758,31 +2759,53 @@ dtype: int64</code></pre>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># http://emailregex.com/</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>email_re <span class="op">=</span> <span class="vs">r&quot;&quot;&quot;(?:[a-z0-9!#$%&amp;&#39;*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;&#39;*+/=?^_`{|}~-]+)*|&quot;(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*&quot;)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.)</span><span class="sc">{3}</span><span class="vs">(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])&quot;&quot;&quot;</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># replace = [ (pattern-to-replace, replacement),  ...]</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>replace <span class="op">=</span> [</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;&lt;a[^&gt;]*&gt;(.*?)&lt;/a&gt;&quot;</span>, <span class="vs">r&quot;\1&quot;</span>),  <span class="co"># Matches most URLs</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    (email_re, <span class="st">&quot;email&quot;</span>),            <span class="co"># Matches emails</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;(?&lt;=\d),(?=\d)&quot;</span>, <span class="st">&quot;&quot;</span>),        <span class="co"># Remove commas in numbers</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;\d+&quot;</span>, <span class="st">&quot;number&quot;</span>),              <span class="co"># Map digits to special token &lt;numbr&gt;</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;[\t\n\r\*\.\@\,\-\/]&quot;</span>, <span class="st">&quot; &quot;</span>), <span class="co"># Punctuation and other junk</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;\s+&quot;</span>, <span class="st">&quot; &quot;</span>)                   <span class="co"># Stips extra whitespace</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>twitter_sentences <span class="op">=</span> []</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, d <span class="kw">in</span> <span class="bu">enumerate</span>(twitter[<span class="st">&#39;text&#39;</span>]):</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> repl <span class="kw">in</span> replace:</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> re.sub(repl[<span class="dv">0</span>], repl[<span class="dv">1</span>], d)</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    twitter_sentences.append(d)</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="at">@Language.component</span>(<span class="st">&quot;lab04Preprocessor&quot;</span>)</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ng20_preprocess(doc):</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token <span class="cf">for</span> token <span class="kw">in</span> doc </span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>              <span class="cf">if</span> <span class="kw">not</span> <span class="bu">any</span>((token.is_stop, token.is_punct))]</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token.lemma_.lower().strip() <span class="cf">for</span> token <span class="kw">in</span> tokens]</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token <span class="cf">for</span> token <span class="kw">in</span> tokens <span class="cf">if</span> token]</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&quot; &quot;</span>.join(tokens)</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>pipeline.add_pipe(<span class="st">&quot;lab04Preprocessor&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># http://urlregex.com/</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>url_re <span class="op">=</span> <span class="vs">r&quot;&quot;&quot;http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&amp;+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+&quot;&quot;&quot;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>emoji_pattern <span class="op">=</span> re.<span class="bu">compile</span>(<span class="st">&quot;[&quot;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F600</span><span class="st">-</span><span class="ch">\U0001F64F</span><span class="st">&quot;</span>  <span class="co"># emoticons</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F300</span><span class="st">-</span><span class="ch">\U0001F5FF</span><span class="st">&quot;</span>  <span class="co"># symbols &amp; pictographs</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F680</span><span class="st">-</span><span class="ch">\U0001F6FF</span><span class="st">&quot;</span>  <span class="co"># transport &amp; map symbols</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F1E0</span><span class="st">-</span><span class="ch">\U0001F1FF</span><span class="st">&quot;</span>  <span class="co"># flags (iOS)</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F1F2</span><span class="st">-</span><span class="ch">\U0001F1F4</span><span class="st">&quot;</span>  <span class="co"># Macau flag</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F1E6</span><span class="st">-</span><span class="ch">\U0001F1FF</span><span class="st">&quot;</span>  <span class="co"># flags</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F600</span><span class="st">-</span><span class="ch">\U0001F64F</span><span class="st">&quot;</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U00002702</span><span class="st">-</span><span class="ch">\U000027B0</span><span class="st">&quot;</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U000024C2</span><span class="st">-</span><span class="ch">\U0001F251</span><span class="st">&quot;</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001f926</span><span class="st">-</span><span class="ch">\U0001f937</span><span class="st">&quot;</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F1F2</span><span class="st">&quot;</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F1F4</span><span class="st">&quot;</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F620</span><span class="st">&quot;</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\u200d</span><span class="st">&quot;</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\u2640</span><span class="st">-</span><span class="ch">\u2642</span><span class="st">&quot;</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;]+&quot;</span>, flags<span class="op">=</span>re.UNICODE)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co"># replace = [ (pattern-to-replace, replacement),  ...]</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>replace <span class="op">=</span> [</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    (url_re, <span class="st">&quot;&quot;</span>),                <span class="co"># Matches most URLs</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    (email_re, <span class="st">&quot;&quot;</span>),            <span class="co"># Matches emails</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    (emoji_pattern,<span class="st">&quot;&quot;</span>),             <span class="co"># remove emoji</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;(?&lt;=\d),(?=\d)&quot;</span>, <span class="st">&quot;&quot;</span>),        <span class="co"># Remove commas in numbers</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;\d+&quot;</span>, <span class="st">&quot;&quot;</span>),              <span class="co"># Map digits to special token &lt;numbr&gt;</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;[\t\n\r\*\.\@\,\-\/]&quot;</span>, <span class="st">&quot; &quot;</span>), <span class="co"># Punctuation and other junk</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;\s+&quot;</span>, <span class="st">&quot; &quot;</span>)                   <span class="co"># Stips extra whitespace</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>twitter_sentences <span class="op">=</span> []</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, d <span class="kw">in</span> <span class="bu">enumerate</span>(twitter[<span class="st">&#39;text&#39;</span>]):</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> repl <span class="kw">in</span> replace:</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> re.sub(repl[<span class="dv">0</span>], repl[<span class="dv">1</span>], d)</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    twitter_sentences.append(d)</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="at">@Language.component</span>(<span class="st">&quot;lab04Preprocessor&quot;</span>)</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ng20_preprocess(doc):</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token <span class="cf">for</span> token <span class="kw">in</span> doc </span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>              <span class="cf">if</span> <span class="kw">not</span> <span class="bu">any</span>((token.is_stop, token.is_punct))]</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token.lemma_.lower().strip() <span class="cf">for</span> token <span class="kw">in</span> tokens]</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token <span class="cf">for</span> token <span class="kw">in</span> tokens <span class="cf">if</span> token]</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&quot; &quot;</span>.join(tokens)</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>pipeline.add_pipe(<span class="st">&quot;lab04Preprocessor&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>&lt;function __main__.ng20_preprocess(doc)&gt;</code></pre>
 </div>
@@ -2790,13 +2813,15 @@ dtype: int64</code></pre>
 <ul>
 <li>Step 5: Pass data through spacy pipeline</li>
 </ul>
+<p>Since I found that there still have some emoji that have not been cleaned after viewing the trying result, I add the a line from packages clean_text. This packages can efficiently remove all the emoji by choosing the <code>no_emoji = True</code>. Now, the text are all be cleaned.</p>
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>docs <span class="op">=</span> []</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sent <span class="kw">in</span> twitter_sentences:</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    docs.append(pipeline(sent))</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> pd.DataFrame(docs)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>result.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> clean(sent,no_emoji<span class="op">=</span><span class="va">True</span>,no_currency_symbols<span class="op">=</span><span class="va">True</span>,no_punct<span class="op">=</span><span class="va">True</span>) <span class="co"># remove all the emoji</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    docs.append(pipeline(s))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> pd.DataFrame(docs)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>result.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 
 <div>
@@ -2811,23 +2836,23 @@ dtype: int64</code></pre>
   <tbody>
     <tr>
       <th>0</th>
-      <td>rt btc_archive 🇷 🇺 bitcoin mining industry pow...</td>
+      <td>croatian team unfair advantage consumption ara...</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>rt jmglachant voluntarily reduce energy consum...</td>
+      <td>cryptopylon proud announce new token bear caso...</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>rt toyota_europe aim european manufacturing fa...</td>
+      <td>btcpriceup proud announce new token bear casol...</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>rt btctn russian ministry energy expect crypto...</td>
+      <td>justcanadian robcairns louisgeorgevonb jasonhi...</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>itron $ itri say thursday connect manage numbe...</td>
+      <td>bnbtracker proud announce new token bear casol...</td>
     </tr>
   </tbody>
 </table>
@@ -2843,7 +2868,7 @@ dtype: int64</code></pre>
 <ul>
 <li>Step 7: Using the CountVectorizer and count the words freqency</li>
 </ul>
-<p>Countvectorizer can convert a collection of text documents to a matrix of token counts.</p>
+<p>Countvectorizer can convert a collection of text documents to a matrix of token counts. The key in bag of word vocabulary is the token which is also the word in text. The value is the count of the key which is calculated by fitting the cleaned text in to countvectorizer. After sorting the counts, we can see the frequency of each words or tokens.</p>
 <div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>vectorizer <span class="op">=</span> CountVectorizer()</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>bow <span class="op">=</span> vectorizer.fit(docs)</span>
@@ -2866,29 +2891,29 @@ dtype: int64</code></pre>
   </thead>
   <tbody>
     <tr>
-      <th>448</th>
-      <td>zxxvrrdmrs</td>
-      <td>497</td>
-    </tr>
-    <tr>
-      <th>251</th>
+      <th>466</th>
       <td>zero</td>
-      <td>496</td>
+      <td>654</td>
     </tr>
     <tr>
-      <th>124</th>
-      <td>young</td>
-      <td>495</td>
+      <th>51</th>
+      <td>yuugiriawano</td>
+      <td>653</td>
     </tr>
     <tr>
-      <th>8</th>
+      <th>107</th>
       <td>year</td>
-      <td>494</td>
+      <td>652</td>
     </tr>
     <tr>
-      <th>61</th>
-      <td>xpcoqqqauk</td>
-      <td>493</td>
+      <th>435</th>
+      <td>yanqinyq</td>
+      <td>651</td>
+    </tr>
+    <tr>
+      <th>558</th>
+      <td>xrp</td>
+      <td>650</td>
     </tr>
     <tr>
       <th>...</th>
@@ -2896,33 +2921,33 @@ dtype: int64</code></pre>
       <td>...</td>
     </tr>
     <tr>
-      <th>231</th>
-      <td>adoption</td>
+      <th>138</th>
+      <td>activist</td>
       <td>4</td>
     </tr>
     <tr>
-      <th>64</th>
-      <td>actually</td>
+      <th>132</th>
+      <td>action</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>393</th>
-      <td>account</td>
+      <th>627</th>
+      <td>actbrigitte</td>
       <td>2</td>
     </tr>
     <tr>
-      <th>464</th>
-      <td>accessory</td>
+      <th>154</th>
+      <td>achieve</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>73</th>
-      <td>absorb</td>
+      <th>570</th>
+      <td>ac</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>498 rows × 2 columns</p>
+<p>655 rows × 2 columns</p>
 </div>
 </div>
 </div>
@@ -2933,80 +2958,593 @@ dtype: int64</code></pre>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>bow.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/countword.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li>Step 9: Opinion Mining</li>
+<li>Step 9: Opinion Mining or Sentiment Analysis</li>
 </ul>
 <p>Opinion mining is an approach to natural language processing (NLP) that identifies the emotional tone behind a body of text. This is a popular way for organizations to determine and categorize opinions about a product, service, or idea. In addition to identifying sentiment, opinion mining can extract the polarity (or the amount of positivity and negativity), subject and opinion holder within the text. Furthermore, sentiment analysis can be applied to varying scopes such as document, paragraph, sentence and sub-sentence levels.</p>
-<p>Since I would like to analysis the attitude people toward the energy consumption, opinion mining is an useful methods to conduct the result.</p>
+<p>There are four most popular NLP Sentiment analysis packages: - Text Blob - VADER - Flair - Custom Model: such as Naive Bayes, SVM, etc.</p>
+<p>I will choose VADER to do the sentiment analysis on my twitter text data. VADER uses a list of lexical features (e.g. word) which are labeled as positive or negative according to their semantic orientation to calculate the text sentiment. It will return the probability of a given input sentence to be <code>positive</code>,<code>negative</code>,<code>neutral</code>.</p>
+<p><strong>Note:</strong> This sentiment analysis is to only for simple analysis. The accuracy for detecting the sentiment of each input sentence will not be investigated. VADER only implement the sentiment rule to the word from their orientation, so this means that this method does not have the ability to analysis the opinion of input as sentence unit. Since the text data I grab from Twitter is without label of users’ attitude. Thus, in this section, i just need the sentiment score the algorithm generated for future research.</p>
+<p>According to my project direction and ten question, sentiment analysis can help me to answer the question of how twitter users’ think about the energy consumption and how likely they are going to do action for protecting enviornment. Thus, understanding twitter users’ opinion is important step in doing my research.</p>
+<ul>
+<li>use the cleaned text to do the analysis. otherwise, the sentiment score will be influenced.</li>
+</ul>
 <div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># define the function</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> getSentiments(df):</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    sid <span class="op">=</span> SentimentIntensityAnalyzer()</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    tweet_str <span class="op">=</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    tweetscore <span class="op">=</span> []</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tweet <span class="kw">in</span> df[<span class="st">&#39;text&#39;</span>]:</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        tweet_str <span class="op">=</span> tweet_str <span class="op">+</span> <span class="st">&quot; &quot;</span> <span class="op">+</span> tweet</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        score <span class="op">=</span> sid.polarity_scores(tweet_str)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        tweetscore.append(score)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tweetscore</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># call the function above to see the result score and form a data frame to record</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>sentiment <span class="op">=</span> getSentiments(twitter)</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>texts <span class="op">=</span> pd.DataFrame(twitter.text)</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>stmscore <span class="op">=</span> pd.DataFrame.from_dict(sentiment)</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>stmscore.head()</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co"># relate the text and score for better view</span></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>txtscore <span class="op">=</span> pd.concat([texts,stmscore],axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>txtscore.head()</span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="co"># export the csv for future analysis</span></span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>txtscore.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/pystmscore.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>twtpy <span class="op">=</span> pd.read_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/piplineresult.csv&quot;</span>,index_col<span class="op">=</span>[<span class="dv">0</span>])</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>twtpy.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>croatian team unfair advantage consumption ara...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cryptopylon proud announce new token bear caso...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>btcpriceup proud announce new token bear casol...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>justcanadian robcairns louisgeorgevonb jasonhi...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>bnbtracker proud announce new token bear casol...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<ul>
+<li>change the column name and get the sentiment score</li>
+</ul>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>twtpy.rename(columns<span class="op">=</span>{<span class="st">&quot;0&quot;</span>:<span class="st">&#39;clean_text&#39;</span>},inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>twtpy.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>clean_text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>croatian team unfair advantage consumption ara...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cryptopylon proud announce new token bear caso...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>btcpriceup proud announce new token bear casol...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>justcanadian robcairns louisgeorgevonb jasonhi...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>bnbtracker proud announce new token bear casol...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<ul>
+<li>defined the function</li>
+</ul>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># define the function</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> getSentiments(df):</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    sid <span class="op">=</span> SentimentIntensityAnalyzer()</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    tweet_str <span class="op">=</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    tweetscore <span class="op">=</span> []</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tweet <span class="kw">in</span> df[<span class="st">&#39;clean_text&#39;</span>]:</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        tweet_str <span class="op">=</span> tweet_str <span class="op">+</span> <span class="st">&quot; &quot;</span> <span class="op">+</span> tweet</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        score <span class="op">=</span> sid.polarity_scores(tweet_str)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        tweetscore.append(score)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tweetscore</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># call the function above to see the result score and form a data frame to record</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>sentiment <span class="op">=</span> getSentiments(twtpy)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>texts <span class="op">=</span> pd.DataFrame(twitter[<span class="st">&#39;text&#39;</span>])</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>clean_text <span class="op">=</span> pd.DataFrame(twtpy[<span class="st">&#39;clean_text&#39;</span>])</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>stmscore <span class="op">=</span> pd.DataFrame.from_dict(sentiment)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>stmscore.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>neg</th>
+      <th>neu</th>
+      <th>pos</th>
+      <th>compound</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.109</td>
+      <td>0.598</td>
+      <td>0.293</td>
+      <td>0.4970</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.062</td>
+      <td>0.665</td>
+      <td>0.272</td>
+      <td>0.8135</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.044</td>
+      <td>0.692</td>
+      <td>0.264</td>
+      <td>0.9121</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.033</td>
+      <td>0.691</td>
+      <td>0.276</td>
+      <td>0.9579</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.027</td>
+      <td>0.702</td>
+      <td>0.271</td>
+      <td>0.9723</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<ul>
+<li>concat the original text, clean_text, and the sentiment score</li>
+</ul>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># relate the text and score for better view</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>txtscore <span class="op">=</span> pd.concat([texts,clean_text,stmscore],axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>twtpy.rename(columns<span class="op">=</span>{},inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>txtscore.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>text</th>
+      <th>clean_text</th>
+      <th>neg</th>
+      <th>neu</th>
+      <th>pos</th>
+      <th>compound</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>The Croatian team had an unfair advantage due ...</td>
+      <td>croatian team unfair advantage consumption ara...</td>
+      <td>0.109</td>
+      <td>0.598</td>
+      <td>0.293</td>
+      <td>0.4970</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>@crypto_pylon 📣🥳We are proud to announce a new...</td>
+      <td>cryptopylon proud announce new token bear caso...</td>
+      <td>0.062</td>
+      <td>0.665</td>
+      <td>0.272</td>
+      <td>0.8135</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>@BTCPriceUp 📣🥳We are proud to announce a new t...</td>
+      <td>btcpriceup proud announce new token bear casol...</td>
+      <td>0.044</td>
+      <td>0.692</td>
+      <td>0.264</td>
+      <td>0.9121</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>@JustCanadian7 @RobCairns10 @LouisGeorgeVonB @...</td>
+      <td>justcanadian robcairns louisgeorgevonb jasonhi...</td>
+      <td>0.033</td>
+      <td>0.691</td>
+      <td>0.276</td>
+      <td>0.9579</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>@BNB_Tracker 📣🥳We are proud to announce a new ...</td>
+      <td>bnbtracker proud announce new token bear casol...</td>
+      <td>0.027</td>
+      <td>0.702</td>
+      <td>0.271</td>
+      <td>0.9723</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<ul>
+<li>save the dataframe for future use</li>
+</ul>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># export the csv for future analysis</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>txtscore.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/pystmscore.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="dataset-twitterr.csv-which-is-grabbed-through-python" class="level4">
 <h4 class="anchored" data-anchor-id="dataset-twitterr.csv-which-is-grabbed-through-python">Dataset “twitterR.csv” which is grabbed through python</h4>
 <p>For Twitter API in R, I used twitter to scratch keywords like <strong>“oil”,“gas”,“solar power”,“wind power”</strong> to scratch users’ attitudes about these four kinds of energy. I want to search different types of energy in order to analysis people attitude toward different enegy, and what they think about two different kind of energy (renewable energy and convential energy).</p>
 <p>Since the dataset has gone through word counts in <code>record data in R</code> link, The purpose for the dataset here is to do the sentiment analysis, which is opinion mining. An important analysis for my project in understanding twitter users’ idea about different type of energy.</p>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>twtr <span class="op">=</span> pd.read_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/twitterR.csv&quot;</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define the function</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> getSentiments(df):</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    sid <span class="op">=</span> SentimentIntensityAnalyzer()</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    tweet_str <span class="op">=</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    tweetscore <span class="op">=</span> []</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tweet <span class="kw">in</span> df[<span class="st">&#39;text&#39;</span>]:</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        tweet_str <span class="op">=</span> tweet_str <span class="op">+</span> <span class="st">&quot; &quot;</span> <span class="op">+</span> tweet</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        score <span class="op">=</span> sid.polarity_scores(tweet_str)</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        tweetscore.append(score)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tweetscore</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co"># call the function above to see the result score and form a data frame to record</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>sentiment <span class="op">=</span> getSentiments(twtr)</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>texts <span class="op">=</span> pd.DataFrame(twtr.text)</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>stmscore <span class="op">=</span> pd.DataFrame.from_dict(sentiment)</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>stmscore.head()</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co"># relate the text and score for better view</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>txtscore <span class="op">=</span> pd.concat([texts,stmscore],axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(txtscore.head())</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="co"># export the csv for future analysis</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>txtscore.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/rstmscore.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>load the dataset</li>
+</ul>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>twtr <span class="op">=</span> pd.read_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/twitterR.csv&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>twtr.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>text</th>
+      <th>favorited</th>
+      <th>favoriteCount</th>
+      <th>replyToSN</th>
+      <th>created</th>
+      <th>truncated</th>
+      <th>replyToSID</th>
+      <th>id</th>
+      <th>replyToUID</th>
+      <th>statusSource</th>
+      <th>screenName</th>
+      <th>retweetCount</th>
+      <th>isRetweet</th>
+      <th>retweeted</th>
+      <th>longitude</th>
+      <th>latitude</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>RT @Mustafa_Alali2: Turkey has been focusing i...</td>
+      <td>False</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>2022-12-10 09:47:10</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>1601513846979842048</td>
+      <td>NaN</td>
+      <td>&lt;a href=&quot;http://twitter.com/download/android&quot; ...</td>
+      <td>Norvecli2121</td>
+      <td>125</td>
+      <td>True</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>RT @MikeHudema: Providing enough electricity t...</td>
+      <td>False</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>2022-12-10 09:46:57</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>1601513792655228928</td>
+      <td>NaN</td>
+      <td>&lt;a href=&quot;http://twitter.com/download/iphone&quot; r...</td>
+      <td>MonicaTedde</td>
+      <td>79</td>
+      <td>True</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>RT @Shehusky: You are not angry that you are p...</td>
+      <td>False</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>2022-12-10 09:46:55</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>1601513782349418496</td>
+      <td>NaN</td>
+      <td>&lt;a href=&quot;http://twitter.com/download/android&quot; ...</td>
+      <td>the_pronoia</td>
+      <td>2039</td>
+      <td>True</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>RT @TansuYegen: China&#39;s first 100MW solar powe...</td>
+      <td>False</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>2022-12-10 09:46:14</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>1601513611603501056</td>
+      <td>NaN</td>
+      <td>&lt;a href=&quot;http://twitter.com/download/android&quot; ...</td>
+      <td>humberto_hass</td>
+      <td>170</td>
+      <td>True</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>RT @jules1430358743: @simonahac Our solar pane...</td>
+      <td>False</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>2022-12-10 09:46:12</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>1601513605060448257</td>
+      <td>NaN</td>
+      <td>&lt;a href=&quot;http://twitter.com/download/iphone&quot; r...</td>
+      <td>connor_daren</td>
+      <td>1</td>
+      <td>True</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> spacy</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> spacy.language <span class="im">import</span> Language</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> spacy.load(<span class="st">&#39;en_core_web_sm&#39;</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># http://emailregex.com/</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>email_re <span class="op">=</span> <span class="vs">r&quot;&quot;&quot;(?:[a-z0-9!#$%&amp;&#39;*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;&#39;*+/=?^_`{|}~-]+)*|&quot;(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*&quot;)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.)</span><span class="sc">{3}</span><span class="vs">(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])&quot;&quot;&quot;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># http://urlregex.com/</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>url_re <span class="op">=</span> <span class="vs">r&quot;&quot;&quot;http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&amp;+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+&quot;&quot;&quot;</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>emoji_pattern <span class="op">=</span> re.<span class="bu">compile</span>(<span class="st">&quot;[&quot;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F600</span><span class="st">-</span><span class="ch">\U0001F64F</span><span class="st">&quot;</span>  <span class="co"># emoticons</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F300</span><span class="st">-</span><span class="ch">\U0001F5FF</span><span class="st">&quot;</span>  <span class="co"># symbols &amp; pictographs</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F680</span><span class="st">-</span><span class="ch">\U0001F6FF</span><span class="st">&quot;</span>  <span class="co"># transport &amp; map symbols</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F1E0</span><span class="st">-</span><span class="ch">\U0001F1FF</span><span class="st">&quot;</span>  <span class="co"># flags (iOS)</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F1F2</span><span class="st">-</span><span class="ch">\U0001F1F4</span><span class="st">&quot;</span>  <span class="co"># Macau flag</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F1E6</span><span class="st">-</span><span class="ch">\U0001F1FF</span><span class="st">&quot;</span>  <span class="co"># flags</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F600</span><span class="st">-</span><span class="ch">\U0001F64F</span><span class="st">&quot;</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U00002702</span><span class="st">-</span><span class="ch">\U000027B0</span><span class="st">&quot;</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U000024C2</span><span class="st">-</span><span class="ch">\U0001F251</span><span class="st">&quot;</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001f926</span><span class="st">-</span><span class="ch">\U0001f937</span><span class="st">&quot;</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F1F2</span><span class="st">&quot;</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F1F4</span><span class="st">&quot;</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\U0001F620</span><span class="st">&quot;</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\u200d</span><span class="st">&quot;</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">u&quot;</span><span class="ch">\u2640</span><span class="st">-</span><span class="ch">\u2642</span><span class="st">&quot;</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;]+&quot;</span>, flags<span class="op">=</span>re.UNICODE)</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="co"># replace = [ (pattern-to-replace, replacement),  ...]</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>replace <span class="op">=</span> [</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    (url_re, <span class="st">&quot;&quot;</span>),                <span class="co"># Matches most URLs</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>    (email_re, <span class="st">&quot;&quot;</span>),            <span class="co"># Matches emails</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>    (emoji_pattern,<span class="st">&quot;&quot;</span>),             <span class="co"># remove emoji</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;(?&lt;=\d),(?=\d)&quot;</span>, <span class="st">&quot;&quot;</span>),        <span class="co"># Remove commas in numbers</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;\d+&quot;</span>, <span class="st">&quot;&quot;</span>),              <span class="co"># Map digits to special token &lt;numbr&gt;</span></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;[\t\n\r\*\.\@\,\-\/]&quot;</span>, <span class="st">&quot; &quot;</span>), <span class="co"># Punctuation and other junk</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>    (<span class="vs">r&quot;\s+&quot;</span>, <span class="st">&quot; &quot;</span>)                   <span class="co"># Stips extra whitespace</span></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>twitter_sentences <span class="op">=</span> []</span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, d <span class="kw">in</span> <span class="bu">enumerate</span>(twtr[<span class="st">&#39;text&#39;</span>]):</span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> repl <span class="kw">in</span> replace:</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> re.sub(repl[<span class="dv">0</span>], repl[<span class="dv">1</span>], d)</span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>    twitter_sentences.append(d)</span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a><span class="at">@Language.component</span>(<span class="st">&quot;lab04Preprocessor&quot;</span>)</span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ng20_preprocess(doc):</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token <span class="cf">for</span> token <span class="kw">in</span> doc </span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>              <span class="cf">if</span> <span class="kw">not</span> <span class="bu">any</span>((token.is_stop, token.is_punct))]</span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token.lemma_.lower().strip() <span class="cf">for</span> token <span class="kw">in</span> tokens]</span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> [token <span class="cf">for</span> token <span class="kw">in</span> tokens <span class="cf">if</span> token]</span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&quot; &quot;</span>.join(tokens)</span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>pipeline.add_pipe(<span class="st">&quot;lab04Preprocessor&quot;</span>)</span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>docs <span class="op">=</span> []</span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sent <span class="kw">in</span> twitter_sentences:</span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> clean(sent,no_emoji<span class="op">=</span><span class="va">True</span>,no_currency_symbols<span class="op">=</span><span class="va">True</span>,no_punct<span class="op">=</span><span class="va">True</span>) <span class="co"># remove all the emoji</span></span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a>    docs.append(pipeline(s))</span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> pd.DataFrame(docs)</span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a>result.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>rt mustafaalali turkey focus attack vitat proj...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>rt mikehudema provide electricity power thousa...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>rt shehusky angry poor angry gas expensive ang...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>rt tansuyegen china mw solar power plant use m...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>rt jules simonahac solar panel battery work wo...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>result.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/piplineresult_r.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>twtrr <span class="op">=</span> pd.read_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/piplineresult_r.csv&quot;</span>,index_col<span class="op">=</span>[<span class="dv">0</span>])</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>twtrr.rename(columns<span class="op">=</span>{<span class="st">&quot;0&quot;</span>:<span class="st">&#39;clean_text&#39;</span>},inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>twtrr.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>clean_text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>rt mustafaalali turkey focus attack vitat proj...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>rt mikehudema provide electricity power thousa...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>rt shehusky angry poor angry gas expensive ang...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>rt tansuyegen china mw solar power plant use m...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>rt jules simonahac solar panel battery work wo...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define the function</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> getSentiments(df):</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    sid <span class="op">=</span> SentimentIntensityAnalyzer()</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    tweet_str <span class="op">=</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    tweetscore <span class="op">=</span> []</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tweet <span class="kw">in</span> df[<span class="st">&#39;clean_text&#39;</span>]:</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        tweet_str <span class="op">=</span> tweet_str <span class="op">+</span> <span class="st">&quot; &quot;</span> <span class="op">+</span> tweet</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        score <span class="op">=</span> sid.polarity_scores(tweet_str)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>        tweetscore.append(score)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tweetscore</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co"># call the function above to see the result score and form a data frame to record</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>sentiment <span class="op">=</span> getSentiments(twtrr)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>texts <span class="op">=</span> pd.DataFrame(twtr[<span class="st">&#39;text&#39;</span>])</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>clean_text <span class="op">=</span> pd.DataFrame(twtrr[<span class="st">&#39;clean_text&#39;</span>])</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>stmscore <span class="op">=</span> pd.DataFrame.from_dict(sentiment)</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>stmscore.head()</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co"># relate the text and score for better view</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>txtscore <span class="op">=</span> pd.concat([texts,clean_text,stmscore],axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(txtscore.head())</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co"># export the csv for future analysis</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>txtscore.to_csv(<span class="st">&quot;/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/rstmscore.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                text  neg    neu    pos  \
-0  RT @RailMinIndia: Progressing Towards Greener ...  0.0  1.000  0.000   
-1  RT @NickDeIuliis: New England bans #natgas pip...  0.0  1.000  0.000   
-2  RT @MikeHudema: This electric car was built in...  0.0  0.943  0.057   
-3  RT @elonmusk: Solar + Powerwall battery ensure...  0.0  0.928  0.072   
-4  Let us know which car gets fuel first in the c...  0.0  0.941  0.059   
+<pre><code>                                                text  \
+0  RT @Mustafa_Alali2: Turkey has been focusing i...   
+1  RT @MikeHudema: Providing enough electricity t...   
+2  RT @Shehusky: You are not angry that you are p...   
+3  RT @TansuYegen: China&#39;s first 100MW solar powe...   
+4  RT @jules1430358743: @simonahac Our solar pane...   
+
+                                          clean_text    neg    neu    pos  \
+0  rt mustafaalali turkey focus attack vitat proj...  0.355  0.645  0.000   
+1  rt mikehudema provide electricity power thousa...  0.209  0.791  0.000   
+2  rt shehusky angry poor angry gas expensive ang...  0.387  0.613  0.000   
+3  rt tansuyegen china mw solar power plant use m...  0.291  0.639  0.070   
+4  rt jules simonahac solar panel battery work wo...  0.227  0.637  0.137   
 
    compound  
-0    0.0000  
-1    0.0000  
-2    0.4504  
-3    0.6015  
-4    0.6015  </code></pre>
+0   -0.7650  
+1   -0.7650  
+2   -0.9618  
+3   -0.9423  
+4   -0.8316  </code></pre>
 </div>
 </div>
 </section>

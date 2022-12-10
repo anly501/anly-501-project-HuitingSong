@@ -1,0 +1,315 @@
+---
+title: "Decision Tree"
+pdf-engine: lualatex
+format:
+  html:
+        code-fold: true
+        self-contained: true
+execute:
+    warning: false
+---
+
+## Introduction of Decision Tree
+
+Classification is a two-step process, learning step and prediction step, in machine learning. In the learning step, the model is developed based on given training data. In the prediction step, the model is used to predict the response for given data. **Decision Tree** is one of the easiest and popular classification algorithms to understand and interpret.
+
+Decision Tree algorithm belongs to the family of supervised learning algorithms. Unlike other supervised learning algorithms, the decision tree algorithm can be used for solving regression and classification problems too. The goal of using a Decision Tree is to create a training model that can use to predict the class or value of the target variable by learning simple decision rules inferred from prior data(training data). In Decision Trees, for predicting a class label for a record we start from the root of the tree. We compare the values of the root attribute with the record’s attribute. On the basis of comparison, we follow the branch corresponding to that value and jump to the next node.
+
+## Dataset Introduction
+
+#### New Dataset of Residential power usage 3 years data
+
+There are two datasets in total. The power usage data, extracted from “TRIEAGLE ENERGY LP, The Woodlands, Texas 77393”. and the historical weather data for Houston, Texas extracted from “www.wunderground.com”
+
+For the direction I want to study, I decided to use this new dataset is because i want to know how residence use energy in time series. And I can analysis the factors that influence residence's decision in energy consumption. like maybe people will use more energy while snowing outside. Thus, this dataset is also useful in answering my ten questions about future energy usage. 
+
+## Objectives
+
+1. Clean the dataset and do simple exploration <br>
+    The dataset has not been cleaned in previous section since it is newly find out. In this section, I will clean it and use it to do some simple EDA. 
+
+2. Decision Tree 
+    The purpose of this section is to geneerate decision tree. And using the hyper-paramter tunning we learn from class to optimize the model. Then, graph the decision tree. 
+
+## Part 1 - Data Cleaning and Exploration
+Load packages and dataset
+```{python}
+import pandas as pd
+import os
+import numpy as np
+import pandas as pd
+import re
+from scipy import stats
+from datetime import datetime
+import matplotlib.pyplot as plt
+import matplotlib 
+%matplotlib inline
+import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn import tree
+
+weather = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/weather.csv",parse_dates = ['Date'])
+weather.head()
+```
+```{python}
+usage = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/raw data/power_usage.csv")
+usage.head()
+```
+
+splite the datetime stamp into date and time sperately
+```{python}
+usage['Date'] = pd.to_datetime(usage["StartDate"]).dt.date
+usage['Date'] = pd.to_datetime(usage['Date'])
+usage['time'] = pd.to_datetime(usage["StartDate"]).dt.time
+usage.drop('StartDate' , axis =1, inplace= True)
+usage.drop('day_of_week' , axis =1, inplace= True)
+usage.head()
+```
+
+merge two dataset by date
+```{python}
+merged = usage.merge(weather, on='Date', how='left')#.drop('date', axis=1)
+merged['year'] = merged['Date'].dt.year
+merged.head()
+```
+
+check the null value and save the merged datatset
+```{python}
+merged.isnull().sum() # no null value
+merged.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/merged_w_u.csv")
+```
+
+barplot to show the daily energy usage value in kWh
+
+from the graph, seems like the daily energy does not change to much. Even thought do not know the reasons why people in day 22 to day 28 use less energy than other day, this may be a good signal that reducing the energy consumption.
+```{python}
+sns.barplot(x=merged["Day"], y=merged["Value (kWh)"])
+plt.show()
+```
+
+scatter plot to how average temperature influence the energy consumpion in kWh
+
+As we can see, the higher then temperature in average, the more energy consumption. The distribution looks extremely skrew to the left. 
+```{python}
+sns.scatterplot(x=merged["Temp_avg"], y=merged["Value (kWh)"])
+```
+
+barplot to show the yearly energy usage. 
+
+2016 has the highest energy consumption, but then 2017 turned to be second lowest. There must be something happened for this abnormal situation.
+```{python}
+sns.barplot(x=merged["year"], y=merged["Value (kWh)"], )
+plt.show()
+```
+
+
+barplot to show energy usage in different notes
+
+from the notes and graph, we can see during the Covid lockdown,the energy usage did not drop dramatically. compare with the situation of lowest energy usage in 2020 in the last step of yearly usage, Covid lockdown does not contribute the energy save much. And, when in vacation, people use less energy. Maybe most of people will choose to go out, the energy in building will goes lower at that period.
+```{python}
+sns.barplot(x=merged["notes"], y=merged["Value (kWh)"], )
+plt.show()
+```
+
+Information of dataset
+
+from the basic info of energy comsumption in kWh, the average usage is about 0.89 kWh. and the median is 0.501. the middle 50% people consume between 0.32 to 1.07. 
+```{python}
+print("the mean of energy usage is: ",merged["Value (kWh)"].mean() )
+print("the median energy usage is:",merged["Value (kWh)"].median())
+print("the percentile of energy usage is:",np.percentile(merged["Value (kWh)"],[25,50,75]))
+print("the maximum of energy usage is: ",merged["Value (kWh)"].max() )
+print("the minimum of energy usage is: ",merged["Value (kWh)"].min() )
+```
+
+Thus, from the EDA, we can see that the energy consumption can be influenced by many factors. These indicate that the energy consumption is hard to be tracked. If we change the time frame and count methods, the energy usage will be shown differenly, but in all, the dataset shows that the daily-based usage of energy is not much different. These may indicate that the behavior of residences does not change dramatically in daily and they are using the energy in a proper way. 
+
+
+Since there are too many factor or value influence the energy consumption, I want to categorize the value into three different groups.
+ - high (2): value in kWh >= 1.5 
+ - low (0): value in kWh <= 1.5
+
+also, for better utilize in the future, i will convert the `notes` into factors 0-4:
+  - weekday : 0
+  - weekend : 1
+  - vacation : 2
+  - COVID-lockdown : 3
+
+```{python}
+# value
+bins = [0,1.5,6.5]
+merged['group'] = pd.cut(merged['Value (kWh)'], bins)
+lbl=LabelEncoder()
+merged['usage'] = lbl.fit_transform(merged['group'])
+df = merged.drop(['Value (kWh)','group'],axis=1)
+
+# notes
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+label = le.fit_transform(df['notes'])
+label
+df["note"] = label
+```
+
+saved dataset for future use
+```{python}
+df = df.drop(['notes',"time","Date"], axis='columns')
+df.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/categorize_usage.csv")
+df.head()
+```
+
+
+Generate a correlation matrix to see the relationship between each variables.
+```{python}
+corr = df.corr();  #print(corr)                 #COMPUTE CORRELATION OF FEATER MATRIX
+print(corr.shape)
+sns.set_theme(style="white")
+f, ax = plt.subplots(figsize=(20, 20))  # Set up the matplotlib figure
+cmap = sns.diverging_palette(230, 20, as_cmap=True)     # Generate a custom diverging colormap
+# Draw the heatmap with the mask and correct aspect ratio
+sns.heatmap(corr,  cmap=cmap, vmin=-1, vmax=1, center=0, square=True, linewidths=.5, cbar_kws={"shrink": .5})
+plt.show()
+```
+
+histogram to see the counts of each categories.
+
+Most of residential usage is low statue which is under 1.5 kWh.
+```{python}
+sns.histplot(df["usage"])
+```
+
+## Part 2- Decision tree
+
+since energy consumption can be influenced by alot. in this part, i will split the train and test set. also, the `usage` variable will be the target column and other variables will be stored together.
+
+```{python}
+y = df['usage']
+X = df.drop(['usage'],axis=1)
+cols = []
+for col in X:
+    cols.append(col)
+
+X = X.to_numpy()
+
+x_train,x_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=0)
+```
+
+Train the model 
+
+I use the function from scikit-learn packages
+```{python}
+model = tree.DecisionTreeClassifier()
+model = model.fit(x_train,y_train)
+```
+
+get the predicted value from test and train set
+```{python}
+yp_train = model.predict(x_train)
+yp_test = model.predict(x_test)
+```
+
+Plot the confusion matrix and get the model accuracy
+
+The accuracy of the model on testing set is 82.9% which is high and can be considered as a fairly good model to predict the usage. 
+```{python}
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn import tree
+from sklearn.metrics import classification_report
+from IPython.display import Image
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.inspection import permutation_importance
+def confusion_plot(y_test,yp_test):
+    print("ACCURACY:",accuracy_score(y_test,yp_test))
+    print("NEGATIVE RECALL (Y=0):",recall_score(y_test, yp_test, pos_label = 0))
+    print("NEGATIVE PRECISION (Y=0):",precision_score(y_test,yp_test, pos_label= 0))
+    print("POSITIVE RECALL (Y=1):",recall_score(y_test,yp_test))
+    print("POSITIVE PRECISION(Y=1):",precision_score(y_test,yp_test))
+    print(confusion_matrix(y_test,yp_test))
+    ConfusionMatrixDisplay.from_predictions(y_test, yp_test)
+    plt.show()
+
+print("------TRAINING------")
+confusion_plot(y_train,yp_train)
+print("------TEST------")
+confusion_plot(y_test,yp_test)
+```
+
+plot the decision tree
+```{python}
+def plot_tree(model,X,Y):
+    fig = plt.figure(figsize=(25,20))
+    _ = tree.plot_tree(model,filled=True)
+plot_tree(model,X,y)
+```
+
+Opitimization
+
+using hyper-parameter tuning to iterate over max_depth to get the optimize the model training. 
+```{python}
+test_results=[]
+train_results=[]
+
+for num_layer in range(1,20):
+    model = tree.DecisionTreeClassifier(max_depth=num_layer)
+    model = model.fit(x_train,y_train)
+
+    yp_train=model.predict(x_train)
+    yp_test=model.predict(x_test)
+
+    # print(y_pred.shape)
+    test_results.append([num_layer,accuracy_score(y_test, yp_test),recall_score(y_test, yp_test,pos_label=0),recall_score(y_test, yp_test,pos_label=1)])
+    train_results.append([num_layer,accuracy_score(y_train, yp_train),recall_score(y_train, yp_train,pos_label=0),recall_score(y_train, yp_train,pos_label=1)])
+
+test_results = pd.DataFrame(test_results)
+train_results = pd.DataFrame(train_results)
+
+print(test_results.head())
+print(train_results.head())
+
+
+plt.plot(train_results[0],train_results[1],'-o')
+plt.plot(test_results[0],test_results[1],'-o',color = 'darkred')
+plt.xlabel("Number of layers in decision tree (max_depth)")
+plt.ylabel("ACCURACY(Y=0): Training (blue) and Test (red)")
+plt.show()
+
+plt.plot(train_results[0],train_results[2],'-o')
+plt.plot(test_results[0],test_results[2],'-o',color = 'darkred')
+plt.xlabel("Number of layers in decision tree (max_depth)")
+plt.ylabel("RECALL(Y=0): Training (blue) and Test (red)")
+plt.show()
+
+plt.plot(train_results[0],train_results[3],'-o')
+plt.plot(test_results[0],test_results[3],'-o',color = 'darkred')
+plt.xlabel("Number of layers in decision tree (max_depth)")
+plt.ylabel("RECALL(Y=1): Training (blue) and Test (red)")
+plt.show()
+```
+
+from the optimization and training result, we can see the accuracy of model has been advanced.
+
+retrain the model by choosing max_depth=8
+```{python}
+from sklearn import tree
+model = tree.DecisionTreeClassifier(max_depth=8)
+model = model.fit(x_train,y_train)
+
+yp_train=model.predict(x_train)
+yp_test=model.predict(x_test)
+
+print("------TRAINING------")
+confusion_plot(y_train,yp_train)
+print("------TEST------")
+confusion_plot(y_test,yp_test)
+
+plot_tree(model,X,y)
+```
+
+## conclusion
+
+With max_depth = 8, the best model accuracy is 83.5%. based on this high score, The decision tree model can be a good model to predict the record data. And shows that the energy consumption can be largely influence by other variables. 

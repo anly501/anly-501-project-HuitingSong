@@ -1,5 +1,5 @@
 ---
-title: "Naive Bayes"
+title: "Naive Bayes in Python with Labeled Text Data"
 pdf-engine: lualatex
 format:
   html:
@@ -15,8 +15,11 @@ In this section, I will use the TI-IDF transformer to process my cleaned text da
 
 ## Part 1 - Naive Bayes in labeled text data
 
-#### On cleaned datset about twitter users' sentiment of energy and environment.
+### On cleaned datset about twitter users' sentiment of energy and environment.
 
+People's perception of energy consumption is very important. It not only reflects the public's perception, but also indirectly reflects people's concern for environmental issues and their willingness to change the status quo. In this section, I will the dataset that cleaned before with content about twitter user's sentiment about energy and enviornment to do the naive bayes algorithm. The purpose of this section for me is to see how the sentiment analysis goes and can i really get the sentiment about the dataset. and then, this influence my study of knowing how people think about energy and envirnment.
+
+#### Data processing
 - Loading the required packages
 ```{python}
 import numpy as np
@@ -33,12 +36,13 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 import matplotlib.pyplot as plt
+import seaborn as sns
 ```
 
 - Loading the dataset
 ```{python}
-score_py = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/pystmscore.csv")
-score_py.head()
+score_r = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/rstmscore.csv",index_col=[0])
+score_r.head()
 ```
 
 - Categorize the sentiment score
@@ -51,25 +55,29 @@ then, save the labeled sentiment data into cleaned data folder for future refere
 
 ```{python}
 conditions = [
-    (score_py['compound'] >= 0.33),
-    (score_py['compound'] <= -0.33),
-    (score_py['compound'] > -0.33) & (score_py['compound'] < 0.33),
+    (score_r['compound'] >= 0.33),
+    (score_r['compound'] <= -0.33),
+    (score_r['compound'] > -0.33) & (score_r['compound'] < 0.33),
 ]
 
 values = ['positive', 'negative', 'neutral']
 
-score_py["sentiment"] = np.select(conditions, values)
+score_r["sentiment"] = np.select(conditions, values)
 
-score_py.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/stm_py_label.csv")
+score_r.to_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/stm_r_label.csv")
 
-score_py.head()
+score_r.head()
 ```
 
+ - EDA 
 
- - split the dataset into traning set (80%) and test set (20%)。 
+From the count plot, we can notice that most of the sentiment in this dataset is negative. Therefore,I can make an asssumption that people alttitude toward different energy and environment is negative, which means that they do not hold good view about energy and enviornment. However, we need to make progress in sentiment analysis model to get the best accuracy for predicting the sentiments.
+
 ```{python}
-x_train,x_test,y_train,y_test=train_test_split(score_py['text'],score_py['sentiment'],test_size=0.2)
+sns.countplot(x=score_r['sentiment'])
+plt.title('Sentiment Counts')
 ```
+
 
  - process the text
 ```{python}
@@ -85,8 +93,15 @@ def cleanText(text):
     text = ' '.join(word for word in text.split() if word not in STOPWORDS) 
     return text
 
-score_py['text'] = score_py['text'].apply(cleanText)
-score_py.head()
+score_r['clean_text'] = score_r['clean_text'].apply(cleanText)
+score_r.head()
+```
+
+#### Word freqency based on TF-IDF
+
+ - split the dataset into traning set (80%) and test set (20%)。 
+```{python}
+x_train,x_test,y_train,y_test=train_test_split(score_r['clean_text'],score_r['sentiment'],test_size=0.2,shuffle=True)
 ```
 
  - Performs the TF-IDF transformation from a provided matrix of counts.
@@ -116,7 +131,7 @@ df.sort_values(by=["tfidf"],ascending=False)
 ```
 
 
- - Different Naive Bayes model
+#### Different Naive Bayes model
 
 **1. Bernoulli NB**
 
@@ -143,19 +158,22 @@ pred = bayes.predict(tfidf_scores_test)
 print(classification_report(y_test,pred))
 ```
 
+From the classification report, the accuracy of Bernoulli NB model is shown as 64% which is not too high but fair. This indicates that this model has 60% chance to correctly predict the sentiment label of input sentences. 
+
+
 **2. Multinomial NB**
 
 Naive Bayes classifier for multinomial models.
  
  The multinomial Naive Bayes classifier is suitable for classification with discrete features (e.g., word counts for text classification). The multinomial distribution normally requires integer feature counts. However, in practice, fractional counts such as tf-idf may also work.
 
-Using the model function
+**Using the model function**
 ```{python}
 nb_clf = MultinomialNB()
 nb_clf.fit(tfidf_scores, y_train)
 ```
 
-Train the model to get the accuracy
+**Train the model to get the accuracy**
 ```{python}
 tfidf_scores_test = tfidf_fitted.transform(x_test)
 accuracy = nb_clf.score(tfidf_scores_test,y_test)
@@ -168,72 +186,64 @@ predictions = nb_clf.predict(tfidf_scores_test)
 print(classification_report(y_test,predictions))
 ```
 
+From the classification report, the accuracy of Multinomial NB model is shown as 65% which is not too high but higher than Bernoulli NB model. This indicates that this model has 63% chance to correctly predict the sentiment label of input sentences. 
 
- - Model Comparison
+**Model Comparison**
 
 The confusion matrix for Bernoulli NB
 ```{python}
-#The confusion matrix
-pred = bayes.predict(tfidf_scores_test)
-cm = confusion_matrix(y_test,pred)
-print(cm)
+cm = confusion_matrix(y_true=y_test, y_pred=pred)
 
-def plot_confusion_matrix(cm, classes,
-                          title='Confusion matrix',
-                          cmap=plt.cm.Blues):
-    """
-    Plot a confusion matrix of predicted and true results
-    """
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.title(title)
-    plt.colorbar()
-    tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes, rotation=0)
-    plt.yticks(tick_marks, classes)
-
-    thresh = cm.max() / 2.
-    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        plt.text(j, i, cm[i, j],
-                 horizontalalignment="center",
-                 color="white" if cm[i, j] > thresh else "black")
-
-    plt.tight_layout()
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
+fig, ax = plt.subplots(figsize=(7.5, 7.5))
+ax.matshow(cm, cmap=plt.cm.Blues, alpha=0.3)
+for i in range(cm.shape[0]):
+    for j in range(cm.shape[1]):
+        ax.text(x=j, y=i,s=cm[i, j], va='center', ha='center', size='xx-large')
+ 
+plt.xlabel('Predictions', fontsize=18)
+plt.ylabel('Actuals', fontsize=18)
+plt.title('Confusion Matrix for Bernoulli NB', fontsize=18)
+plt.show()
 ```
 
-The Confussion matrix for Multinormial NB
+The prediction vs true labels graph for Bernoulli NB
 ```{python}
-#The confusion matrix
-predictions = nb_clf.predict(tfidf_scores_test)
-cm = confusion_matrix(y_test,predictions)
-print(cm)
-
-def plot_confusion_matrix(cm, classes,
-                          title='Confusion matrix',
-                          cmap=plt.cm.Blues):
-    """
-    Plot a confusion matrix of predicted and true results
-    """
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.title(title)
-    plt.colorbar()
-    tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes, rotation=0)
-    plt.yticks(tick_marks, classes)
-
-    thresh = cm.max() / 2.
-    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        plt.text(j, i, cm[i, j],
-                 horizontalalignment="center",
-                 color="white" if cm[i, j] > thresh else "black")
-
-    plt.tight_layout()
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
+Bernoulli = pd.DataFrame(pred)
+sns.histplot(pred,color="lightblue")
+sns.histplot(y_test,color="lightpink")
+plt.legend(labels=["predict label","true label"])
+plt.title("predicted vs true")
 ```
 
+The confusion matrix for Multinomial NB
+```{python}
+cm = confusion_matrix(y_true=y_test, y_pred=predictions)
 
-## Part 2 - Naive Bayes on labeled record dataset
+fig, ax = plt.subplots(figsize=(7.5, 7.5))
+ax.matshow(cm, cmap=plt.cm.Blues, alpha=0.3)
+for i in range(cm.shape[0]):
+    for j in range(cm.shape[1]):
+        ax.text(x=j, y=i,s=cm[i, j], va='center', ha='center', size='xx-large')
+ 
+plt.xlabel('Predictions', fontsize=18)
+plt.ylabel('Actuals', fontsize=18)
+plt.title('Confusion Matrix for Multinomial NB', fontsize=18)
+plt.show()
+```
 
-## Conclusion
+The prediction vs true labels graph for Multinormial NB
+```{python}
+MultinomialNB = pd.DataFrame(predictions)
+sns.histplot(predictions,color="coral")
+sns.histplot(y_test,color="lightyellow")
+plt.legend(labels=["predict label","true label"])
+plt.title("predicted vs true")
+```
+
+#### Conclusion
+
+From the Confusion matrix, the graphs are kind of weird since it is not like the typical heatmap, but this is because the neutral labels which is '1' are matched in both prediction and true labels. Since the negative sentiment counts for most of the testing set, the confusion matrix will look like that. We can see that both Naive Bayes classifiers predict similar amount of correct labels, but Multinomial NB classifier has higher accuracy in predicting both the negative and positive labels. 
+
+In the previous step, through comparing the accuracy of two model, I think Multinomial NB claasifier is more accuracy in predicting the sentiment label of input sentence since it has 65% accuracy. And through looking at the prediction vs true labels graph, we cannot find any big difference in the number between prediction and true labels from two graphs. Based on the accuracy principle, I will choose Multinomial NB classifier as the model to predict the sentiment labels. However, the accuracy by using Naive Bayes is not really high, so I think in the future study i can try other classification method to make better prediction. 
+
+Based on the Naive Bayes model, I do know 65% of twitter users' alttitude are as the same as the sentiment analysis provided. Inside the sentiment analysis, most of the users are holding negative thinking about different energy and environment.

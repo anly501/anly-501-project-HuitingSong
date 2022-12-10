@@ -1,0 +1,163 @@
+---
+title: "Clustering"
+pdf-engine: lualatex
+format:
+  html:
+        code-fold: true
+        self-contained: true
+execute:
+    warning: false
+---
+
+## Introducation to Clustering
+
+Clustering is the task of dividing the population or data points into a number of groups such that data points in the same groups are more similar to other data points in the same group than those in other groups. In simple words, the aim is to segregate groups with similar traits and assign them into clusters.
+
+Let’s understand this with an example. Suppose, you are the head of a rental store and wish to understand preferences of your costumers to scale up your business. Is it possible for you to look at details of each costumer and devise a unique business strategy for each one of them? Definitely not. But, what you can do is to cluster all of your costumers into say 10 groups based on their purchasing habits and use a separate strategy for costumers in each of these 10 groups. And this is what we call clustering.
+
+refernce: https://www.analyticsvidhya.com/blog/2016/11/an-introduction-to-clustering-and-different-methods-of-clustering/ 
+
+## Dataset Introduction
+
+#### New Dataset of Residential power usage 3 years data
+
+There are two datasets in total. The power usage data, extracted from “TRIEAGLE ENERGY LP, The Woodlands, Texas 77393”. and the historical weather data for Houston, Texas extracted from “www.wunderground.com”
+
+For the direction I want to study, I decided to use this ataset is because i want to know how residence use energy in time series. clustering can help me to cluster factors together in order to get more persuasive and accurate result to determine what energy consumption range resident usually is.
+
+Since there are too many factor or value influence the energy consumption, I categorize the value into three different groups in variable `usage`:
+ - high (2): value in kWh >= 1.5 
+ - low (0): value in kWh <= 1.5
+
+also, for better utilize in the future, i convert the `notes` into factors 0-4:
+  - weekday : 0
+  - weekend : 1
+  - vacation : 2
+  - COVID-lockdown : 3
+
+In these datasets, we will use three kinds of methods of clustering and compare their accuracy and feasibility to determine which method is the most suitable to do clustering and reach conclusions.
+
+The three methods of clustering: K means / DBSAN / Hierachical clustering
+
+## Process to clustering
+
+### K-Means Clustering
+
+K means is an iterative clustering algorithm that aims to find local maxima in each iteration. This algorithm works in these 5 steps :
+    1. Specify the desired number of clusters K
+    2. Randomly assign each data point to a cluster
+    3. Compute cluster centroids
+    4. Re-assign each point to the closest cluster centroid
+    5. Re-compute cluster centroids
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from statistics import mode
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from scipy.spatial.distance import cdist
+from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay, accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import DBSCAN
+from sklearn.metrics import silhouette_samples, silhouette_score
+from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.cluster import AgglomerativeClustering
+
+df = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/categorize_usage.csv")
+df.head()
+```
+
+clean and EDA
+
+no NA missing
+```{python}
+df = df.drop("Unnamed: 0",axis=1)
+df.isna().sum()
+```
+
+drop columns
+```{python}
+df = df.drop(["Day","year"],axis=1)
+df['note'] = df['note'].astype("category")
+df['usage'] = df['usage'].astype("category")
+```
+
+correlation matrix
+
+the graph shows that the usage and temperature are somehow correlated.
+```{python}
+corr = df.corr();  
+print(corr.shape)
+sns.set_theme(style="white")
+f, ax = plt.subplots(figsize=(20, 20)) 
+cmap = sns.diverging_palette(230, 20, as_cmap=True)   
+sns.heatmap(corr,  cmap=cmap, vmin=-1, vmax=1, center=0, square=True, linewidths=.5, cbar_kws={"shrink": .5})
+plt.show()
+```
+
+
+split the dataset 
+```{python}
+X = df[['usage']]
+scalar = StandardScaler()
+scalar.fit(X)
+X = scalar.transform(X)
+```
+
+Fit ino the KMeans model and generate evaluation plot
+```{python}
+distortions = []
+inertias = []
+k = 10
+
+for k in range(1,k):
+    kmeanModel = KMeans(n_clusters=k, init='k-means++', random_state=42)
+    kmeanModel.fit(X)
+
+    distortions.append(sum(np.min(cdist(X, kmeanModel.cluster_centers_, 'euclidean'),axis=1))/X.shape[0])
+    inertias.append(kmeanModel.inertia_)
+    evaluation = pd.DataFrame.from_records({'Cluster':np.arange(1,k+1), 'Distortion':distortions, "Inertia":inertias})
+
+evaluation
+```
+```{python}
+from yellowbrick.cluster import KElbowVisualizer
+evaluation.plot.line(x = 'Cluster', subplots=True)
+
+print('Elbow Method to determine the number of clusters to be formed:')
+Elbow_M = KElbowVisualizer(KMeans(), k=10)
+Elbow_M.fit(X)
+Elbow_M.show()
+
+bestK = KMeans(n_clusters=4, init='k-means++',random_state=42)
+labels4 = bestK.fit_predict(X)
+df['nlabels'] = labels4
+sns.scatterplot(x='usage',hue='nlabels',data=df)
+plt.show()
+```
+
+### DBSCAN
+
+perform DBSCAN clustering. use the eps and min_samples parameters to find the optimal number of clusters. plot the number of clusters vs the silhouette score. Suggest the optimal number of clusters based on the plot.
+
+```{python}
+eps_range = np.arange(1,11)
+for i in eps_range:
+    db = DBSCAN(eps=i, min_samples=5).fit(X)
+    labels = db.labels_
+    if len(np.unique(labels)) == 1:
+        continue
+    silhouette_avg = silhouette_score(X, labels)
+    print(
+        "For eps = {:0.2f}".format(i),
+        "The average silhouette_score is {:0.4f}.".format(silhouette_avg)
+    )
+```
+
+for the result 
