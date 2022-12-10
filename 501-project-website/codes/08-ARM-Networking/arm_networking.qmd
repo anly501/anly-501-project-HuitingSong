@@ -1,0 +1,156 @@
+---
+title: "ARM and Networking"
+pdf-engine: lualatex
+format:
+  html:
+        code-fold: true
+        self-contained: true
+execute:
+    warning: false
+---
+
+## Introducation of ARM and Networking
+
+Association rules are "if-then" statements, that help to show the probability of relationships between data items, within large data sets in various types of databases. In data science, association rules are used to find correlations and co-occurrences between data sets. They are ideally used to explain patterns in data from seemingly independent information repositories, such as relational databases and transactional databases. The act of using association rules is sometimes referred to as "association rule mining" or "mining associations."
+
+Association rules are widely used in analyzing medical data set, retail industry, UX design and entertainment industry. The strength of a given association rule is measured by two main parameters: support and confidence. Support refers to how often a given rule appears in the database being mined. Confidence refers to the amount of times a given rule turns out to be true in practice. A rule may show a strong correlation in a data set because it appears very often but may occur far less when applied. This would be a case of high support, but low confidence.
+
+Popular algorithms that use association rules include AIS, SETM, Apriori and variations of the latter. With the AIS algorithm, itemsets are generated and counted as it scans the data. The SETM algorithm also generates candidate itemsets as it scans a database, but this algorithm accounts for the itemsets at the end of its scan. With the Apriori algorithm, candidate itemsets are generated using only the large itemsets of the previous pass.
+
+Reference: https://www.techtarget.com/searchbusinessanalytics/definition/association-rules-in-data-mining 
+
+## The Dataset Information
+
+#### Twitter text data grabbed by Python
+
+People's perception of energy consumption is very important. It not only reflects the public's perception, but also indirectly reflects people's concern for environmental issues and their willingness to change the status quo. In the data gathering section, I have gather the text data by setting "enviornment" "clean energy" "conventional energy" "energy consumption" as the keywords for the twitter api to get the text data. In data cleaning section, I have cleaned this data by removing the unnessecery items in the text and generate a list of cleaned text. Now in this section, I will use the cleaned dataset to perform the network plot through training the ARM model to find out the relationship between words.
+
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from apyori import apriori
+import networkx as nx 
+import pandas as pd
+from nltk.tokenize import word_tokenize
+
+df = pd.read_csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/piplineresult.csv",index_col=[0])
+df.head()
+```
+
+### Generate word token to list
+```{python}
+ 
+df = df['0']
+doc = [word_tokenize(df[i]) for i in range(len(df))]
+doc[0:2]
+```
+
+## Define function to ARM and Networking
+
+The function is based on the code reference shared by Professor J. Hickman
+
+There are some change. Since my python announces an error of 'list is not callable' while training the apiorio algorithm and I found this function makes list call repeatly, I remove the list function in `reformat_results` function and later training part. 
+
+### Utility function: Re-format output
+```{python}
+def reformat_results(results):
+    keep=[]
+    for i in range(0,len(results)):
+        for j in range(0,len(results[i])):
+            if(j>1):
+                for k in range(0,len(results[i][j])):
+                    if(len(results[i][j][k][0])!=0):
+                        rhs= results[i][j][k][0]
+                        lhs= results[i][j][k][1]
+                        conf= results[i][j][k][2]
+                        lift= results[i][j][k][3]
+                        keep.append([rhs,lhs,supp,conf,supp*conf,lift])
+            if(j==1):
+                supp=results[i][j]
+    return pd.DataFrame(keep, columns=["rhs","lhs","supp","conf","supp*conf","lift"])
+```
+
+### Utility function: Convert to NetworkX object
+```{python}
+def convert_to_network(df):
+    print(df)
+
+    #BUILD GRAPH
+    G = nx.DiGraph()  # DIRECTED
+    for row in df.iterrows():
+        # for column in df.columns:
+        lhs="_".join(row[1][0])
+        rhs="_".join(row[1][1])
+        conf=row[1][3]; #print(conf)
+        if(lhs not in G.nodes): 
+            G.add_node(lhs)
+        if(rhs not in G.nodes): 
+            G.add_node(rhs)
+
+        edge=(lhs,rhs)
+        if edge not in G.edges:
+            G.add_edge(lhs, rhs, weight=conf)
+
+    # print(G.nodes)
+    # print(G.edges)
+    return G
+```
+
+### Utility function: Plot NetworkX object
+```{python}
+def plot_network(G):
+    #SPECIFIY X-Y POSITIONS FOR PLOTTING
+    pos=nx.random_layout(G)
+
+    #GENERATE PLOT
+    fig, ax = plt.subplots()
+    fig.set_size_inches(15, 15)
+
+    #assign colors based on attributes
+    weights_e   = [G[u][v]['weight'] for u,v in G.edges()]
+
+    #SAMPLE CMAP FOR COLORS 
+    cmap=plt.cm.get_cmap('Blues')
+    colors_e    = [cmap(G[u][v]['weight']*10) for u,v in G.edges()]
+
+    #PLOT
+    nx.draw(
+    G,
+    edgecolors="black",
+    edge_color=colors_e,
+    node_size=2000,
+    linewidths=2,
+    font_size=8,
+    font_color="white",
+    font_weight="bold",
+    width=weights_e,
+    with_labels=True,
+    pos=pos,
+    ax=ax
+    )
+    ax.set(title='Dracula')
+    plt.show()
+```
+       
+## Call the function
+
+### train the ARM model by apriori 
+```{python}
+# INSERT CODE TO TRAIN THE ARM MODEL USING THE "apriori" PACKAGE
+print("Transactions:",pd.DataFrame(doc).head())
+results = [*apriori(doc, min_support=0.1)]     #RUN APRIORI ALGORITHM
+res = reformat_results(results)
+print(res.shape)
+```
+
+### plot the Network-x 
+```{python}
+# INSERT CODE TO PLOT THE RESULTS AS A NETWORK-X OBJECT 
+G=convert_to_network(res[0:25])
+plot_network(G)
+```
+
+Now, we can see the word relationship. Most of the words shown in the network graph have no understandable meaning, but I notice `energy` has relation with `actually`. This weird relationship and I had no idea what this means. The probable reasons for making this unreabable result is the dataset have lots of dirty words. People in twitter can have free speech and I do not have the algorithm to deal with the meaningless word. 
+For future study, I hope i can have solution for this problem and can figure out the real Network relationship.

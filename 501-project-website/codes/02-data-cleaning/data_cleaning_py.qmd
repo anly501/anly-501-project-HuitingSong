@@ -89,7 +89,7 @@ replace = [
     (emoji_pattern,""),             # remove emoji
     (r"(?<=\d),(?=\d)", ""),        # Remove commas in numbers
     (r"\d+", ""),              # Map digits to special token <numbr>
-    (r"[\t\n\r\*\.\@\,\-\/]", " "), # Punctuation and other junk
+    (r"[\t\n\r\*\.\@\,\-\/\=\+\<\>\~\^]", " "), # Punctuation and other junk
     (r"\s+", " ")                   # Stips extra whitespace
 ]
 
