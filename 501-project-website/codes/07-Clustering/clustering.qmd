@@ -26,31 +26,18 @@ There are two datasets in total. The power usage data, extracted from “TRIEAGL
 For the direction I want to study, I decided to use this ataset is because i want to know how residence use energy in time series. clustering can help me to cluster factors together in order to get more persuasive and accurate result to determine what energy consumption range resident usually is.
 
 Since there are too many factor or value influence the energy consumption, I categorize the value into three different groups in variable `usage`:
- - high (2): value in kWh >= 1.5 
- - low (0): value in kWh <= 1.5
+    - high (2): value in kWh >= 1.5 
+    - low (0): value in kWh <= 1.5
 
 also, for better utilize in the future, i convert the `notes` into factors 0-4:
-  - weekday : 0
-  - weekend : 1
-  - vacation : 2
-  - COVID-lockdown : 3
+    - weekday : 0
+    - weekend : 1
+    - vacation : 2
+    - COVID-lockdown : 3
 
 In these datasets, we will use three kinds of methods of clustering and compare their accuracy and feasibility to determine which method is the most suitable to do clustering and reach conclusions.
 
 The three methods of clustering: K means / DBSAN / Hierachical clustering
-
-## Process to clustering
-
-### K-Means Clustering
-
-K-means clustering (k-means) is a clustering algorithm based on the division of the sample set. K-means clustering divides the sample set into k subsets, which constitute k classes, and divides n samples into k classes, each sample has the smallest distance to the center of the class it belongs to, and each sample belongs to only one class, which is k-means clustering, 
-
-This algorithm works in these 5 steps :
-    1. Specify the desired number of clusters K
-    2. Randomly assign each data point to a cluster
-    3. Compute cluster centroids
-    4. Re-assign each point to the closest cluster centroid
-    5. Re-compute cluster centroids
 
 ```{python}
 import pandas as pd
@@ -87,6 +74,15 @@ drop columns
 df = df.drop(["Day","year","time"],axis=1)
 ```
 
+change the tyepe the variable `notes` to category
+```{python}
+df["notes"] = df["notes"].astype("category")
+df["notes"] = df['notes'].replace("weekday","0")
+df["notes"] = df["notes"].replace("weekend","1")
+df["notes"] = df['notes'].replace("vacation","2")
+df["notes"] = df["notes"].replace("COVID_lockdown","3")
+```
+
 correlation matrix
 
 the graph shows that the usage and humidity are somehow positively correlated. and the pressure and temperature are negatively correlated.
@@ -101,18 +97,33 @@ sns.heatmap(corr,  cmap=cmap, vmin=-1, vmax=1, center=0, square=True, linewidths
 plt.show()
 ```
 
-split the dataset 
+## Clustering using Three methods
+
+### 1. K-Means Clustering 
+
+K-means clustering (k-means) is a clustering algorithm based on the division of the sample set. K-means clustering divides the sample set into k subsets, which constitute k classes, and divides n samples into k classes, each sample has the smallest distance to the center of the class it belongs to, and each sample belongs to only one class, which is k-means clustering, 
+
+This algorithm works in these 5 steps :
+    1. Specify the desired number of clusters K
+    2. Randomly assign each data point to a cluster
+    3. Compute cluster centroids
+    4. Re-assign each point to the closest cluster centroid
+    5. Re-compute cluster centroids
+
+**split the dataset**
 ```{python}
-X = df[['Value (kWh)','Temp_avg']]
+X = df[['Temp_avg','Value (kWh)']]
 scaler = StandardScaler()
 X = scaler.fit_transform(X)
 ```
 
-Fit ino the KMeans model and generate evaluation plot
+#### Perform K-Means Clustering
+
+**Fit ino the KMeans model and generate evaluation plot**
 ```{python}
 distortions = []
 inertias = []
-k = 10
+k = 11
 
 for k in range(1,k):
     kmeanModel = KMeans(n_clusters=k, init='k-means++', random_state=42)
@@ -125,6 +136,7 @@ for k in range(1,k):
 evaluation
 ```
 
+**Using Elbow method to determine the number of clusters**
 ```{python}
 from yellowbrick.cluster import KElbowVisualizer
 evaluation.plot.line(x = 'Cluster', subplots=True)
@@ -133,15 +145,49 @@ print('Elbow Method to determine the number of clusters to be formed:')
 Elbow_M = KElbowVisualizer(KMeans(), k=10)
 Elbow_M.fit(X)
 Elbow_M.show()
+```
 
-bestK = KMeans(n_clusters=4, init='k-means++',random_state=42)
+From the Elbow method, the optimal numbers of clustering is 3. When K increases, the centroids are closer to the clusters centroids. The improvements will decline, at some point rapidly, creating the elbow shape. The point i thought on the graph should 3. So i will set the number of cluster equals to 3 for further k-mean clustering.
+
+**Graph the plot use the number of cluster we choose**
+```{python}
+bestK = KMeans(n_clusters=3, init='k-means++',random_state=42)
 labels4 = bestK.fit_predict(X)
 df['nlabels'] = labels4
-sns.scatterplot(x='usage',hue='nlabels',data=df)
+sns.scatterplot(x="Temp_avg",y='Value (kWh)',hue='nlabels',data=df)
 plt.show()
 ```
 
-### DBSCAN
+#### Result 
+When number of cluster is 3, the clustered data has been shown on the graph. We can group the clustered data into 3 groups:
+    - nlabels 2. Low average temperature & Low energy consumption value in kWh
+    - nlabels 1. High average temperature & Low energy consumption value in kWh
+    - nlabels 0. High average temperature & High energy consumption value in kWh 
+
+#### Result 
+```{python}
+sns.countplot(x=df["nlabels"])
+plt.title("Distribution Of The K-means Clusters")
+plt.show()
+```
+From the count plot, we can see most of the points drops into nlabels 1 which is the group which igh average temperature and Low energy consumption value in kWh. The distribution of the K-means clusters is more like normal distribution.
+
+During the data clean I have categorized the `notes` into four levels. Then, I want to see how residences in these three clusters perform in four date type levels. 
+
+- Notes:<br>
+i convert the `notes` into factors 0-4:
+    - weekday : 0
+    - weekend : 1
+    - vacation : 2
+    - COVID-lockdown : 3
+```{python}
+sns.countplot(hue=df["nlabels"], x=df["notes"])
+plt.show()
+```
+
+As we see from the graph, the three clusters are more likely to happened during weekday. To be more specifically, High average temperature and Low energy consumption value in kWh are more likely to be seen during weekday.
+
+### 2. DBSCAN
 
 The idea is that assuming the categories can be determined by the closeness of the sample distribution, and that samples of the same category, which are closely related to each other, must exist in the same category not far from any sample of that category.
 
@@ -149,8 +195,11 @@ The advantages of DBSCAN are that it does not require a predetermined number of 
 
 perform DBSCAN clustering. use the eps and min_samples parameters to find the optimal number of clusters. plot the number of clusters vs the silhouette score. Suggest the optimal number of clusters based on the plot.
 
+#### Perform DBSCAN clustering. 
+
+**use the eps and min_samples parameters to find the optimal number of clusters**
 ```{python}
-eps_range = np.arange(1,11)
+eps_range = np.arange(0.1,1.0,0.1)
 for i in eps_range:
     db = DBSCAN(eps=i, min_samples=5).fit(X)
     labels = db.labels_
@@ -163,10 +212,12 @@ for i in eps_range:
     )
 ```
 
+With the avg silhouette score for eps = 0.6662, we will set the eps as 0.70.
+
 ```{python}
-S = np.arange(1,11)
+S = np.arange(1,10)
 for s in S:
-    db = DBSCAN(eps=0.2, min_samples=s).fit(X)
+    db = DBSCAN(eps=0.7, min_samples=s).fit(X)
     labels = db.labels_
     if len(np.unique(labels)) == 1:
         continue
@@ -177,42 +228,78 @@ for s in S:
     )
 ```
 
-```{python}
-db = DBSCAN(eps=0.2, min_samples=5).fit(X)
+With the best avg silhouette score, we get the best eps=0.7 and min samples ranges from 3.00 to 6.00. I will choose eps = 0.7 and min_sample =6 as my parameter to do the DBSCAN modelling.
 
-adv['Labels'] = db.labels_
+**Fit the the data with eps=0.7 and min_sample=6 to train the model**
+```{python}
+db = DBSCAN(eps=0.7, min_samples=6).fit(X)
+
+df['Labels'] = db.labels_
 plt.figure(figsize=(12, 8))
-sns.scatterplot(adv['Daily Time Spent on Site'], adv['Daily Internet Usage'], hue=adv['Labels'], 
+sns.scatterplot(x=df['Temp_avg'], y=df['Value (kWh)'], hue=df['Labels'], 
                 palette=sns.color_palette('hls', np.unique(db.labels_).shape[0]))
 plt.title('DBSCAN with epsilon 0.2, min samples 5')
 plt.show()
 ```
 
-### Hierarchical Clustering
+The DBSCAN algorithm cluster the data into two groups. As the group shown, most of the data are in one huge cluster. In my opinion, the method may not be a suitable clustering method. 
+
+#### Result
+```{python}
+sns.countplot(x=df["Labels"])
+plt.title("Distribution Of The DBSCAN Clusters")
+plt.show()
+```
+
+As we see from the distribution graph. nearly all data are in the Labels 0. Frankly, no clustering at all. Therefore, I think this is not a good model to cluster the dataset. 
+
+### 3. Hierarchical Clustering
 
 As the name implies, the clustering is done layer by layer, either by splitting the large categories (cluster) from top to bottom or by aggregating the small categories from bottom to top. Hierarchical clustering methods decompose a given data set hierarchically until certain conditions are met. After distance values have been obtained, elements can be linked to each other. A structure can be constructed by separation and fusion. The method traditionally represented is a Tree data structure.
 
 Hierarchical clustering algorithms are either bottom-up aggregation type, which starts from leaf nodes and eventually converges to the root node, or top-down splitting type, which starts from the root node and recursively splits downward.
 
+#### Perform Agglomerative Clustering
+
 ```{python}
-# Perform Agglomerative Clustering
 model = AgglomerativeClustering().fit(X)
 labels = model.labels_
 ```
+
+**create linkage for agglomerative clustering, and the dendrogram for the linkage. Suggest the optimal number of clusters based on the dendrogram.**
 ```{python}
-# create linkage for agglomerative clustering, and the dendrogram for the linkage. Suggest the optimal number of clusters based on the dendrogram.
 Z = linkage(X, method='ward')
 dend = dendrogram(Z)
 plt.axhline(y=12,color='r',linestyle='--',label=21)
 ```
+
+From the dendrogram, I think i should choose the number of clusters as 22 by counting the optimal number of cluster above the line.
+
+**fit model and predict clusters**
 ```{python}
-AC = AgglomerativeClustering(n_clusters=3)
-# fit model and predict clusters
+AC = AgglomerativeClustering(n_clusters=22)
 yhat_AC = AC.fit_predict(X)
 #Adding the Clusters feature to the orignal dataframe.
-adv["Clusters"]= yhat_AC
+df["Clusters"]= yhat_AC
 plt.figure(figsize=(12, 8))
-sns.scatterplot(adv['Daily Time Spent on Site'], adv['Daily Internet Usage'], hue=adv['Clusters'], 
+sns.scatterplot(x=df['Temp_avg'], y=df['Value (kWh)'], hue=df['Clusters'], 
                 palette=sns.color_palette('hls', np.unique(yhat_AC).shape[0]))
 plt.show()
 ```
+
+As shown on the graph, the Agglomerative Clustering method groups data into many clusters. This clustering may be good since the sample size is large. However, it is difficult to get the cluster infomation under such large number of clusters. Therefore, I will also consider this clustering method as ineffective and not suitable. 
+
+####  Result
+```{python}
+pl = sns.countplot(x=df["Clusters"])
+pl.set_title("Distribution Of The Agglomerative Clusters")
+plt.show()
+```
+
+The distribution of the agglomerative cluster is not bell-shaped. and as I said before, this method groups the data in too many number of clusters, so it is difficult to analyze the result. We need more further study to address this problem. 
+
+## Conclusion
+
+Comparing the result of three clustering method (KMeans, DBSCAN, Agglomerative), the best clustering result will be K-Means cluster. We get the data in three clusters or groups and clearly analyze the groups in four different notes type. I conclude that in the weekday of high average temperature, the energy consumption value in kWh will be low. 
+
+In common sense, when temperature is high, we tend to open the AC to make us feel better, so then the energy consumption will be high. Here, the cluster infomation shows the opposite. Maybe, in the weekday residence tend to go to work place, the energy consumption at that moment in residence building is low. Thinking in this way, the question will be addressed. 
