@@ -163,7 +163,30 @@ for i in eps_range:
     )
 ```
 
-for the result 
+```{python}
+S = np.arange(1,11)
+for s in S:
+    db = DBSCAN(eps=0.2, min_samples=s).fit(X)
+    labels = db.labels_
+    if len(np.unique(labels)) == 1:
+        continue
+    silhouette_avg = silhouette_score(X, labels)
+    print(
+        "For min_samples = {:0.2f}".format(s),
+        "The average silhouette_score is {:0.4f}.".format(silhouette_avg)
+    )
+```
+
+```{python}
+db = DBSCAN(eps=0.2, min_samples=5).fit(X)
+
+adv['Labels'] = db.labels_
+plt.figure(figsize=(12, 8))
+sns.scatterplot(adv['Daily Time Spent on Site'], adv['Daily Internet Usage'], hue=adv['Labels'], 
+                palette=sns.color_palette('hls', np.unique(db.labels_).shape[0]))
+plt.title('DBSCAN with epsilon 0.2, min samples 5')
+plt.show()
+```
 
 ### Hierarchical Clustering
 
@@ -171,3 +194,25 @@ As the name implies, the clustering is done layer by layer, either by splitting 
 
 Hierarchical clustering algorithms are either bottom-up aggregation type, which starts from leaf nodes and eventually converges to the root node, or top-down splitting type, which starts from the root node and recursively splits downward.
 
+```{python}
+# Perform Agglomerative Clustering
+model = AgglomerativeClustering().fit(X)
+labels = model.labels_
+```
+```{python}
+# create linkage for agglomerative clustering, and the dendrogram for the linkage. Suggest the optimal number of clusters based on the dendrogram.
+Z = linkage(X, method='ward')
+dend = dendrogram(Z)
+plt.axhline(y=12,color='r',linestyle='--',label=21)
+```
+```{python}
+AC = AgglomerativeClustering(n_clusters=3)
+# fit model and predict clusters
+yhat_AC = AC.fit_predict(X)
+#Adding the Clusters feature to the orignal dataframe.
+adv["Clusters"]= yhat_AC
+plt.figure(figsize=(12, 8))
+sns.scatterplot(adv['Daily Time Spent on Site'], adv['Daily Internet Usage'], hue=adv['Clusters'], 
+                palette=sns.color_palette('hls', np.unique(yhat_AC).shape[0]))
+plt.show()
+```
