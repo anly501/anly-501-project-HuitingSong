@@ -63,6 +63,11 @@ sector.clean <- sector.clean %>%
          filter( Description != "Electricity Sales to Ultimate Customers by the Commercial Sector")%>%
          filter( Description != "Electricity Sales to Ultimate Customers in the Industrial Sector")
 
+sector.clean <- sector.clean %>%
+         filter( Description != "Electrical System Energy Losses by Residential Sector ")%>%
+         filter( Description != "Electrical System Energy Losses by Commercial Sector ")%>%
+         filter( Description != "Electrical System Energy Losses by Industrial Sector ")
+
 unique(sector.clean$Description)
 ```
 
@@ -78,18 +83,21 @@ sum(is.na(sector.clean))
 
 sector.clean$energy_type[sector.clean$energy_type=="Primary Energy Consumed "]<-"Primary Energy"
 sector.clean$energy_type[sector.clean$energy_type=="End-Use Energy Consumed "]<-"End-Use Energy"
-sector.clean$energy_type[sector.clean$energy_type=="Electrical System Energy Losses "]<-"Electrical Energy"
 sector.clean$energy_type[sector.clean$energy_type=="Total Energy Consumed "]<-"Total"
 sector.clean$sector[sector.clean$sector==" the Residential Sector"]<-"Residential"
 sector.clean$sector[sector.clean$sector==" the Commercial Sector"]<-"Commercial"
 sector.clean$sector[sector.clean$sector==" the Industrial Sector"]<-"Industrial"
-sector.clean$sector[sector.clean$sector==" Residential Sector"]<-"Residential"
-sector.clean$sector[sector.clean$sector==" Commercial Sector"]<-"Commercial"
-sector.clean$sector[sector.clean$sector==" Industrial Sector"]<-"Industrial"
 
 head(sector.clean)
 ```
 
+ - Step 7: eliminate the data time before 201201
+
+ Since the data time is from 1949 which is a extremely long period, I decide to only hava the time frame after 201201 for convinience. 
+```{r}
+sector.clean = subset(sector.clean, YYYYMM >= 201201)
+head(sector.clean)
+```
  - Step 7: save to csv file
 ```{r}
 write.csv(sector.clean,"/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/clean_sector.csv")

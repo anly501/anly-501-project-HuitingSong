@@ -1,0 +1,143 @@
+---
+title: "Exploring Data in R"
+pdf-engine: lualatex
+format:
+  html:
+        code-fold: true
+        self-contained: true
+execute:
+    warning: false
+---
+
+Exploratory Data Analysis (EDA) refers to the critical process of performing initial investigations on data so as to discover patterns,to spot anomalies,to test hypothesis and to check assumptions with the help of summary statistics and graphical representations. In my project, I plan to use the data I cleaned previously to do EDA.
+
+## Dataset Introducation and Plan
+
+### Record dataset about energy consumption by sectors from EIA
+
+The sample source is from U.S. EIA. EIA conducts a comprehensive data collection program that covers the full spectrum of energy sources, end uses, and energy flows; generates short- and long-term domestic and international energy projections; and performs informative energy analyses. EIA disseminates its data products, analyses, reports, and services to customers and stakeholders primarily through its website and the customer contact center.
+
+For the direction I want to study, I need to collect monthly data samples of energy consumption of different groups. Americans use a lot of energy in homes, in businesses, and in industry, and to travel and transport goods.There are three end-use sectors in the dataset that purchase or produce energy for their own consumption and not for resale: 
+ - The residential sector includes homes and apartments.
+ - The commercial sector includes offices, malls, stores, schools, hospitals, hotels, warehouses, restaurants, and places of worship and public assembly.
+ - The industrial sector includes facilities and equipment used for manufacturing, agriculture, mining, and construction.
+
+Also the energy type in the dataset is:
+ - Primary energy:
+    Primary energy includes all energy products not transformed, directly exploited or imported. It mainly includes crude oil, oil shale, natural gas, solid mineral fuels, biomass, solar radiation, hydraulic energy, wind energy, geothermic energy and the energy taken from uranium fission.
+ - End-use energy:
+    the energy directly consumed by the user, as opposed to primary energy which is the energy that is harvested directly from natural resources. End use energy includes electricity, gasoline, and natural gas.
+ - Total energy consumption: 
+    The summation of all energy consumption in a year
+
+This dataset is useful in understanding the tendency of energy consumption in each sector and in each energy types. After cleaning and tyding the dataset, I can use this predict the future tendency of consumption.
+
+**Load packages and Dataset**
+```{r}
+library(selectr)
+library(dplyr)
+library(ggplot2)
+suppressWarnings(expr)#ignore warning
+options(warn=-1)
+library(scales)
+library(gridExtra)
+```
+```{r}
+df <- read.csv("/Users/crystal/Desktop/anly-501-project-HuitingSong/501-project-website/data/cleaned data/clean_sector_v2.csv")
+df$Time <- zoo::as.yearmon(paste(df$Year," ",df$Month), "%Y %b")
+head(df,5)
+```
+
+**check the levels of data and change the datatype**
+```{r}
+df$energy_type <- as.factor(df$energy_type)
+df$sector <- as.factor(df$sector)
+str(df)
+unique(df$sector)
+unique(df$energy_type)
+```
+
+**Barplot of mean value of consumption in different sectors**
+
+As the graph shown, Industrial sector use contribute a lot in consuming the energy in average. This average consumption makes sense since industrial sector includes facilities and equipment used for manufacturing, agriculture, mining, and construction which are all the place that may use the most energy. The conmercial sector is the least. 
+```{r}
+data_histogram <- df %>% 
+                    group_by(sector) %>%
+                    summarize(mean_value = round(mean(Value), 2))
+
+ggplot(data_histogram, aes(x=sector,y = mean_value,fill=sector)) +
+    geom_bar(stat = "identity",alpha = 0.5) +
+    theme_classic()+
+    geom_text(aes(label = mean_value),
+        vjust = 2,
+        color = "black",
+        size = 6)
+```
+
+**Barplot of mean value of consumption in different energy type**
+
+ As the graph shown, total energy has the highest consumption in average. This is obvious since it sums up the consumption of two major energy type. Without considering the total energy consumption, the highest use in Primary energy. Since the primary energy includes all energy products not transformed, directly exploited or imported. It mainly includes crude oil, oil shale, natural gas, solid mineral fuels, biomass, solar radiation, hydraulic energy, wind energy, geothermic energy and the energy taken from uranium fission. So we can assume people usually use a lot of in those kinds of energy.
+```{r}
+data_histogram <- df %>% 
+                    group_by(energy_type) %>%
+                    summarize(mean_value = round(mean(Value), 2))
+
+ggplot(data_histogram, aes(x=energy_type,y = mean_value,fill=energy_type)) +
+    geom_bar(stat = "identity") +
+    theme_classic()+
+    geom_text(aes(label = mean_value),
+        vjust = 2,
+        color = "black",
+        size = 6)
+```
+
+**Line plots**
+
+- in 2022, the energy consumption for each sectors
+
+From the three plots, we can clearly see that The consumption of End-Use energy is always greater than the use of primary energy. However, the consumption tendency of industrial section contradict to other two sectors. For residential and commercial sector, the total energy consumption decreased in the middle of year, but for industrial sector, the total usage increased. 
+```{r}
+c <- subset(df,df$Year=="2022")
+d <- subset(c,c$sector=="Residential")
+e <- subset(c,c$sector=="Industrial")
+f <- subset(c,c$sector=="Commercial")
+
+plot1 <- ggplot(d, aes(x=Time)) +
+            geom_line(aes(y=Value,color=energy_type)) +
+            ggtitle("Energy Comsumption of Residential Sector in 2022")
+plot2 <- ggplot(e, aes(x=Time)) +
+            geom_line(aes(y=Value,color=energy_type)) +
+            ggtitle("Energy Comsumption of Industrial Sector in 2022")
+plot3 <- ggplot(f, aes(x=Time)) +
+            geom_line(aes(y=Value,color=energy_type)) +
+            ggtitle("Energy Comsumption of Commercial Sector in 2022")
+
+grid.arrange(plot1, plot2, plot3, ncol=1,nrow=3) 
+```
+
+
+- from 2020 to 2022, the energy consumption for each energy
+
+From the graph, we can have see that tendency of three energy type are all similar. And we can find that residential and commercial sector consume more energy in winter session, but the energy consumption in industrial sector increased gradually before summer. And also, the end-use energy are shown a boom up during summer.
+```{r}
+c <- subset(df,df$Year>=2020 & df$Year<=2022)
+d <- subset(c,c$energy_type=="Primary Energy")
+e <- subset(c,c$energy_type=="End-Use Energy")
+f <- subset(c,c$energy_type=="Total")
+
+plot1 <- ggplot(d, aes(x=Time)) +
+            geom_line(aes(y=Value,color=sector)) +
+            ggtitle("Primary Energy Comsumption from 2020 to 2022")
+plot2 <- ggplot(e, aes(x=Time)) +
+            geom_line(aes(y=Value,color=sector)) +
+            ggtitle("End-Use Energy Comsumption from 2020 to 2022")
+plot3 <- ggplot(f, aes(x=Time)) +
+            geom_line(aes(y=Value,color=sector)) +
+            ggtitle("Total Energy Comsumption from 2020 to 2022")
+
+grid.arrange(plot1, plot2, plot3, ncol=1,nrow=3) 
+```
+
+**Conclusion**
+
+From those graphes, the energy consumption in industrial sector is always hhigher than any other sectors in any time. And human activity can also be shown from the graph. For example, more energy consumption action will occur during summer and winter time ,then there will have a short time for using less. I guess this my because of the whether. On the other hands, within the year period, behaviors in each section are kind of similar and without huge change. 
