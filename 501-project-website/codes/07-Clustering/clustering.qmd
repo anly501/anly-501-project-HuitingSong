@@ -43,7 +43,9 @@ The three methods of clustering: K means / DBSAN / Hierachical clustering
 
 ### K-Means Clustering
 
-K means is an iterative clustering algorithm that aims to find local maxima in each iteration. This algorithm works in these 5 steps :
+K-means clustering (k-means) is a clustering algorithm based on the division of the sample set. K-means clustering divides the sample set into k subsets, which constitute k classes, and divides n samples into k classes, each sample has the smallest distance to the center of the class it belongs to, and each sample belongs to only one class, which is k-means clustering, 
+
+This algorithm works in these 5 steps :
     1. Specify the desired number of clusters K
     2. Randomly assign each data point to a cluster
     3. Compute cluster centroids
@@ -64,7 +66,7 @@ from scipy.spatial.distance import cdist
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay, accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import DBSCAN
+from sklearn.cluster import DBSCAN,KMeans
 from sklearn.metrics import silhouette_samples, silhouette_score
 from scipy.cluster.hierarchy import dendrogram, linkage
 from sklearn.cluster import AgglomerativeClustering
@@ -101,10 +103,9 @@ plt.show()
 
 split the dataset 
 ```{python}
-X = df[['Value (kWh)']]
-scalar = StandardScaler()
-scalar.fit(X)
-X = scalar.transform(X)
+X = df[['Value (kWh)','Temp_avg']]
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
 ```
 
 Fit ino the KMeans model and generate evaluation plot
@@ -123,6 +124,7 @@ for k in range(1,k):
 
 evaluation
 ```
+
 ```{python}
 from yellowbrick.cluster import KElbowVisualizer
 evaluation.plot.line(x = 'Cluster', subplots=True)
@@ -141,6 +143,10 @@ plt.show()
 
 ### DBSCAN
 
+The idea is that assuming the categories can be determined by the closeness of the sample distribution, and that samples of the same category, which are closely related to each other, must exist in the same category not far from any sample of that category.
+
+The advantages of DBSCAN are that it does not require a predetermined number of clusters as KMeans does, and is insensitive to outliers. Also he can separate high density data into small clusters and can also cluster non-linear relationships (clustering to arbitrary shapes). However, it also has disadvantages because it is difficult to identify clusters in data of different densities, difficult to cluster high-dimensional data, and very sensitive to parameters of very small points.
+
 perform DBSCAN clustering. use the eps and min_samples parameters to find the optimal number of clusters. plot the number of clusters vs the silhouette score. Suggest the optimal number of clusters based on the plot.
 
 ```{python}
@@ -158,3 +164,10 @@ for i in eps_range:
 ```
 
 for the result 
+
+### Hierarchical Clustering
+
+As the name implies, the clustering is done layer by layer, either by splitting the large categories (cluster) from top to bottom or by aggregating the small categories from bottom to top. Hierarchical clustering methods decompose a given data set hierarchically until certain conditions are met. After distance values have been obtained, elements can be linked to each other. A structure can be constructed by separation and fusion. The method traditionally represented is a Tree data structure.
+
+Hierarchical clustering algorithms are either bottom-up aggregation type, which starts from leaf nodes and eventually converges to the root node, or top-down splitting type, which starts from the root node and recursively splits downward.
+
